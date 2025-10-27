@@ -111,20 +111,19 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   
   - Prestazioni chiave e figure di merito
     - `EIRP`, `EIS`, `G/T`, `NF`, efficienza, linearità (`IP3`, `P1dB`, `ACPR`), leakage e spuri.
-    - Coerenza di fase tra canali, equalizzazione di ampiezza, calibrazione vs temperatura e invecchiamento.
-  
-  - Calibrazione e allineamento
-    - Metodi: built‑in couplers/loopback, near‑field probe, antenna di riferimento; correzioni di ampiezza/fase per boresight e scan.
-    - Modelli di errore: offset di fase, quantizzazione, compressione; aggiornamenti periodici via BIST e tabelle di compensazione.
+    - Coerenza di fase tra canali, equalizzazione di ampiezza, calibrazione vs temperatura.
+  - <span class="md-note">**How to Design and Test a Phased Array Antenna =>** `G/T` quantifica la capacità di ricevere segnali deboli rispetto al rumore; la misura si esegue con Y‑factor usando sorgenti HOT (6000 K) e COLD (290 K).</span>
   
   - Strategie di test (OTA/cablato)
-    - OTA in camera anecoica: pattern, `EIRP/EIS/TRP`, cross‑pol; set‑up meccanico e sincronizzazione; time gating e gestione della dinamica.
+    - OTA in camera anecoica: pattern, `EIRP/EIS`, cross‑pol; set‑up meccanico e sincronizzazione; time gating e gestione della dinamica.
     - Cablato: caratterizzazione canali (S‑parametri), linearità e rumore; verifica dei controlli di fase/ampiezza; interfacce di controllo e logging.
-    - Metriche per array: pointing accuracy, beam squint, sidelobes, scan‑range, switching speed; calibrazione su codebook.
+    - Metriche per array: pointing accuracy, beam squint, sidelobes, scan‑range, switching speed.
+  - <span class="md-note">**How to Design and Test a Phased Array Antenna =>** Il time gating definisce la finestra temporale di acquisizione per isolare il primo impulso ed escludere riflessioni successive e contributi di rumore.</span>
   
   - Automazione e controllo
     - Codebook di beam e sequenze di misura; sweeping di fase/ampiezza; tracciabilità e ripetibilità.
     - Integrazione con generatori, VNA, analizzatori, posizionatori; sincronizzazione tra strumenti (trigger/clock).
+  - <span class="md-note">**How to Design and Test a Phased Array Antenna =>** Il beam codebook è un insieme discreto di pattern/fasci impiegati per lo steering; riduce la complessità del controllo e abilita test ripetibili su fasci predefiniti.</span>
   
   - Criticità e mitigazioni
     - Grating lobes per `d > λ/2`, scan loss con `θ` elevati, quantizzazione dei controlli.
@@ -133,10 +132,6 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Linee guida operative
     - Definire obiettivi di `SLL`, `EIRP/EIS`, scan e banda; scegliere `d` e taper; pianificare la catena di calibrazione.
     - Progettare il test OTA: range/quiete zone, sonda/ricevitore, dinamica e incertezze; definire KPI e criteri di accettazione.
-  
-  - Pagine successive (sintesi in 2 righe)
-    - Coprono esempi di test di produzione/automazione, conformità 5G FR2 e strategie di scalabilità del collaudo per array di grandi dimensioni.
-    - Evidenziano processi di validazione, KPI pratici ed integrazione BIST per manutenzione e ricalibra automatica.
 
 - Riferimenti
   - Balanis, “Antenna Theory”, Chapter 17 (NF measurements, planar NF→FF). File: `NF-FF/Balanis_Chapter_17.pdf`.
@@ -157,8 +152,9 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Ricostruzione del FF tramite spettro di onde piane (2D FFT) delle componenti di campo tangenziali misurate sul piano.
   - Setup e strumentazione
     - AUT fissata su supporto a basso scattering; piano di scansione ortogonale e planare; posizionatore X–Y con accuratezza di passo e ripetibilità elevate.
-    - Controllo della distanza `z0` stabile nel tempo; tilt/bow del piano minimizzati; riferimenti di posizione e allineamento (boresight) tracciabili.
+    - Controllo della distanza `z0` stabile nel tempo.
     - Sonda ricevente a polarizzazione nota; preferibilmente non direttiva (pattern ampio) e fisicamente contenuta rispetto a `λ` per preservare risoluzione spaziale; gestione della banda utile e della cross‑pol.
+  - <span class="md-note">**Near-Field_Scanning_Measurements =>** La sonda deve essere fisicamente piccola rispetto a `λ` poiché in near‑field non si misura un punto ma una superficie; il guadagno della sonda è preferibilmente 10–20 dB più basso rispetto alla AUT per limitare riflessioni multiple e accoppiamenti indesiderati.</span>
   - Misura delle componenti di campo
     - Acquisire il campo tangenziale `E_t` (due componenti) o una tensione proporzionale `V` con VNA/receiver; registrare ampiezza e fase per ciascun punto della griglia.
     - Stabilizzare il riferimento di fase (clock/trigger condivisi, cavi coerenti); scegliere IFBW e medie per SNR/dinamica; controllare drift e jitter.
@@ -167,8 +163,8 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Area di scansione: estendere oltre l’apertura effettiva della AUT con margine (≥ 0.5–1 `λ` per lato) per ridurre troncamento e ripple da bordi.
     - Applicare finestre di apodizzazione (Hann/Hamming/Taylor) per mitigare artefatti da troncamento; usare zero‑padding per migliorare densità angolare nel dominio `θ, φ`.
   - Probe correction (de‑embedding)
-    - Il segnale `V(x,y)` è la convoluzione tra il campo della AUT e la risposta spaziale della sonda `H`; correggere in dominio `(k_x, k_y)` dividendo per `H(k_x, k_y)` con regolarizzazione per limitare l’amplificazione del rumore.
     - Allineare correttamente la polarizzazione; caratterizzare `H` via misura o simulazioni EM alla stessa distanza `z0`; considerare cross‑pol e banda operativa.
+    - <span class="md-note">**Near-Field_Scanning_Measurements =>** La matrice `P` lega il campo vero della AUT al campo misurato; consente di rimuovere l’interazione della sonda (de‑embedding) ottenendo il campo irradiato della AUT.</span>
     <details class="md-box">
       <summary class="md-box-title">Procedura per la costruzione della matrice P (Probe Correction)</summary>
       <div class="md-box-body">
@@ -182,7 +178,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
           <li>
             <strong>Conversione dei dati</strong>
             <ul>
-              <li>Trasforma ampiezza + fase in valori complessi:</li>
+              <li>Si trasformano ampiezza e fase in valori complessi:</li>
               <li><code>H_co = ampiezza_co × exp(i × fase_co)</code></li>
               <li><code>H_cross = ampiezza_cross × exp(i × fase_cross)</code></li>
             </ul>
@@ -190,16 +186,16 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
           <li>
             <strong>Allineamento</strong>
             <ul>
-              <li>Porta i dati della sonda sulla stessa griglia angolare della AUT.</li>
-              <li>Assicurati che la fase sia riferita a un unico riferimento comune.</li>
+              <li>I dati della sonda vengono portati sulla stessa griglia angolare della AUT.</li>
+              <li>Si assicura che la fase sia riferita a un unico riferimento comune.</li>
             </ul>
           </li>
           <li>
             <strong>Ottenimento della seconda colonna</strong>
             <ul>
-              <li><strong>Sonda lineare ruotata di 90°</strong>: misura nuovamente co/cross → ottieni la seconda colonna.</li>
-              <li><strong>Sonda dual‑port</strong>: usa i pattern dei due porti, con ampiezza e fase relative note.</li>
-              <li><strong>Caso ideale (sonda quasi ideale)</strong>: assumi P diagonale (solo co e cross, senza termini di accoppiamento).</li>
+              <li><strong>Sonda lineare ruotata di 90°</strong>: si misurano nuovamente co/cross → si ottiene la seconda colonna.</li>
+              <li><strong>Sonda dual‑port</strong>: si usano i pattern dei due porti, con ampiezza e fase relative note.</li>
+              <li><strong>Caso ideale (sonda quasi ideale)</strong>: si assume P diagonale (solo co e cross, senza termini di accoppiamento).</li>
             </ul>
           </li>
           <li>
@@ -215,8 +211,8 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
           <li>
             <strong>Verifica della matrice</strong>
             <ul>
-              <li>Controlla la condizione numerica di P (determinante o rapporto tra singolari).</li>
-              <li>Se P è mal condizionata, applica regolarizzazione o limita l’analisi alle regioni angolari affidabili.</li>
+              <li>Si controlla la condizione numerica di P (determinante o rapporto tra singolari).</li>
+              <li>Se P è mal condizionata, si applica regolarizzazione o si limita l’analisi alle regioni angolari affidabili.</li>
             </ul>
           </li>
           <li>
@@ -235,8 +231,8 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
         <h4>Note pratiche</h4>
         <ul>
-          <li>Co/cross sono definiti rispetto all’orientazione della sonda: mantieni coerenza con la base scelta.</li>
-          <li>La rotazione di 90° della sonda può introdurre cambi di segno/fase: verifica con attenzione.</li>
+          <li>Co/cross sono definiti rispetto all’orientazione della sonda: si mantiene coerenza con la base scelta.</li>
+          <li>La rotazione di 90° della sonda può introdurre cambi di segno/fase: si verifica con attenzione.</li>
           <li>Nei sistemi multi‑porta, la fase relativa tra porti deve essere misurata in FF commutando tra le porte.</li>
           <li>Se la sonda ha cross‑pol elevato, i termini fuori diagonale di P non sono trascurabili.</li>
         </ul>
@@ -267,6 +263,4 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 
 - Riferimenti
-  - nf2ff_transformation — Algoritmi NF→FF (Matlab): codice analizzato per soluzioni pratiche di trasformazione NF→FF e compensazione della sonda; usato come spunto per gli script Python della pipeline. Link: https://github.com/hbartle/nf2ff_transformation
   - Near-Field Scanning Measurements — Scan planare (setup, campionamento, correzioni, incertezze). File: `NF-FF/Near-Field_Scanning_Measurements.pdf`.
-  - Documentazione R&S per misure di antenne AESA: https://www.rohde-schwarz.com/it/applicazioni/misura-di-un-antenna-con-beamforming-in-modalita-di-trasmissione-nota-di-applicazione_56280-408715.html
