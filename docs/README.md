@@ -1,4 +1,4 @@
-# <span style="color: #00FF00;">Report settimanale – Misure NF e NF→FF con beamforming</span>
+# <span style="color: #00FF00;">Report settimanale –Tirocinio PicoSaTs</span>
 
 Questo documento raccoglie, settimana per settimana, i punti chiave dai paper analizzati, con focus su misure Near-Field (NF) e trasformazione Far-Field (FF), e sulla loro integrazione con il beamforming di antenne AESA.
 
