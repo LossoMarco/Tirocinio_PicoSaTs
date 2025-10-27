@@ -6,26 +6,36 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/themes/dark.css">
   <style>
     /* Box riutilizzabile per callout/nota */
-    .md-box {
+    details.md-box {
       border: 1px solid #334155; /* slate-700 */
-      background: #1f2937;       /* slate-800 */
       border-radius: 8px;
       margin: 12px 0;
+      background: #1f2937;       /* slate-800 */
       box-shadow: 0 1px 2px rgba(0,0,0,.25);
+      overflow: hidden;
     }
     .md-box-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-weight: 600;
-      padding: 8px 12px;
-      border-bottom: 1px solid #334155;
+      padding: 10px 14px;
       background: #0f172a; /* slate-900 */
       color: #e5e7eb;      /* text-slate-200 */
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+      border-bottom: 1px solid #334155;
+      cursor: pointer;
     }
-    .md-box-body { padding: 12px; }
-    .md-box-body pre, .md-box-body code {
-      background-color: #0b1220;
+    details.md-box[open] .md-box-title { border-bottom-color: #475569; }
+    details.md-box > summary { list-style: none; }
+    details.md-box > summary::-webkit-details-marker { display: none; }
+    .md-box-title::after {
+      content: "▸"; /* caret */
+      color: #cbd5e1;
+      transition: transform .2s ease;
     }
+    details.md-box[open] .md-box-title::after { transform: rotate(90deg); }
+    .md-box-body { padding: 12px 14px; }
+    .md-box-body pre, .md-box-body code { background-color: #0b1220; }
   </style>
 </head>
 <body>

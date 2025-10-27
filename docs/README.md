@@ -173,53 +173,79 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Probe correction (de‑embedding)
     - Il segnale `V(x,y)` è la convoluzione tra il campo della AUT e la risposta spaziale della sonda `H`; correggere in dominio `(k_x, k_y)` dividendo per `H(k_x, k_y)` con regolarizzazione per limitare l’amplificazione del rumore.
     - Allineare correttamente la polarizzazione; caratterizzare `H` via misura o simulazioni EM alla stessa distanza `z0`; considerare cross‑pol e banda operativa.
-    <div class="md-box">
-      <div class="md-box-title">Procedura per la costruzione della matrice P (Probe Correction)</div>
+    <details class="md-box">
+      <summary class="md-box-title">Procedura per la costruzione della matrice P (Probe Correction)</summary>
       <div class="md-box-body">
-    - Dati necessari
-      - Pattern di radiazione della sonda in campo lontano (FF), in due polarizzazioni ortogonali.
-      - Per ogni direzione angolare (theta, phi): ampiezza e fase delle componenti co‑polar e cross‑polar.
+        <h4>Dati necessari</h4>
+        <ul>
+          <li>Pattern di radiazione della sonda in campo lontano (FF), in due polarizzazioni ortogonali.</li>
+          <li>Per ogni direzione angolare (theta, phi): ampiezza e fase delle componenti co‑polar e cross‑polar.</li>
+        </ul>
 
-    1. <strong>Conversione dei dati</strong>
-       - Trasforma ampiezza + fase in valori complessi:
-         - H_co = ampiezza_co × exp(i × fase_co)
-         - H_cross = ampiezza_cross × exp(i × fase_cross)
+        <ol>
+          <li>
+            <strong>Conversione dei dati</strong>
+            <ul>
+              <li>Trasforma ampiezza + fase in valori complessi:</li>
+              <li><code>H_co = ampiezza_co × exp(i × fase_co)</code></li>
+              <li><code>H_cross = ampiezza_cross × exp(i × fase_cross)</code></li>
+            </ul>
+          </li>
+          <li>
+            <strong>Allineamento</strong>
+            <ul>
+              <li>Porta i dati della sonda sulla stessa griglia angolare della AUT.</li>
+              <li>Assicurati che la fase sia riferita a un unico riferimento comune.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Ottenimento della seconda colonna</strong>
+            <ul>
+              <li><strong>Sonda lineare ruotata di 90°</strong>: misura nuovamente co/cross → ottieni la seconda colonna.</li>
+              <li><strong>Sonda dual‑port</strong>: usa i pattern dei due porti, con ampiezza e fase relative note.</li>
+              <li><strong>Caso ideale (sonda quasi ideale)</strong>: assumi P diagonale (solo co e cross, senza termini di accoppiamento).</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Costruzione della matrice P</strong>
+            <ul>
+              <li>Per ogni angolo (theta, phi):</li>
+            </ul>
+            <p>P = [[col1_co, col2_co], [col1_cross, col2_cross]]</p>
+            <ul>
+              <li>Dove col1 e col2 sono i valori complessi ottenuti dalle due configurazioni ortogonali.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Verifica della matrice</strong>
+            <ul>
+              <li>Controlla la condizione numerica di P (determinante o rapporto tra singolari).</li>
+              <li>Se P è mal condizionata, applica regolarizzazione o limita l’analisi alle regioni angolari affidabili.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Applicazione della correzione</strong>
+            <ul>
+              <li>Per ogni direzione: <code>E_aut = P⁻¹ × E_measured</code></li>
+              <li>Dove:
+                <ul>
+                  <li><code>E_measured</code> = campo ottenuto dalla trasformazione NF→FF della AUT.</li>
+                  <li><code>E_aut</code> = campo corretto della AUT, libero dall’influenza della sonda.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ol>
 
-    2. <strong>Allineamento</strong>
-       - Porta i dati della sonda sulla stessa griglia angolare della AUT.
-       - Assicurati che la fase sia riferita a un unico riferimento comune.
-
-    3. <strong>Ottenimento della seconda colonna</strong>
-       - <strong>Sonda lineare ruotata di 90°</strong>: misura nuovamente co/cross → ottieni la seconda colonna.
-       - <strong>Sonda dual‑port</strong>: usa i pattern dei due porti, con ampiezza e fase relative note.
-       - <strong>Caso ideale (sonda quasi ideale)</strong>: assumi P diagonale (solo co e cross, senza termini di accoppiamento).
-
-    4. <strong>Costruzione della matrice P</strong>
-       - Per ogni angolo (theta, phi):
-         ```
-         P = [[col1_co,    col2_co],
-              [col1_cross, col2_cross]]
-         ```
-       - Dove col1 e col2 sono i valori complessi ottenuti dalle due configurazioni ortogonali.
-
-    5. <strong>Verifica della matrice</strong>
-       - Controlla la condizione numerica di P (determinante o rapporto tra singolari).
-       - Se P è mal condizionata, applica regolarizzazione o limita l’analisi alle regioni angolari affidabili.
-
-    6. <strong>Applicazione della correzione</strong>
-       - Per ogni direzione:
-         - E_aut = P⁻¹ × E_measured
-       - Dove:
-         - E_measured = campo ottenuto dalla trasformazione NF→FF della AUT.
-         - E_aut = campo corretto della AUT, libero dall’influenza della sonda.
-
-    - Note pratiche
-      - Co/cross sono definiti rispetto all’orientazione della sonda: mantieni coerenza con la base scelta.
-      - La rotazione di 90° della sonda può introdurre cambi di segno/fase: verifica con attenzione.
-      - Nei sistemi multi‑porta, la fase relativa tra porti deve essere misurata in FF commutando tra le porte.
-      - Se la sonda ha cross‑pol elevato, i termini fuori diagonale di P non sono trascurabili.
+        <h4>Note pratiche</h4>
+        <ul>
+          <li>Co/cross sono definiti rispetto all’orientazione della sonda: mantieni coerenza con la base scelta.</li>
+          <li>La rotazione di 90° della sonda può introdurre cambi di segno/fase: verifica con attenzione.</li>
+          <li>Nei sistemi multi‑porta, la fase relativa tra porti deve essere misurata in FF commutando tra le porte.</li>
+          <li>Se la sonda ha cross‑pol elevato, i termini fuori diagonale di P non sono trascurabili.</li>
+        </ul>
       </div>
-    </div>
+    </details>
   - Trasformazione NF→FF planare
     - Convertire il campo corretto `E_t(x,y,z0)` in spettro planare `E_t(k_x,k_y,z0)` tramite 2D FFT (spettro di onde piane).
     - Separare componenti propaganti (`k_x^2 + k_y^2 ≤ k^2`) da quelle evanescenti; calcolare `k_z = √(k^2 − k_x^2 − k_y^2)` per propagazione.
@@ -247,9 +273,4 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 - Riferimenti
   - nf2ff_transformation — Algoritmi NF→FF (Matlab): codice analizzato per soluzioni pratiche di trasformazione NF→FF e compensazione della sonda; usato come spunto per gli script Python della pipeline. Link: https://github.com/hbartle/nf2ff_transformation
   - Near-Field Scanning Measurements — Scan planare (setup, campionamento, correzioni, incertezze). File: `NF-FF/Near-Field_Scanning_Measurements.pdf`.
-
----
-Struttura del documento
-- Ogni settimana: obiettivi, sintesi tecnica, decisioni operative, attività pianificate.
-- Riferimenti con percorsi locali ai PDF e eventuali materiali esterni.
-- Note su integrazione con beamforming per array (AESA) e pianificazione misure.
+  - Documentazione R&S per misure di antenne AESA: https://www.rohde-schwarz.com/it/applicazioni/misura-di-un-antenna-con-beamforming-in-modalita-di-trasmissione-nota-di-applicazione_56280-408715.html
