@@ -18,7 +18,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 - Trasformazione NF→FF planare (spettro di onde piane)
   - Si misura il campo tangenziale su griglia rettangolare: `E(x,y,z0)`.
-  - Si calcola lo spettro spaziale via 2D FFT per ottenere componenti `k_x, k_y` e propagazione lungo `k_z`.
+  - Si calcola lo spettro spaziale via 2D FFT.
   - Si effettua la correzione di polarizzazione/sonda e la ricombinazione in campo lontano.
 
 - Campionamento e area di scansione
@@ -30,14 +30,6 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Il campo misurato è la convoluzione con la risposta della sonda; serve deconvoluzione/correzione.
   - È necessaria la caratterizzazione della sonda (fattore di correzione) e l’allineamento di polarizzazione.
   - <span style="color: #f8df00ff;">**Tutti =>** Che antenna usare => Tromba o guida d'onda non direttiva, lobo principale che prende tutto il FOV della AUT</span>
-  
-  - MMS 2015 — Probe correction (riassunto)
-    - Problema: la tensione misurata `V` è la convoluzione tra il campo AUT `E` e la risposta spaziale della sonda `H` (`V = E conv H`). Obiettivo: recuperare `E` per una trasformazione NF→FF corretta.
-    - Modello/procedura: stimare/ottenere `H` (ampiezza+fase) via misura o simulazione elettromagnetica alla stessa distanza `z0`; eseguire la deconvoluzione nel dominio spaziale o, preferibilmente, nel dominio spettrale planare (`k_x, k_y`) con regolarizzazione per evitare amplificazione del rumore.
-    - Sonda OERWG (open-ended rectangular waveguide): pattern e polarizzazione noti; considerare cross‑pol e banda utile della sonda nella correzione.
-    - Passaggi operativi: calibrare ampiezza/fase della sonda con antenne standard; acquisire NF con riferimento di fase stabile; applicare correzione sonda (de‑embedding) prima della 2D FFT; verificare il FF risultante rispetto a pattern attesi.
-    - Accortezze: aliasing/oversampling, dinamica VNA/receiver, finestre (apodizzazione) per troncamento, coerenza del sistema di riferimento (orientamento sonda e assi), controllo drift e rumore.
-  
   - <span style="color: #f8df00ff;">**Probes correction for planar near field antennas measurements =>** Nel metodo della deconvoluzione si ha che **E** è il campo elettrico da trovare. **V** è la tensione misurata e **H** è la risposta spaziale della sonda, quindi è cosa nota. Si ha che **V = E conv H**. quindi per trovare **E** devo dividere (nel dominio della frequenza)  **V/H** e fare la trasformata inversa.</span>
   - <span style="color: #f8df00ff;">Per ottenere **H** si fanno delle simualzioni i CST come se fosse la misura, da stare attenti a mantenere la distanza della simualzione uguale a quella della misura reale</span>
 
