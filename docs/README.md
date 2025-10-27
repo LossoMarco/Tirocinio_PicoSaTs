@@ -173,8 +173,9 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Probe correction (de‑embedding)
     - Il segnale `V(x,y)` è la convoluzione tra il campo della AUT e la risposta spaziale della sonda `H`; correggere in dominio `(k_x, k_y)` dividendo per `H(k_x, k_y)` con regolarizzazione per limitare l’amplificazione del rumore.
     - Allineare correttamente la polarizzazione; caratterizzare `H` via misura o simulazioni EM alla stessa distanza `z0`; considerare cross‑pol e banda operativa.
-    <div style="border: 1px solid #334155; background: #1f2937; padding: 10px; border-radius: 6px; margin: 6px 0;">
-    <strong>Procedura per la costruzione della matrice P (Probe Correction)</strong>
+    <div class="md-box">
+      <div class="md-box-title">Procedura per la costruzione della matrice P (Probe Correction)</div>
+      <div class="md-box-body">
     - Dati necessari
       - Pattern di radiazione della sonda in campo lontano (FF), in due polarizzazioni ortogonali.
       - Per ogni direzione angolare (theta, phi): ampiezza e fase delle componenti co‑polar e cross‑polar.
@@ -217,6 +218,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
       - La rotazione di 90° della sonda può introdurre cambi di segno/fase: verifica con attenzione.
       - Nei sistemi multi‑porta, la fase relativa tra porti deve essere misurata in FF commutando tra le porte.
       - Se la sonda ha cross‑pol elevato, i termini fuori diagonale di P non sono trascurabili.
+      </div>
     </div>
   - Trasformazione NF→FF planare
     - Convertire il campo corretto `E_t(x,y,z0)` in spettro planare `E_t(k_x,k_y,z0)` tramite 2D FFT (spettro di onde piane).
