@@ -1,10 +1,10 @@
-# <span style="color: #00FF00;">Report settimanale –Tirocinio PicoSaTs</span>
+# <span style="color: #6bc06bff;">Report settimanale –Tirocinio PicoSaTs</span>
 
 Questo documento raccoglie, settimana per settimana, i punti chiave dai paper analizzati, con focus su misure Near-Field (NF) e trasformazione Far-Field (FF), e sulla loro integrazione con il beamforming di antenne AESA.
 
 ---
 
-## <span style="color: #FF8800;">Settimana 1</span>
+## <span style="color: #e69a44ff;">Settimana 1</span>
 
 Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al planar scanning.
 
@@ -29,7 +29,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 - Sonda e correzione (probe correction)
   - Il campo misurato è la convoluzione con la risposta della sonda; serve deconvoluzione/correzione.
   - È necessaria la caratterizzazione della sonda (fattore di correzione) e l’allineamento di polarizzazione.
-  - <span style="color: #FFFF00;">**Tutti =>** Che antenna usare => Tromba o guida d'onda non direttiva, lobo principale che prende tutto il FOV della AUT</span>
+  - <span style="color: #f8df00ff;">**Tutti =>** Che antenna usare => Tromba o guida d'onda non direttiva, lobo principale che prende tutto il FOV della AUT</span>
   
   - MMS 2015 — Probe correction (riassunto)
     - Problema: la tensione misurata `V` è la convoluzione tra il campo AUT `E` e la risposta spaziale della sonda `H` (`V = E conv H`). Obiettivo: recuperare `E` per una trasformazione NF→FF corretta.
@@ -38,15 +38,15 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Passaggi operativi: calibrare ampiezza/fase della sonda con antenne standard; acquisire NF con riferimento di fase stabile; applicare correzione sonda (de‑embedding) prima della 2D FFT; verificare il FF risultante rispetto a pattern attesi.
     - Accortezze: aliasing/oversampling, dinamica VNA/receiver, finestre (apodizzazione) per troncamento, coerenza del sistema di riferimento (orientamento sonda e assi), controllo drift e rumore.
   
-  - <span style="color: #FFFF00;">**Probes correction for planar near field antennas measurements =>** Nel metodo della deconvoluzione si ha che **E** è il campo elettrico da trovare. **V** è la tensione misurata e **H** è la risposta spaziale della sonda, quindi è cosa nota. Si ha che **V = E conv H**. quindi per trovare **E** devo dividere (nel dominio della frequenza)  **V/H** e fare la trasformata inversa.</span>
-  - <span style="color: #FFFF00;">Per ottenere **H** si fanno delle simualzioni i CST come se fosse la misura, da stare attenti a mantenere la distanza della simualzione uguale a quella della misura reale</span>
+  - <span style="color: #f8df00ff;">**Probes correction for planar near field antennas measurements =>** Nel metodo della deconvoluzione si ha che **E** è il campo elettrico da trovare. **V** è la tensione misurata e **H** è la risposta spaziale della sonda, quindi è cosa nota. Si ha che **V = E conv H**. quindi per trovare **E** devo dividere (nel dominio della frequenza)  **V/H** e fare la trasformata inversa.</span>
+  - <span style="color: #f8df00ff;">Per ottenere **H** si fanno delle simualzioni i CST come se fosse la misura, da stare attenti a mantenere la distanza della simualzione uguale a quella della misura reale</span>
 
 - Principali fonti di errore
   - Troncamento del piano, aliasing (passo troppo grande), drift di fase/ampiezza.
   - Disallineamenti meccanici/angolari, multi-path residuo, non idealità della sonda.
 
 - Note operative e prossimi passi
-  - <span style="color: #FFFF00;">**Measurements_of_Antenna_Radiation_Pattern_Laboratory_Manual =>** A pagina 4 si parla di relative radiation pattern, quindi si fa la misura del pattern relativo alla AUT, quindi la calibrazione non è necessaria.</span>
+  - <span style="color: #f8df00ff;">**Measurements_of_Antenna_Radiation_Pattern_Laboratory_Manual =>** A pagina 4 si parla di relative radiation pattern, quindi si fa la misura del pattern relativo alla AUT, quindi la calibrazione non è necessaria.</span>
 
 - <span style="color: #4FC3F7;">Linee guida IEEE 149 (1979, 2021)</span>
   - Scopo: pratiche raccomandate per misure di pattern, guadagno, polarizzazione e parametri associati in gamme di prova (anechoic, outdoor, compact, near-field).
@@ -54,9 +54,9 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Quiet zone e range: definizione dell’area utile, controllo riflessioni (assorbitori, ground bounce), materiali del supporto AUT a basso scattering, gestione delle diffrazioni dei bordi.
   - Scanner planare: planarità/ortogonalità assi, accuratezza di passo e ripetibilità, calibrazione del piano di misura, riferimenti di posizione e controllo dell’errore di posizionamento.
   - Incertezze: contributi da strumentazione, sonda, allineamento, ambiente e post-elaborazione; costruzione del budget e propagazione all’FF dopo la trasformazione.
-  - <span style="color: #FFFF00;">**IEEE Std 149-2021 =>** La griglia deve soddisfare il criterio di misura per cui devo captare segnali di -45 dB rispetto alla misura massima sulla mia AUT</span>
-  - <span style="color: #FFFF00;">**IEEE Std 149-2021 =>** L'antenna caratterizzante va puntata verso la AUT? NO, vengono usati i metodi di compensazione della sonda con il teorema di reciprocità di Lorentz applicato al campo vicino. Il campo misurato è la convoluzione dei due campi, quindi vanno de-convoluti. Per mantenere un sistema di riferimento coerente e gli algoritmi FFT per NF/FF assumono che la sonda sia fissa (oltre alla AUT), inoltre aggiungere gradi di liberà rende tutto più difficile e costoso.</span>
-  - <span style="color: #FFFF00;">**IEEE 149-2021 =>** Distanza dalla AUT almeno 3λ per NF, chiaramente più piccola del FF 2D^2/λ</span>
+  - <span style="color: #f8df00ff;">**IEEE Std 149-2021 =>** La griglia deve soddisfare il criterio di misura per cui devo captare segnali di -45 dB rispetto alla misura massima sulla mia AUT</span>
+  - <span style="color: #f8df00ff;">**IEEE Std 149-2021 =>** L'antenna caratterizzante va puntata verso la AUT? NO, vengono usati i metodi di compensazione della sonda con il teorema di reciprocità di Lorentz applicato al campo vicino. Il campo misurato è la convoluzione dei due campi, quindi vanno de-convoluti. Per mantenere un sistema di riferimento coerente e gli algoritmi FFT per NF/FF assumono che la sonda sia fissa (oltre alla AUT), inoltre aggiungere gradi di liberà rende tutto più difficile e costoso.</span>
+  - <span style="color: #f8df00ff;">**IEEE 149-2021 =>** Distanza dalla AUT almeno 3λ per NF, chiaramente più piccola del FF 2D^2/λ</span>
 
 - <span style="color: #4FC3F7;">IEEE 1720-2012 — Pratiche di misura NF</span>
   - Ambito e geometrie: planare, sferica, cilindrica; criteri di scelta in base a dimensioni AUT, direzioni richieste e vincoli meccanici/ambientali.
@@ -69,10 +69,10 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Cilindrica: espansione in armoniche cilindriche per antenne allungate; criteri di campionamento lungo asse e perimetro.
   - Verifica e validazione: uso di antenne standard (SGH), ripetibilità, inter-range comparison, controlli periodici del range; criteri di accettazione e report dei parametri.
   - Output e metriche: pattern 2D/3D, guadagno/directivity, cross-pol.
-  - <span style="color: #FFFF00;">**IEEE Std 1720‑2012 =>** Devo avere un XPD di 10/15 dB migliore rispetto alla AUT, il che implica un axial ratio molto vicino a 0 dB</span>
-  - <span style="color: #FFFF00;">**IEEE Std 1720‑2012 / An_overview_of_near-field_antenna_measurements =>** Si preferisce la sonda non direttiva, pattern ampio. Sonda piccola rispetto a λ, altrimenti perdo risoluzione.</span>
-  - <span style="color: #FFFF00;">**IEEE Std 1720‑2012 =>** Buona pratica vuole che si facciano piu misure con punti di acquisizione spostati di λ/8 e anche la distanza tra le antenne per mediare le riflessioni tra le stesse</span>
-  - <span style="color: #FFFF00;">**IEEE Std 1720‑2012 =>** Test sui cavi flessibili (system phase error) => utilizzo un cavo di loop back al posto della AUT e vedo come varia il segnale muovendo la sonda sulla griglia</span>
+  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 =>** Devo avere un XPD di 10/15 dB migliore rispetto alla AUT, il che implica un axial ratio molto vicino a 0 dB</span>
+  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 / An_overview_of_near-field_antenna_measurements =>** Si preferisce la sonda non direttiva, pattern ampio. Sonda piccola rispetto a λ, altrimenti perdo risoluzione.</span>
+  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 =>** Buona pratica vuole che si facciano piu misure con punti di acquisizione spostati di λ/8 e anche la distanza tra le antenne per mediare le riflessioni tra le stesse</span>
+  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 =>** Test sui cavi flessibili (system phase error) => utilizzo un cavo di loop back al posto della AUT e vedo come varia il segnale muovendo la sonda sulla griglia</span>
 
 - <span style="color: #4FC3F7;">Electronics 2018, 7, 257 — Strategie di campionamento NF </span>
   - Scopo: rassegna di strategie di campionamento per NF→FF, con obiettivo di ridurre i punti rispetto al passo `λ/2` mantenendo l’accuratezza del FF.
@@ -88,10 +88,10 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     5) Acquisizione: impostare riferimento di fase stabile, controlla drift, registrare ampiezza/fase in ciascun punto MRSS; conservare metadati (IFBW, media, potenza).
     6) Regridding: ricostruire griglia uniforme tramite kernel bandlimitati (sinc finestrata) o interpolatori min‑errore; applicare correzione sonda e apodizzazione.
     7) Verifica FF: confrontare con misura `λ/2` su antenna standard; metriche: errore RMS dB, sidelobes, beam pointing/squint, cross‑pol.
-  - <span style="color: #FFFF00;">**electronics-07-00257** **=>** MRSS porta al limite teorico dei gradi di libertà, quindi con interpolazione ricostruisco griglia uniforme e FFT veloce</span>
-  - <span style="color: #FFFF00;">**electronics-07-00257 =>** I gradi di liberà corrispondono a quante info indip contiene il campo. Fortemente influenzati dalle dimensioni elettriche dell'antenna (+ grande => + gradi), dalla distanza dall'antenna (+ lontano => - gradi (solo componenti propaganti)).</span>
-  - <span style="color: #FFFF00;">Quindi per antenne lineari NDF = 2 * (D/λ); mentre per antenne con una superficie si ha NDF = 4 * A/(λ^2)</span>
-  - <span style="color: #FFFF00;">I valori singolari di A corrispondono alla radice quadrata degli autovalori di A^+ * A e sono numeri reali non negativi decrescenti. Dove A è la funzione che mappa J (densità di corrente) in E (campo elettrico).</span>
+  - <span style="color: #f8df00ff;">**electronics-07-00257** **=>** MRSS porta al limite teorico dei gradi di libertà, quindi con interpolazione ricostruisco griglia uniforme e FFT veloce</span>
+  - <span style="color: #f8df00ff;">**electronics-07-00257 =>** I gradi di liberà corrispondono a quante info indip contiene il campo. Fortemente influenzati dalle dimensioni elettriche dell'antenna (+ grande => + gradi), dalla distanza dall'antenna (+ lontano => - gradi (solo componenti propaganti)).</span>
+  - <span style="color: #f8df00ff;">Quindi per antenne lineari NDF = 2 * (D/λ); mentre per antenne con una superficie si ha NDF = 4 * A/(λ^2)</span>
+  - <span style="color: #f8df00ff;">I valori singolari di A corrispondono alla radice quadrata degli autovalori di A^+ * A e sono numeri reali non negativi decrescenti. Dove A è la funzione che mappa J (densità di corrente) in E (campo elettrico).</span>
 
 
 - <span style="color: #4FC3F7;">How to Design and Test a Phased Array Antenna </span>
@@ -153,7 +153,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 ---
 
 
-## <span style="color: #FF8800;">Settimana 2</span>
+## <span style="color: #e69a44ff;">Settimana 2</span>
 
 - <span style="color: #4FC3F7;">Near-Field Scanning Measurements — Scan planare</span>
   - Obiettivo e ambito
