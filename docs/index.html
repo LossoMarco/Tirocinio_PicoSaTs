@@ -36,6 +36,27 @@
     details.md-box[open] .md-box-title::after { transform: rotate(90deg); }
     .md-box-body { padding: 12px 14px; }
     .md-box-body pre, .md-box-body code { background-color: #0b1220; }
+
+    /* Testo formule (inline code) più chiaro su tema scuro */
+    .markdown-section code,
+    .markdown-section pre code {
+      color: #ffffff !important; /* bianco pieno per massima leggibilità */
+    }
+
+    /* Titoli delle sezioni/documenti (azzurro leggibile su scuro) */
+    .md-cite {
+      color: #4FC3F7 !important; /* azzurro alta visibilità */
+      font-weight: 600;
+    }
+
+    /* Sezioni gialle (note) con contrasto migliorato per elementi annidati */
+    .md-note { color: #f8df00; }
+    .md-note strong,
+    .md-note b,
+    .md-note a,
+    .md-note code {
+      color: #ffffff !important;
+    }
   </style>
 </head>
 <body>

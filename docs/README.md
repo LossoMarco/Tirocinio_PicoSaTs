@@ -29,64 +29,68 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 - Sonda e correzione (probe correction)
   - Il campo misurato è la convoluzione con la risposta della sonda; serve deconvoluzione/correzione.
   - È necessaria la caratterizzazione della sonda (fattore di correzione) e l’allineamento di polarizzazione.
-  - <span style="color: #f8df00ff;">**Tutti =>** Che antenna usare => Tromba o guida d'onda non direttiva, lobo principale che prende tutto il FOV della AUT</span>
-  - <span style="color: #f8df00ff;">**Probes correction for planar near field antennas measurements =>** Nel metodo della deconvoluzione si ha che **E** è il campo elettrico da trovare. **V** è la tensione misurata e **H** è la risposta spaziale della sonda, quindi è cosa nota. Si ha che **V = E conv H**. quindi per trovare **E** devo dividere (nel dominio della frequenza)  **V/H** e fare la trasformata inversa.</span>
-  - <span style="color: #f8df00ff;">Per ottenere **H** si fanno delle simualzioni i CST come se fosse la misura, da stare attenti a mantenere la distanza della simualzione uguale a quella della misura reale</span>
+- <span class="md-note">**Tutti =>** Che antenna usare => Tromba o guida d'onda non direttiva, lobo principale che prende tutto il FOV della AUT</span>
+- <span class="md-note">**Probes correction for planar near field antennas measurements =>** Nel metodo della deconvoluzione si ha che **E** è il campo elettrico da trovare. **V** è la tensione misurata e **H** è la risposta spaziale della sonda, quindi è cosa nota. Si ha che **V = E conv H**. quindi per trovare **E** devo dividere (nel dominio della frequenza)  **V/H** e fare la trasformata inversa.</span>
+- <span class="md-note">Per ottenere **H** si fanno delle simualzioni i CST come se fosse la misura, da stare attenti a mantenere la distanza della simualzione uguale a quella della misura reale</span>
 
 - Principali fonti di errore
   - Troncamento del piano, aliasing (passo troppo grande), drift di fase/ampiezza.
   - Disallineamenti meccanici/angolari, multi-path residuo, non idealità della sonda.
 
-- Note operative e prossimi passi
-  - <span style="color: #f8df00ff;">**Measurements_of_Antenna_Radiation_Pattern_Laboratory_Manual =>** A pagina 4 si parla di relative radiation pattern, quindi si fa la misura del pattern relativo alla AUT, quindi la calibrazione non è necessaria.</span>
+- Note operative
+- <span class="md-note">**Measurements_of_Antenna_Radiation_Pattern_Laboratory_Manual =>** A pagina 4 si parla di relative radiation pattern, quindi si fa la misura del pattern relativo alla AUT, quindi la calibrazione non è necessaria.</span>
 
-- <span style="color: #4FC3F7;">Linee guida IEEE 149 (1979, 2021)</span>
+- <span class="md-cite">Linee guida IEEE 149 (1979, 2021)</span>
   - Scopo: pratiche raccomandate per misure di pattern, guadagno, polarizzazione e parametri associati in gamme di prova (anechoic, outdoor, compact, near-field).
   - 2021: aggiornamenti su metodi NF (planare/sferico/cilindrico), analisi dell'incertezza, requisiti software/strumentazione, sicurezza e high-power, verifiche e terminologia aggiornata (quiet zone, target support, tracking).
   - Quiet zone e range: definizione dell’area utile, controllo riflessioni (assorbitori, ground bounce), materiali del supporto AUT a basso scattering, gestione delle diffrazioni dei bordi.
   - Scanner planare: planarità/ortogonalità assi, accuratezza di passo e ripetibilità, calibrazione del piano di misura, riferimenti di posizione e controllo dell’errore di posizionamento.
   - Incertezze: contributi da strumentazione, sonda, allineamento, ambiente e post-elaborazione; costruzione del budget e propagazione all’FF dopo la trasformazione.
-  - <span style="color: #f8df00ff;">**IEEE Std 149-2021 =>** La griglia deve soddisfare il criterio di misura per cui devo captare segnali di -45 dB rispetto alla misura massima sulla mia AUT</span>
-  - <span style="color: #f8df00ff;">**IEEE Std 149-2021 =>** L'antenna caratterizzante va puntata verso la AUT? NO, vengono usati i metodi di compensazione della sonda con il teorema di reciprocità di Lorentz applicato al campo vicino. Il campo misurato è la convoluzione dei due campi, quindi vanno de-convoluti. Per mantenere un sistema di riferimento coerente e gli algoritmi FFT per NF/FF assumono che la sonda sia fissa (oltre alla AUT), inoltre aggiungere gradi di liberà rende tutto più difficile e costoso.</span>
-  - <span style="color: #f8df00ff;">**IEEE 149-2021 =>** Distanza dalla AUT almeno 3λ per NF, chiaramente più piccola del FF 2D^2/λ</span>
+- <span class="md-note">**IEEE Std 149-2021 =>** La griglia deve soddisfare il criterio di misura per cui devo captare segnali di -45 dB rispetto alla misura massima sulla mia AUT</span>
+- <span class="md-note">**IEEE Std 149-2021 =>** L'antenna caratterizzante va puntata verso la AUT? NO, vengono usati i metodi di compensazione della sonda con il teorema di reciprocità di Lorentz applicato al campo vicino. Il campo misurato è la convoluzione dei due campi, quindi vanno de-convoluti. Per mantenere un sistema di riferimento coerente e gli algoritmi FFT per NF/FF assumono che la sonda sia fissa (oltre alla AUT), inoltre aggiungere gradi di liberà rende tutto più difficile e costoso.</span>
+- <span class="md-note">**IEEE 149-2021 =>** Distanza dalla AUT almeno 3λ per NF, chiaramente più piccola del FF 2D^2/λ</span>
 
-- <span style="color: #4FC3F7;">IEEE 1720-2012 — Pratiche di misura NF</span>
+- <span class="md-cite">IEEE 1720-2012 — Pratiche di misura NF</span>
   - Ambito e geometrie: planare, sferica, cilindrica; criteri di scelta in base a dimensioni AUT, direzioni richieste e vincoli meccanici/ambientali.
-  - Scanner e posizionamento: planarità e ortogonalità degli assi, accuratezza del passo, controllo della distanza `z0`, tilt e bow; tracciabilità dei riferimenti di posizione.
+  - Scanner e posizionamento: planarità e ortogonalità degli assi, accuratezza del passo, controllo della distanza `z0`, tilt e bow.
   - Campionamento e area di scansione: passi tipici ≤ `λ/2` (con oversampling se necessario per dinamica); estensione dell’area oltre i bordi AUT; apodizzazione (Hann/Hamming) per ridurre ripple da troncamento.
-  - Sonda e correzione: caratterizzazione complessa della sonda (ampiezza/fase), de-embedding e correzione di polarizzazione/cross-pol; verifica periodica e certificazione dei fattori di correzione.
+  - Sonda e correzione: caratterizzazione complessa della sonda (ampiezza/fase).
   - Trasformazioni NF→FF:
-    - Planare: spettro di onde piane con 2D FFT; gestione componenti evanescenti; normalizzazione e conversione in coordinate angolari (`θ, φ`).
+    - Planare: spettro di onde piane con 2D FFT.
     - Sferica: espansione in armoniche sferiche; requisiti di copertura angolare e numero di punti; ricostruzione completa del pattern.
-    - Cilindrica: espansione in armoniche cilindriche per antenne allungate; criteri di campionamento lungo asse e perimetro.
-  - Verifica e validazione: uso di antenne standard (SGH), ripetibilità, inter-range comparison, controlli periodici del range; criteri di accettazione e report dei parametri.
+    - Cilindrica: espansione in armoniche cilindriche per antenne allungate.
+  - Verifica e validazione: uso di antenne standard (SGH).
   - Output e metriche: pattern 2D/3D, guadagno/directivity, cross-pol.
-  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 =>** Devo avere un XPD di 10/15 dB migliore rispetto alla AUT, il che implica un axial ratio molto vicino a 0 dB</span>
-  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 / An_overview_of_near-field_antenna_measurements =>** Si preferisce la sonda non direttiva, pattern ampio. Sonda piccola rispetto a λ, altrimenti perdo risoluzione.</span>
-  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 =>** Buona pratica vuole che si facciano piu misure con punti di acquisizione spostati di λ/8 e anche la distanza tra le antenne per mediare le riflessioni tra le stesse</span>
-  - <span style="color: #f8df00ff;">**IEEE Std 1720‑2012 =>** Test sui cavi flessibili (system phase error) => utilizzo un cavo di loop back al posto della AUT e vedo come varia il segnale muovendo la sonda sulla griglia</span>
+- <span class="md-note">**IEEE Std 1720‑2012 =>** Devo avere un XPD di 10/15 dB migliore rispetto alla AUT, il che implica un axial ratio molto vicino a 0 dB</span>
+- <span class="md-note">**IEEE Std 1720‑2012 / An_overview_of_near-field_antenna_measurements =>** Si preferisce la sonda non direttiva, pattern ampio. Sonda piccola rispetto a λ, altrimenti perdo risoluzione.</span>
+- <span class="md-note">**IEEE Std 1720‑2012 =>** Buona pratica vuole che si facciano piu misure con punti di acquisizione spostati di λ/8 e anche la distanza tra le antenne per mediare le riflessioni tra le stesse</span>
+- <span class="md-note">**IEEE Std 1720‑2012 =>** Test sui cavi flessibili (system phase error) => utilizzo un cavo di loop back al posto della AUT e vedo come varia il segnale muovendo la sonda sulla griglia</span>
 
-- <span style="color: #4FC3F7;">Electronics 2018, 7, 257 — Strategie di campionamento NF </span>
+- <span class="md-cite">Electronics 2018, 7, 257 — Strategie di campionamento NF </span>
   - Scopo: rassegna di strategie di campionamento per NF→FF, con obiettivo di ridurre i punti rispetto al passo `λ/2` mantenendo l’accuratezza del FF.
   - Limite informativo inferiore: gradi di libertà del campo/AUT.
   - Campionamento standard: passo `λ/2`; spesso sovracampionamento rispetto al limite; effetti su tempo di misura e troncamento.
-  - Linee pratiche: usare `λ/2` come baseline; per ridurre punti applicare MRSS con margine di sicurezza sui DOF previsti; apodizzazione; riferimento di fase; validare l’FF con antenne di riferimento.
-  - Implicazioni per il nostro setup: riduzione di punti e tempo; definire set MRSS per AESA; aggiornare pipeline NF→FF e diagnostica; pianificare verifiche e budget d’incertezza.
-  - Procedura MRSS
-    1) Input: dimensioni AUT (`D`), frequenza (`f`/`λ`), distanza piano `z0`, dinamica desiderata (dB) e banda/polarizzazione della sonda.
-    2) Stima DOF: usa `NDF ≈ 2·(D/λ)` per array lineari o `NDF ≈ 4·(A/λ^2)` per aperture planari; aggiungere margine per dinamica (tipicamente +10–20%).
-    3) Densità MRSS: costruire una mappa di densità più fitta dove il campo varia (vicino all’asse principale, bordi/autocorr); impostare distribuzioni tipo Chebyshev o profili radiali/lineari non uniformi.
-    4) Generazione posizioni: calcolare coordinate non uniformi su X,Y con controllo di errore di posizionamento; assicurarsi di poter ricampionare su griglia uniforme (regridding) mantenendo fase.
-    5) Acquisizione: impostare riferimento di fase stabile, controlla drift, registrare ampiezza/fase in ciascun punto MRSS; conservare metadati (IFBW, media, potenza).
-    6) Regridding: ricostruire griglia uniforme tramite kernel bandlimitati (sinc finestrata) o interpolatori min‑errore; applicare correzione sonda e apodizzazione.
-    7) Verifica FF: confrontare con misura `λ/2` su antenna standard; metriche: errore RMS dB, sidelobes, beam pointing/squint, cross‑pol.
-  - <span style="color: #f8df00ff;">**electronics-07-00257** **=>** MRSS porta al limite teorico dei gradi di libertà, quindi con interpolazione ricostruisco griglia uniforme e FFT veloce</span>
-  - <span style="color: #f8df00ff;">**electronics-07-00257 =>** I gradi di liberà corrispondono a quante info indip contiene il campo. Fortemente influenzati dalle dimensioni elettriche dell'antenna (+ grande => + gradi), dalla distanza dall'antenna (+ lontano => - gradi (solo componenti propaganti)).</span>
-  - <span style="color: #f8df00ff;">Quindi per antenne lineari NDF = 2 * (D/λ); mentre per antenne con una superficie si ha NDF = 4 * A/(λ^2)</span>
-  - <span style="color: #f8df00ff;">I valori singolari di A corrispondono alla radice quadrata degli autovalori di A^+ * A e sono numeri reali non negativi decrescenti. Dove A è la funzione che mappa J (densità di corrente) in E (campo elettrico).</span>
+  - Linee pratiche: usare `λ/2` come baseline; per ridurre punti applicare MRSS con margine di sicurezza sui DOF (Degree Of Freedom) previsti.
+  <details class="md-box">
+    <summary class="md-box-title">Procedura MRSS</summary>
+    <div class="md-box-body">
+      <ol>
+        <li>Input: dimensioni AUT (<code>D</code>), frequenza (<code>f</code>/<code>λ</code>), distanza piano <code>z0</code>, dinamica desiderata (dB) e banda/polarizzazione della sonda.</li>
+        <li>Stima DOF: usa <code>NDF ≈ 2·(D/λ)</code> per array lineari o <code>NDF ≈ 4·(A/λ^2)</code> per aperture planari; aggiungere margine per dinamica (tipicamente +10–20%).</li>
+        <li>Densità MRSS: costruire una mappa di densità più fitta dove il campo varia (vicino all’asse principale, bordi/autocorr); impostare distribuzioni tipo Chebyshev o profili radiali/lineari non uniformi. E' necessario parametrizzare il campo in modo da ottenere una sua descrizione più "ampia" dove il campo varia più velocemente.</li>
+        <li>Campiono con nyquisto su questa nuova parametrizzazione. Calcolare coordinate non uniformi su X,Y con controllo di errore di posizionamento.</li>
+        <li>Acquisizione: registrare ampiezza/fase in ciascun punto MRSS; conservare metadati (IFBW, media, potenza).</li>
+        <li>Regridding: ricostruire griglia uniforme tramite kernel bandlimitati (sinc finestrata) o interpolatori min‑errore; applicare correzione sonda e apodizzazione.</li>
+        <li>Verifica FF: confrontare con misura <code>λ/2</code> su antenna standard; metriche: errore RMS dB, sidelobes, beam pointing/squint, cross‑pol.</li>
+      </ol>
+    </div>
+  </details>
+- <span class="md-note">**electronics-07-00257** **=>** MRSS porta al limite teorico dei gradi di libertà, quindi con interpolazione ricostruisco griglia uniforme e FFT veloce</span>
+- <span class="md-note">**electronics-07-00257 =>** I gradi di liberà corrispondono a quante info indip contiene il campo. Fortemente influenzati dalle dimensioni elettriche dell'antenna (+ grande => + gradi), dalla distanza dall'antenna (+ lontano => - gradi (solo componenti propaganti)).</span>
+- <span class="md-note">Quindi per antenne lineari NDF = 2 * (D/λ); mentre per antenne con una superficie si ha NDF = 4 * A/(λ^2)</span>
 
 
-- <span style="color: #4FC3F7;">How to Design and Test a Phased Array Antenna </span>
+- <span class="md-cite">How to Design and Test a Phased Array Antenna </span>
   
   - Obiettivo e contesto
     - Definire requisiti di sistema e di test per array a fasi in microonde/mmWave.
@@ -94,12 +98,12 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   
   - Architetture di beamforming
     - Analogico (controllo di fase/ampiezza per elemento), Digitale (per canale con ADC/DAC), Ibrido (subarray analogici con precoding digitale).
-    - Moduli TRx: catene RF per elemento/subarray; controlli di fase `ϕ` e ampiezza `A`; quantizzazione (bit) e step minimi.
-    - Distribuzione LO e sincronizzazione: riferimento di fase comune, drift e jitter; clock e trigger.
+    - Moduli TRx: catene RF per elemento/subarray; controlli di fase `ϕ` e ampiezza `A`.
   
   - Geometrie e spaziatura degli elementi
     - `d ≤ λ/2` per evitare grating lobes entro lo scan massimo; progetto del volume di scansione (`θ_max`), scan loss e degradazioni di guadagno.
-    - Pitch, fill factor e interazione con radome/superstrati; mutual coupling e pattern del singolo elemento.
+    - Pitch, fill factor; mutual coupling e pattern del singolo elemento.
+- <span class="md-note">**How to Design and Test a Phased Array Antenna =>** Il pitch (spaziatura tra elementi) deve rispettare `d ≤ λ/2` per evitare grating lobes entro l'angolo di scansione previsto; il fill factor (rapporto tra area attiva e superficie totale) influenza efficienza e perdite, specie con radome/superstrati; il mutual coupling modifica l'element pattern e può introdurre variazioni di fase/ampiezza tra canali, richiedendo modellazione e calibrazione attiva.</span>
   
   - Pattern e sidelobes
     - Composizione `Array Factor × Element Pattern`; taper (Taylor/Chebyshev/DPSS) per controllo dei sidelobes e bilanciamento guadagno–SLL.
@@ -147,7 +151,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 ## <span style="color: #e69a44ff;">Settimana 2</span>
 
-- <span style="color: #4FC3F7;">Near-Field Scanning Measurements — Scan planare</span>
+- <span class="md-cite">Near-Field Scanning Measurements — Scan planare</span>
   - Obiettivo e ambito
     - Focus esclusivo sulla scansione planare (X–Y) a distanza fissa `z0`.
     - Ricostruzione del FF tramite spettro di onde piane (2D FFT) delle componenti di campo tangenziali misurate sul piano.

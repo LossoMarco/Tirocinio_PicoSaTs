@@ -42,4 +42,8 @@ Per ottenere **H** si fanno delle simualzioni i CST come se fosse la misura, da 
 
 **Measurements_of_Antenna_Radiation_Pattern_Laboratory_Manual =>** A pagina 4 si parla di relative radiation pattern, quindi si fa la misura del pattern relativo alla AUT, quindi la calibrazione non è necessaria.
 
+**Near-Field_Scanning_Measurements =>** Sonda piccola rispetto a lambda perchè essendo così vicini alla AUT si ha ch enon miusra un punto del campo ma un superficie. Si vuole Guadagno della sonda piccolo rispetto alla AUT(10-20dB più bassa) perchè essendo vicine le antenne, più sono simili i loro guadagni più ci sono disturbi da riflessioni multiple.
+
+**How to Design and Test a Phased Array Antenna =>** Il pitch è la distanza tra i centri di due elementi radianti, troppo grande si sa che si hanno i grating lobes e troppo  piccola ho accoppiamento, si misura osservando la presenza di eventuali grating lobes anche lo stearing del fascio. Il fill factor è il rapporto tra l'area effettivamente radiativa e quella totale dell'array, si misura tramite efficienza radiante e uniformità del pattern. Il mutual coupling è l'interazione tra elementi vicini, porta a errori nel pattern del singolo e nella sua impedenza (diversa da singolo o in array), si analizza la matrice S, si vede come varia il pattern da quando è isolato a quando è nell'array, sempre eccitando solo lui la sistemo con calibrazione attiva.
+
 Caratterizzazzione array con beamforming, che tipo di misure si fanno 
