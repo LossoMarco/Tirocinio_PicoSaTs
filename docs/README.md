@@ -286,6 +286,25 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 
 
+- <span class="md-cite">Misure OTA in trasmissione per antenne beamforming (R&S 1MA278)</span>
+  - Strumenti e modalità R&S
+    - Defined Coherence Mode (ZVA): consente di pilotare più porte contemporaneamente con ampiezze e fasi controllate → utile per simulare/verificare beamsteering/beamforming in modalità TX senza ricablaggi.
+    - Misura combinata S‑parameters + Beamforming: con un’unica connessione all’AUT si ottengono sia i parametri di scattering sia la risposta in beamforming → aumenta throughput e riduce errori di riconnessione.
+    - Scalabilità con daisy‑chain: collegando più VNA si estende il numero di porte → concetto utile per scalare da array piccoli (4 elementi) ad array più grandi (7+ elementi).
+  - Differenze concettuali
+    - Beamsteering: solo fasi progressive → direzione del lobo principale.
+    - Beamforming: fasi + ampiezze → ottimizzazione della discriminazione utente/interferente (codebook).
+  - Risultati sperimentali
+    - X‑band, 4 elementi con parasitici: dimostrato steering a 41° con offset di fase di 228° → esempio pratico di verifica tra fase applicata e fascio desiderato.
+    - Ka‑band, array 4×10 (26–30 GHz):
+      - Pattern di singolo elemento utilizzato per calcolare il pattern d’array.
+      - Misure reali confermano le predizioni → validazione del modello.
+    - Beamforming su 4 elementi:
+      - Caso base: discriminazione utente/interferente ≈ 8.9 dB.
+      - Solo steering: discriminazione peggiora (≈ 8.6 dB).
+      - Beamforming (ampiezze [−2, 0, 0, −2] dB + fasi): discriminazione migliora a ≈ 13.5 dB, con lieve perdita di potenza radiata (≈ −0.9 dB).
+
 - Riferimenti
   - Near-Field Scanning Measurements — Scan planare (setup, campionamento, correzioni, incertezze). File: `NF-FF/Near-Field_Scanning_Measurements.pdf`.
   - Error analysis techniques for planar near-field measurements — Analisi degli errori (Newell, 1988, IEEE TAP). File: `NF-FF/Error_analysis_techniques_for_planar_near-field_measurements.pdf`.
+  - Measurement of Beamforming Antenna in Transmit Mode (R&S App Note 1MA278). File: `AESA/Measurement_of_Beamforming_Antenna_in_Transmit_Mode_R&S.pdf`.
