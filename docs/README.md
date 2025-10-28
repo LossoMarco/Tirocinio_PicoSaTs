@@ -146,6 +146,50 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 ## <span style="color: #e69a44ff;">Settimana 2</span>
 
+
+- <span class="md-cite">Sintesi Balanis — Capitolo 6 (Array di antenne)</span>
+  - Concetti chiave
+    - Pattern multiplication: pattern totale = elemento × fattore d’array (AF).
+    - AF, spaziatura `d`, ampiezze/fasi; broadside, endfire, scanning.
+  - Fattore d’array e legge di puntamento
+    - `AF(θ) = \sum a_n · e^{j(nψ)}`, con `ψ = k d cosθ + β`.
+    - Massimi/minimi: `ψ = 2πm` (massimi); nulls posizionabili via eccitazioni (`a_n`, `β`).
+    - Puntamento con `β`: broadside `β = 0`, endfire `β ≈ ± k d`.
+  - Spaziatura e lobi
+    - Vincolo `d ≤ λ/2` per evitare grating lobes (specie in scansione).
+    - Compromesso tra `HPBW` e `SLL`.
+    - Effetto di `N` e `d` su larghezza del fascio; scan loss a `θ` elevati.
+  - Pesature e sintesi
+    - Binomiale, Dolph–Chebyshev, Taylor; metodi Schelkunoff e Woodward–Lawson.
+    - Sintesi continua (Fourier/aperture) e discretizzazione su array reali.
+    - Thinned/sparse arrays: riduzione elementi con SLL accettabile; trade‑off in guadagno.
+  - Broadside vs endfire
+    - Broadside: mainlobe centrato; `HPBW` regolato dal taper.
+    - Endfire: `β ≈ k d`; correzione Hansen–Woodyard per stringere il fascio.
+  - Null steering e multi‑beam
+    - Null direzionali su interferenti mediante controllo di `a_n`/`β`.
+    - Multi‑beam via reti (Butler/Rotman) o digitale (codebook e pesi).
+  - Array planari/circolari
+    - Fattorizzazione in due AF; scansione in azimut/elevazione.
+    - Element pattern attivo; accoppiamento mutuo.
+    - Planari rettangolari: separabilità `AF_x × AF_y`; directivity ~ `N_x · N_y` (uniforme, appross.)
+    - Circolari: scanning azimutale, simmetria e gestione della polarizzazione.
+  - Wideband e TTD
+    - Beam squint in sola fase; mitigazione con ritardi di tempo (TTD).
+    - Sub‑band, equalizzazione e compensazioni per ridurre squint.
+  - Errori e tolleranze
+    - Errori di ampiezza/fase/quantizzazione → pointing error e `SLL↑`.
+    - Fail di elementi → degrado guadagno e ripple; necessaria calibrazione.
+    - Mutuo accoppiamento → varia impedenza attiva e element pattern; serve correzione.
+  - KPI e linee guida
+    - Directivity/guadagno, `HPBW`, `SLL`, pointing/scan range, efficienza.
+    - Scelte di `d`, taper e calibrazione coerenti con banda e obiettivi.
+  - Procedura pratica di progetto
+    - Definisci `HPBW`/`SLL` target → scegli taper (Chebyshev/Taylor).
+    - Verifica `d` rispetto scan range → evita grating lobes.
+    - Stima `N` e apertura per i KPI desiderati; valuta scan loss.
+    - Costruisci/valida codebook; calibrazione OTA/cablata e controllo di coerenza.
+
 - <span class="md-cite">Near-Field Scanning Measurements — Scan planare</span>
   - Obiettivo e ambito
     - Focus esclusivo sulla scansione planare (X–Y) a distanza fissa `z0`.
@@ -307,4 +351,5 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 - Riferimenti
   - Near-Field Scanning Measurements — Scan planare (setup, campionamento, correzioni, incertezze). File: `NF-FF/Near-Field_Scanning_Measurements.pdf`.
   - Error analysis techniques for planar near-field measurements — Analisi degli errori (Newell, 1988, IEEE TAP). File: `NF-FF/Error_analysis_techniques_for_planar_near-field_measurements.pdf`.
-  - Measurement of Beamforming Antenna in Transmit Mode (R&S App Note 1MA278). File: `AESA/Measurement_of_Beamforming_Antenna_in_Transmit_Mode_R&S.pdf`.
+   - Measurement of Beamforming Antenna in Transmit Mode (R&S App Note 1MA278). File: `AESA/Measurement_of_Beamforming_Antenna_in_Transmit_Mode_R&S.pdf`.
+  - Balanis, "Antenna Theory: Analysis and Design", 4th ed., Wiley, 2016. File: `Teoria/Antenna theory analysis and design, 4th Edition  Constantine A. Balanis. - New York John Wiley & Sons, 2016.pdf - collegamento.lnk`.
