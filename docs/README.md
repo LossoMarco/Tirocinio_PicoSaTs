@@ -260,7 +260,8 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Sequenza tipica: acquisizione su griglia → (eventuale) regridding MRSS → correzione sonda → 2D FFT → filtraggio evanescente → conversione angolare → normalizzazione → esportazione.
     - Configurare finestra e zero‑padding per ottimizzare risoluzione e ridurre artefatti angolari; attenzione all’aliasing dei picchi.
 
-- <span style="color: #4FC3F7;">Error analysis techniques for planar near-field measurements — Sintesi degli errori</span>
+
+- <span class="md-cite">Error analysis techniques for planar near-field measurements — Sintesi degli errori</span>
   - Introduzione
     - Riepilogo dei contributi d’errore trattati da A.C. Newell (IEEE TAP, 1988) per misure NF planari e loro impatto su correzione di sonda e trasformazione NF→FF.
   - Probe parameter errors (1–4) — impattano direttamente la correzione di sonda `P` e le metriche di polarizzazione.
