@@ -260,7 +260,31 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Sequenza tipica: acquisizione su griglia → (eventuale) regridding MRSS → correzione sonda → 2D FFT → filtraggio evanescente → conversione angolare → normalizzazione → esportazione.
     - Configurare finestra e zero‑padding per ottimizzare risoluzione e ridurre artefatti angolari; attenzione all’aliasing dei picchi.
 
+- <span style="color: #4FC3F7;">Error analysis techniques for planar near-field measurements — Sintesi degli errori</span>
+  - Introduzione
+    - Riepilogo dei contributi d’errore trattati da A.C. Newell (IEEE TAP, 1988) per misure NF planari e loro impatto su correzione di sonda e trasformazione NF→FF.
+  - Probe parameter errors (1–4) — impattano direttamente la correzione di sonda `P` e le metriche di polarizzazione.
+    - Relative pattern: differenze nel pattern co/cross della sonda (ampiezza/fase) → errori di de‑embedding e leakage copol/cross‑pol.
+    - Polarization ratio: incertezza nel rapporto co/cross (XPR/XPD) della sonda → alterazione delle componenti principali e cross della AUT.
+    - Gain: errore sul guadagno assoluto della sonda → scala errata dell’FF/EIRP e della normalizzazione.
+    - Alignment: disallineamento di orientazione/rotazione della sonda e di `z0` → mixing di polarizzazioni ed errori di fase.
+  - Near‑field measurement errors (5–18) — legati al set‑up di misura e al post‑processing.
+    - Normalization constant: costante di normalizzazione NF→FF non corretta → scala d’ampiezza/potenza errata.
+    - Mismatch: disadattamento di porte/cavi/sonda → ripple e errori di ampiezza.
+    - AUT alignment: orientazione/posizionamento AUT non corretti → pointing error e simmetria del pattern alterata.
+    - Sampling/aliasing: passi `Δx, Δy` troppo grandi → aliasing spettrale e lobi spurî.
+    - Area truncation: area di scansione insufficiente → troncamento e incremento dei sidelobes/ripple.
+    - Position error (x/y/z): misregistrazione, tilt del piano, errore su `z0` → sfasamenti e blur del campo.
+    - Multiple reflections: multipath tra superfici/strutture → ghost lobes e ripple; utile il time‑gating.
+    - Receiver amplitude nonlinearity: compressione/non linearità del ricevitore → errori di ampiezza e distorsione.
+    - System phase errors: instabilità/offset di fase del sistema → errori di fase cumulativi e incoerenza.
+    - Dynamic range: SNR insufficiente e floor elevato → perdita di dinamica e mis‑stima dei sidelobes.
+    - Room scattering: diffrazioni/scattering del range → corruzione del campo misurato.
+    - Leakage/crosstalk: accoppiamenti/leakage tra canali/strumenti → componenti spurie nel segnale.
+    - Random amplitude/phase errors: rumori casuali e jitter → variabilità statistica; richiede medie e stima d’incertezza.
+
 
 
 - Riferimenti
   - Near-Field Scanning Measurements — Scan planare (setup, campionamento, correzioni, incertezze). File: `NF-FF/Near-Field_Scanning_Measurements.pdf`.
+  - Error analysis techniques for planar near-field measurements — Analisi degli errori (Newell, 1988, IEEE TAP). File: `NF-FF/Error_analysis_techniques_for_planar_near-field_measurements.pdf`.
