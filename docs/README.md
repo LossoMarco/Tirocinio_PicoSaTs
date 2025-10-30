@@ -356,20 +356,26 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Funzioni: `nf2ff_planar_fft(...)` per la trasformazione; `compute_ff_coverage(...)` per stimare la copertura angolare utile in funzione di distanza `z0`, passo di campionamento `Δ` e apertura `L` (minimo tra limite geometrico e di campionamento).
     - Plot: `plot_planar_nf_data.py` contiene grafici 3D/2D per NF e FF (magnitudine, fase).
   - Convenzioni di plotting
-    - FF 3D/2D: assi allineati al NF — `X = theta [deg]`, `Y = phi [deg]`, per confronto visivo immediato tra NF e FF.
-    - Top‑down (2D): colormap blu→giallo per evidenziare zone deboli/forti; scaling attuale in ampiezza lineare (opzione dB prevista come estensione).
+    - NF 3D/2D: `X = x [m]`, `Y = y [m]`. La griglia è costruita come `Z[y_index, x_index]` (righe = valori unici di `y`, colonne = valori unici di `x`) per evitare trasposizioni ad hoc e mantenere coerenza tra 3D (`plot_surface`) e 2D (`imshow`).
+    - FF 3D/2D: `X = phi [deg]`, `Y = theta [deg]`. Inversione dell’asse `Y` (theta) attiva per allineare la direzione visiva con la convenzione decisa: all’aumentare di `theta` la coordinata `y` deve diminuire (cioè “scendere” nel grafico).
+    - Top‑down (2D): colormap blu→giallo per evidenziare zone deboli/forti; supporto `dB` e lineare; `origin="lower"` per far crescere l’asse verticale verso l’alto.
+  - Giustificazione di scambi/inversioni assi (NF↔FF)
+    - Semantica `imshow`: la prima dimensione della matrice sono le righe (asse `Y`), la seconda le colonne (asse `X`). Se i dati NF sono memorizzati come `Z[x_index, y_index]` (ordine di acquisizione x‑major), in 2D si percepisce “X/Y scambiati”. La soluzione robusta adottata è costruire sempre la griglia ordinata e monotona `Z[y_index, x_index]` (righe = `y`, colonne = `x`) prima del plotting.
+    - Semantica `meshgrid`: in 3D si usano coordinate esplicite `X, Y`. Allineando la costruzione della griglia NF a `Z[y, x]`, i plot 3D e 2D condividono la stessa interpretazione degli assi e non richiedono trasposizioni.
+    - Reshape FF: l’algoritmo `nf2ff_planar_fft` produce vettori piatti su griglia sferica. Il reshape avviene a `Z_ff.shape = (len(phi), len(theta))` (righe = `phi`, colonne = `theta`), coerente con `meshgrid(..., indexing="ij")`. Per rendere la corrispondenza desiderata “variazione di `y` ↔ variazione di `theta`” si è scelto di mappare i plot FF con `X = phi`, `Y = theta`.
+    - Inversione di `theta` (asse Y nei plot FF): graficamente vogliamo che “quando `theta` cresce, `y` cali”. Poiché l’asse verticale cresce verso l’alto, si inverte l’asse `Y` nei plot FF (`invert_theta=True`). Questo è l’unico flip rimasto necessario; ogni altro swap/inversione ad hoc è stato rimosso grazie alla griglia NF `Z[y, x]` e al reshape FF coerente.
+    - Taglio `phi = 0°` nella comparativa NF vs FF: per confrontare la colonna NF a `x≈0` (rimappata in `theta`) con il taglio FF a `phi=0°`, la curva FF viene specchiata orizzontalmente (`theta → −theta`). Ciò rende il confronto visivo bilaterale senza dover unire i semipiani `phi=0°/180°`.
   - Dataset utilizzato (per ora)
     - Single slotted waveguide array antenna a ~94 GHz. Dataset: https://nf2ff.sourceforge.net/.
     - Parametri del dataset: `dx = dy ≈ 1 mm`, `Lx = Ly ≈ 50 mm`, `z0 ≈ 6 mm`, `f ≈ 94.075 GHz`.
-  - Copertura angolare consigliata (automa)
-    - Esempio calcolato: `θ_geo ≈ 80.37°`, `θ_sample ≈ 90.00°` → `θ_max ≈ 80.37°`. Azimut `φ` usato: ±80° (passo 1°); elevazione `θ` centrata a 0 e limitata a `±θ_max`.
+  - Copertura angolare `θ ≈ 80°`, `φ ≈ 80°`.
   - Risultati e osservazioni principali
     - Nei plot, sia NF che FF, il lobo principale non è centrato (non a `θ = 0°, φ = 0°`) ma risulta a circa `θ ≈ −20°` (con `φ ≈ 0°`).
     - Osservazione interessante: il puntamento del fascio suggerisce che l’antenna sia una traveling‑wave waveguide slotted antenna array.
     - L’algoritmo NF→FF planare converte il dataset e mostra coerenza tra NF e FF nelle regioni coperte dalla geometria/sampling.
   - Riproducibilità
-    - Script: `Script/nf2ff_python/demo_planar_nf.py` — esegue carica dataset, stima copertura, esegue NF→FF e genera i grafici.
-    - Comando: `python Script/nf2ff_python/demo_planar_nf.py` (opzionale `--show` per mostrare a schermo).
+    - Script: `demo_planar_nf.py` — esegue carica dataset, stima copertura, esegue NF→FF e genera i grafici.
+    - Comando: `demo_planar_nf.py` (opzionale `--show` per mostrare a schermo).
     - Output grafici salvati in: `Script/nf2ff_python/plots/` (es.: `nf_magnitude_3d_lin.png`, `nf_topdown_lin.png`, `ff_magnitude_3d_db.png`, `ff_topdown_db.png`).
   - Prossimi passi
     - Convalidare trasformazione con dataset con misure sferiche per confronto diretto FF calcolato e FF misurto (reale)
