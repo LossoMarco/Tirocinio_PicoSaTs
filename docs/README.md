@@ -348,8 +348,42 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
       - Solo steering: discriminazione peggiora (≈ 8.6 dB).
       - Beamforming (ampiezze [−2, 0, 0, −2] dB + fasi): discriminazione migliora a ≈ 13.5 dB, con lieve perdita di potenza radiata (≈ −0.9 dB).
 
+- <span class="md-cite">NF→FF Planare — Conversione MATLAB→Python e Plots</span>
+  - Obiettivo
+    - Portare la trasformazione NF→FF planare da MATLAB (`nf2ff_planar.m`) a Python (`nf2ff_planar_fft.py`) con funzioni di plotting dedicate per valutare la bontà dell’algoritmo.
+  - Implementazione Python (solo caso planare, quello di nostro interesse)
+    - Pipeline: finestra 2D (Hann/Hamming/Tukey), FFT 2D con padding, spettro di onde piane, interpolazione bilineare su griglia sferica, calcolo componenti FF (`Eθ, Eφ`) e magnitudine `|E|`.
+    - Funzioni: `nf2ff_planar_fft(...)` per la trasformazione; `compute_ff_coverage(...)` per stimare la copertura angolare utile in funzione di distanza `z0`, passo di campionamento `Δ` e apertura `L` (minimo tra limite geometrico e di campionamento).
+    - Plot: `plot_planar_nf_data.py` contiene grafici 3D/2D per NF e FF (magnitudine, fase).
+  - Convenzioni di plotting
+    - FF 3D/2D: assi allineati al NF — `X = theta [deg]`, `Y = phi [deg]`, per confronto visivo immediato tra NF e FF.
+    - Top‑down (2D): colormap blu→giallo per evidenziare zone deboli/forti; scaling attuale in ampiezza lineare (opzione dB prevista come estensione).
+  - Dataset utilizzato (per ora)
+    - Single slotted waveguide array antenna a ~94 GHz. Dataset: https://nf2ff.sourceforge.net/.
+    - Parametri del dataset: `dx = dy ≈ 1 mm`, `Lx = Ly ≈ 50 mm`, `z0 ≈ 6 mm`, `f ≈ 94.075 GHz`.
+  - Copertura angolare consigliata (automa)
+    - Esempio calcolato: `θ_geo ≈ 80.37°`, `θ_sample ≈ 90.00°` → `θ_max ≈ 80.37°`. Azimut `φ` usato: ±80° (passo 1°); elevazione `θ` centrata a 0 e limitata a `±θ_max`.
+  - Risultati e osservazioni principali
+    - Nei plot, sia NF che FF, il lobo principale non è centrato (non a `θ = 0°, φ = 0°`) ma risulta a circa `θ ≈ −20°` (con `φ ≈ 0°`).
+    - Osservazione interessante: il puntamento del fascio suggerisce che l’antenna sia una traveling‑wave waveguide slotted antenna array.
+    - L’algoritmo NF→FF planare converte il dataset e mostra coerenza tra NF e FF nelle regioni coperte dalla geometria/sampling.
+  - Riproducibilità
+    - Script: `Script/nf2ff_python/demo_planar_nf.py` — esegue carica dataset, stima copertura, esegue NF→FF e genera i grafici.
+    - Comando: `python Script/nf2ff_python/demo_planar_nf.py` (opzionale `--show` per mostrare a schermo).
+    - Output grafici salvati in: `Script/nf2ff_python/plots/` (es.: `nf_magnitude_3d_lin.png`, `nf_topdown_lin.png`, `ff_magnitude_3d_db.png`, `ff_topdown_db.png`).
+  - Prossimi passi
+    - Convalidare trasformazione con dataset con misure sferiche per confronto diretto FF calcolato e FF misurto (reale)
+    - Aggiungere probe correction
+
+- <span class="md-cite">Conferma ipotesi — Pattern a ~94 GHz</span>
+  - Il confronto con il paper allegato conferma che il pattern di radiazione dell’antenna in esame coincide con quello estratto dagli script Python dal dataset a ~94 GHz.
+  - Osservazioni principali: lobo principale intorno a `θ ≈ −20°` con `φ ≈ 0°`, larghezze di fascio comparabili e andamento dei sidelobe coerente tra FF misurato e FF calcolato.
+  - Implicazione: la pipeline NF→FF implementata in Python riproduce correttamente il comportamento dell’antenna analizzata.
+  - Riferimento: `AESA/Design_Sub-THz_SWAA.pdf`.
+
 - Riferimenti
   - Near-Field Scanning Measurements — Scan planare (setup, campionamento, correzioni, incertezze). File: `NF-FF/Near-Field_Scanning_Measurements.pdf`.
   - Error analysis techniques for planar near-field measurements — Analisi degli errori (Newell, 1988, IEEE TAP). File: `NF-FF/Error_analysis_techniques_for_planar_near-field_measurements.pdf`.
-   - Measurement of Beamforming Antenna in Transmit Mode (R&S App Note 1MA278). File: `AESA/Measurement_of_Beamforming_Antenna_in_Transmit_Mode_R&S.pdf`.
+  - Measurement of Beamforming Antenna in Transmit Mode (R&S App Note 1MA278). File: `AESA/Measurement_of_Beamforming_Antenna_in_Transmit_Mode_R&S.pdf`.
   - Balanis, "Antenna Theory: Analysis and Design", 4th ed., Wiley, 2016. File: `Teoria/Antenna theory analysis and design, 4th Edition  Constantine A. Balanis. - New York John Wiley & Sons, 2016.pdf - collegamento.lnk`.
+  - nf2ff_transformation — Algoritmi NF→FF (Matlab). Link: https://github.com/hbartle/nf2ff_transformation
