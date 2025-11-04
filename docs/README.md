@@ -397,38 +397,3 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 ## <span style="color: #e69a44ff;">Settimana 3</span>
 
-- <span class="md-cite">Traduzione di campo via spettro di onde piane (PWS‑FFT) — patch ±36° → piano tangente a r=3.198</span>
-
-- Obiettivo
-  - Tradurre i dati limitati su patch sferica (±36° attorno al boresight) su un piano tangente a distanza `r=3.198`, assumendo regime paraxiale e campo localmente quasi‑planare.
-
-- Metodo (sintesi operativa)
-  - Pre‑elaborazione: convertire `Eθ, Eφ` in componenti cartesiane locali sul patch (es. `Ex, Ey` tangenziali); mantenere un riferimento di fase coerente.
-  - Mappatura angolare → spettro: `kx = k · sinθ · cosφ`, `ky = k · sinθ · sinφ`, con `k = 2π/λ`.
-  - Costruzione dello spettro discreto: organizzare i dati su griglia adeguata; applicare finestra (Hann/Taylor) e zero‑padding; usare 2D FFT (o NUFFT se la griglia non è uniforme).
-  - Propagazione al piano tangente: `kz = sqrt(k^2 − kx^2 − ky^2)`; separare componenti propaganti (`kx^2 + ky^2 ≤ k^2`) dagli evanescenti; moltiplicare per `exp(i · kz · Δr)` con `Δr = r_target − r_ref`.
-  - Ricostruzione sul piano: IFFT dello spettro propagato per ottenere `E(x, y, r_target)`; estrarre ampiezza/fase e le componenti di polarizzazione desiderate.
-  - Normalizzazione e riferimenti: mantenere origine e convenzioni di unità; documentare eventuali scaling e filtri applicati.
-
-- Note pratiche
-  - La copertura limitata ±36° introduce troncamento dello spettro: mitigare con apodizzazione e padding per ridurre ripple/lobi laterali.
-  - Evitare aliasing: scegliere passi coerenti con `λ/2` nella parametrizzazione angolare equivalente; controllare densità e uniformità della griglia.
-  - Le componenti evanescenti decadono con `Δr`: un filtro dolce (es. Tukey) può stabilizzare la traduzione in presenza di rumore.
-  - Se la griglia angolare è irregolare, preferire NUFFT o integrazione con quadrature al posto della FFT su griglia uniforme.
-
-- Confronto metodi
-  - PWS‑FFT: semplice, veloce, adatto a patch paraxiale; implementazione diretta con FFT.
-  - Huygens/Stratton–Chu: generale e robusto con coperture ampie; più oneroso (correnti equivalenti e integrazione di superficie).
-  - Espansione in armoniche sferiche: potente ma sensibile a troncamenti; meno adatta con copertura ±36°.
-
-- Output atteso
-  - Campo `E(x, y)` sul piano tangente a `r=3.198`, pronto per plotting/analisi (mappe di ampiezza/fase, sezioni) e, se necessario, ulteriore proiezione in FF via PWS.
-
-### Riferimenti
-- `NF-FF/Plane_Wave_Based_NFFFT_with_Adaptive_Field_Translation.pdf` — Traduzione del campo basata su spettro di onde piane e adattamento.
-- `NF-FF/Determination_of_far-field_antenna_patterns_from_near-field_measurements.pdf` — Fondamenti PWS/FFT, mappatura `kx, ky` e propagazione `exp(i kz Δr)`.
-- `NF-FF/Electromagnetic Field Transformations for Measurements.pdf` — Rassegna metodi NF→FF; sezioni su angular spectrum e propagazione tra superfici.
-- `NF-FF/IEEE 149-2021.pdf` — Raccomandazioni per trasformazioni planari via PWS e requisiti di campionamento.
-- `NF-FF/Near-Field_Scanning_Measurements.pdf` — Tutorial pratico su acquisizione e trasformazioni; discretizzazione e gestione evanescenti.
-- `NF-FF/Error_analysis_techniques_for_planar_near-field_measurements.pdf` — Windowing, padding e impatto della copertura limitata.
-- `NF-FF/Balanis_Chapter_17.pdf` — Base teorica (Green/Huygens) e collegamenti con rappresentazioni in onde piane.
