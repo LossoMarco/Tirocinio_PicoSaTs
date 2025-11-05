@@ -397,3 +397,55 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 ## <span style="color: #e69a44ff;">Settimana 3</span>
 
+- Strumenti sviluppati: integrazione VNA ↔ Ender3 per scansione NF con acquisizione automatica dei parametri S e salvataggio CSV per punto griglia.
+
+### Script: `VNA-Ender3/vna_sparams.py`
+- Scopo
+  - Misurare i parametri S di un VNA R&S (ZVA/ZVB/ZVT) in due modalità: `single` (CW, una riga CSV) e `sweep` (start/stop, N punti; una riga per punto).
+  - Generare filename dinamici basati su frequenze e, se fornito, sul tag coordinate della stampante (`--coord`).
+- Modalità
+  - `single`: usa `CONFIG["freq_hz"]`; output `sparam_single_<freq>.csv`.
+  - `sweep`: usa `CONFIG["start_hz"]`, `CONFIG["stop_hz"]`, `CONFIG["points"]` oppure `CONFIG["step_hz"]` (calcolo automatico punti e adattamento dello stop); output `sparams_sweep_<start>_<stop>.csv`.
+- Configurazione principale
+  - `vna_address`: VISA (es. `TCPIP::10.30.59.150::INSTR`).
+  - `mode`: `single` o `sweep`.
+  - `freq_hz` (single) oppure `start_hz`, `stop_hz`, `points`/`step_hz` (sweep).
+  - `if_bandwidth_hz`, `power_dbm`, `timeout_s`, `measure_list` (default: `S11,S21,S12,S22`).
+  - Output folder: `VNA-Ender3/vna_output_file/` (creata automaticamente).
+- Dipendenze
+  - `pyvisa` e driver VISA R&S; consigliata connessione LAN.
+- Uso rapido
+  - Single: `python VNA-Ender3/vna_sparams.py --coord X120_000_Y35_500_Z30_000`
+  - Sweep:  `python VNA-Ender3/vna_sparams.py --coord X120_000_Y35_500_Z30_000`
+    - Frequenze e punti provengono dalla configurazione nel file.
+- Naming dei file
+  - Single: `sparam_single_<freqGHz>[_<coord>].csv` es. `sparam_single_20_X120_000_Y35_500_Z30_000.csv`.
+  - Sweep: `sparams_sweep_<startGHz>_<stopGHz>[_<coord>].csv` es. `sparams_sweep_18_22_X120_000_Y35_500_Z30_000.csv`.
+- Note operative
+  - Comandi SCPI channel-specific (`CH1`) e fallbacks per lista frequenze; `timeout_s` aumentato per sweep lunghi.
+  - `step_hz`: se impostato, calcola `points` e allinea `stop_hz` allo step.
+
+### Script: `VNA-Ender3/ender3_nf_scanner.py`
+- Scopo
+  - Controllare la stampante Ender3 via G‑code (seriale) per eseguire una scansione su griglia nel piano `XY` (quota Z costante) o `XZ` (Y=0), e ad ogni punto lanciare la misura VNA in modo sincrono.
+- Funzionamento
+  - Calcolo parametri: `λ = c/f`, `z0 = 10λ` con clamp rispetto soglia di Fraunhofer; passo base ≈ `λ/3`.
+  - Pianificazione griglia sull’area utile del piano (`bed_x_mm`, `bed_y_mm`), serpentina per ridurre tempi.
+  - Sequenza: `G90/G21` → `G28` (homing) → movimenti `G1` con `F` impostato → `M400` (attesa fine movimento) → dwell (`dwell_ms`).
+  - Integrazione VNA: dopo ogni punto, esegue `vna_sparams.py --coord <tag>`; chiamata bloccante (`subprocess.run`) per garantire attesa fine misura.
+- Coordinate e tag
+  - Formato coerente: `X<mm>_Y<mm>_Z<mm>` con tre decimali e underscore (es. `X120_000_Y35_500_Z30_000`).
+  - `XY`: usa Z costante (`z0 + aut_ingombro_mm`). `XZ`: usa `Y=0.000` e Z variabile.
+- Dipendenze
+  - `pyserial` (comunicazione G‑code via porta seriale).
+- Avvio
+  - Selezione piano: `python VNA-Ender3/ender3_nf_scanner.py --plane xy` oppure `--plane xz`.
+  - Configurare `CONFIG["port"]` (es. `COM3`), `feedrate`, `dwell_ms`, dimensioni piano.
+- Gestione errori
+  - Errori VNA loggati e scansione prosegue; errori seriali gestiti con timeout.
+- Output
+  - CSV salvati in `VNA-Ender3/vna_output_file/` con naming frequenza + coordinate.
+
+- Prossimi passi
+  - Aggiungere flag RF ON/OFF nel VNA, pre‑dwell dedicato prima di `INIT`, e opzionale timestamp nei filename.
+
