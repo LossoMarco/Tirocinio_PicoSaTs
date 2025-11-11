@@ -451,6 +451,24 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 ## <span style="color: #e69a44ff;">Settimana 4</span>
 
+### Misure e test in laboratorio
+
+- Setup
+  - Stampante Ender 3 con antenna probe a guida d’onda fissata provvisoriamente con fascette, collegata alla porta 1 del VNA.
+  - Il carrello esegue un movimento a zig‑zag sul piano XZ con passo ≈ `λ/3` calcolato alla frequenza centrale di lavoro della AUT.
+  - AUT: patch a polarizzazione circolare 4×4 montata su un piedistallo da macchina fotografica, posta a ~13 cm dalla probe.
+  - Regime di misura: campo vicino radiativo (campo reattivo ≈ 8 cm; far‑field teorico ≈ 50 cm). La AUT è collegata alla porta 2 del VNA.
+
+- Condizioni di test
+  - Le misure attuali servono a convalidare il codice e ottenere una prima stima dei risultati.
+  - Non sono presenti assorbitori per limitare le riflessioni; non è stata applicata alcuna probe correction.
+  - Non sono state compensate le riflessioni introdotte dal telaio della stampante 3D.
+
+- Prossimi passi
+  - Ottenere il far‑field e confrontarlo con misure di due tagli della AUT eseguite in far‑field.
+  - Modellare la probe in CST insieme alla geometria rilevante della stampante 3D per stimarne la RCS e predisporre la probe correction.
+  - Ripetere le misure in camera anecoica per un confronto sistematico con le simulazioni.
+
 - Obiettivo
   - Rendere autosufficiente la pipeline di misura NF planare: acquisizione automatica dei parametri S con VNA integrato nello scanner XZ e visualizzazione delle mappe dai file `.s2p` salvati.
 
