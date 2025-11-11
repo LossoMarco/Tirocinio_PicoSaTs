@@ -449,3 +449,44 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 - Prossimi passi
   - Aggiungere flag RF ON/OFF nel VNA, pre‑dwell dedicato prima di `INIT`, e opzionale timestamp nei filename.
 
+## <span style="color: #e69a44ff;">Settimana 4</span>
+
+- Obiettivo
+  - Rendere autosufficiente la pipeline di misura NF planare: acquisizione automatica dei parametri S con VNA integrato nello scanner XZ e visualizzazione delle mappe dai file `.s2p` salvati.
+
+- Scanner NF — `VNA-Ender3/ender3_nf_scanner.py`
+  - Piano di scansione: XZ soltanto (Y=0); griglia su `X` e `Z` con passo basato su `λ / lambda_fraction`.
+  - Connessione VNA via VISA/SCPI integrata; sweep preconfigurato sul canale 1 (start/stop, punti, IFBW, potenza).
+  - Misura per punto: esegue `INIT1` e salva `.s2p` sul VNA; download automatico in cartella locale (`VNA-Ender3/vna_output_file`).
+  - Controllo stampante: homing, movimenti G‑code (`G1` con `F`), attesa (`M400`) e dwell per stabilizzazione.
+  - Distanza di lavoro: `z0 = 10λ` con clamp se oltre la soglia FF (`2·D²/λ`) e offset `aut_ingombro_mm`.
+
+- Parametri chiave (scanner)
+  - Geometria: `bed_x_mm` (es. 185 mm), `bed_y_mm` (es. 220 mm), limite verticale `Z_MAX_MM` (es. 150 mm).
+  - Campionamento: `--freq-ghz` (default progetto 20), `--lambda-fraction` (default 3 → passo ≈ `λ/3`).
+  - Sweep VNA: `--start-ghz`/`--stop-ghz` (default 16–22), `--points` (201), `--power-dbm` (0), `--ifbw-hz` (1000).
+  - Tracce misurate: `measure_list = [S11, S21, S12, S22]`.
+  - I/O: `--download-folder` attivo di default; `--outdir` per destinazione dei `.s2p` (cartella locale dedicata).
+  - Connessioni: `vna_address` (VISA/LAN), `port` seriale (es. `COM3`), `baud`, `serial_timeout`.
+  - Operativi: `feedrate`, `dwell_ms`, `aut_ingombro_mm`, cartella remota sul VNA per salvataggio (`C:\Users\Instrument\Desktop\nf_sparams`).
+
+- Plot dei campi S‑param — `VNA-Ender3/plot_sparams_field.py`
+  - Lettura dei `.s2p` e parsing dei parametri `S11/S21/S12/S22` (parte reale/immaginaria) alla frequenza target.
+  - Costruzione della mappa X–Z dalle coordinate codificate nel nome file; Y fissata a 0.
+  - Visualizzazione 2D (pseudocolor) e 3D opzionale; salvataggio PNG in `VNA-Ender3/nf_plot`.
+  - Interpolazione opzionale della griglia e normalizzazione al massimo per confronti visivi.
+
+- Parametri chiave (plot)
+  - Sorgente: `--dir` (default `VNA-Ender3/vna_output_file`); destinazione: `--outdir` (default `VNA-Ender3/nf_plot`).
+  - Selezione: `--freq-ghz` (obbligatoria); `--param` (`S11/S21/S12/S22`); `--value` (`mag/db/phase`).
+  - Grafica: `--plot3d`; `--interp-factor`/`--interp-method`; `--normalize`; `--pyvista`; `--zscale`.
+
+- Risultati
+  - Generate le prime mappe (es. `S12 @ 19 GHz`) e immagini salvate in `VNA-Ender3/Plot_first_scan_nf/`.
+
+- Prerequisiti
+  - Software: `pyserial`, `pyvisa` (con driver VISA del VNA), `numpy`, `matplotlib`; opzionali `scipy` (interpolazione) e `pyvista` (viewer 3D).
+  - Operativi: connessione LAN al VNA, porta seriale della stampante libera, directory di output accessibile.
+
+
+
