@@ -399,7 +399,8 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 - Strumenti sviluppati: integrazione VNA ↔ Ender3 per scansione NF con acquisizione automatica dei parametri S e salvataggio CSV per punto griglia.
 
-### Script: `VNA-Ender3/vna_sparams.py`
+
+- <span class="md-cite">VNA-Ender3/vna_sparams.py</span>
 - Scopo
   - Misurare i parametri S di un VNA R&S (ZVA/ZVB/ZVT) in due modalità: `single` (CW, una riga CSV) e `sweep` (start/stop, N punti; una riga per punto).
   - Generare filename dinamici basati su frequenze e, se fornito, sul tag coordinate della stampante (`--coord`).
@@ -425,7 +426,8 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Comandi SCPI channel-specific (`CH1`) e fallbacks per lista frequenze; `timeout_s` aumentato per sweep lunghi.
   - `step_hz`: se impostato, calcola `points` e allinea `stop_hz` allo step.
 
-### Script: `VNA-Ender3/ender3_nf_scanner.py`
+
+- <span class="md-cite">VNA-Ender3/ender3_nf_scanner.py</span>
 - Scopo
   - Controllare la stampante Ender3 via G‑code (seriale) per eseguire una scansione su griglia nel piano `XY` (quota Z costante) o `XZ` (Y=0), e ad ogni punto lanciare la misura VNA in modo sincrono.
 - Funzionamento
@@ -451,7 +453,8 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 ## <span style="color: #e69a44ff;">Settimana 4</span>
 
-### Misure e test in laboratorio
+
+- <span class="md-cite">Misure e test in laboratorio</span>
 
 - Setup
   - Stampante Ender 3 con antenna probe a guida d’onda fissata provvisoriamente con fascette, collegata alla porta 1 del VNA.
@@ -507,7 +510,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Operativi: connessione LAN al VNA, porta seriale della stampante libera, directory di output accessibile.
 
 
-### Riepilogo funzioni script (senza codice)
+- <span class="md-cite">Riepilogo funzioni script</span>
 
 - `VNA-Ender3/ender3_nf_scanner.py`
   - VNA: `connect_vna` (sessione VISA), `scpi`/`scpi_query` (comandi/query SCPI), `configure_sweep` (start/stop, punti, IFBW, potenza).
