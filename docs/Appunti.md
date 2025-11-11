@@ -37,10 +37,12 @@ Il time gating è il periodo di tempo durante il quale si misura il segnale, si 
 Il beam codebook è un insieme di beam pattern che vengono usati per steerare il fascio, descrive un sistema discreto di fasci che riduce la complessità del sistema.
 
 
--------------------------------TO DO-------------------------------------
 - nf2ff_transformation — Algoritmi NF→FF (Matlab): codice analizzato per soluzioni pratiche di trasformazione NF→FF e compensazione della sonda; usato come spunto per gli script Python della pipeline. Link: https://github.com/hbartle/nf2ff_transformation
 - Documentazione R&S per misure di antenne AESA: https://www.rohde-schwarz.com/it/applicazioni/misura-di-un-antenna-con-beamforming-in-modalita-di-trasmissione-nota-di-applicazione_56280-408715.html
 
+-------------------------------TO DO-------------------------------------
+
+
 - Spherical scatterer method, Spherical calibration method
 
-- conversione NF-FF partendo da dataset prendendo valori spaziati diversamente (sempre meno fitto) e magari con una costruzione diversa (meno fitto esterno e più fitto interno)
+- Da FF a campo sulla superficie dell'antenna per capire radiazione singoli elementi radianti

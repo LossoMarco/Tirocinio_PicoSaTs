@@ -462,7 +462,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Distanza di lavoro: `z0 = 10λ` con clamp se oltre la soglia FF (`2·D²/λ`) e offset `aut_ingombro_mm`.
 
 - Parametri chiave (scanner)
-  - Geometria: `bed_x_mm` (es. 185 mm), `bed_y_mm` (es. 220 mm), limite verticale `Z_MAX_MM` (es. 150 mm).
+  - Geometria: `bed_x_mm` (es. 180 mm), `bed_y_mm` (es. 220 mm), limite verticale `Z_MAX_MM` (es. 150 mm).
   - Campionamento: `--freq-ghz` (default progetto 20), `--lambda-fraction` (default 3 → passo ≈ `λ/3`).
   - Sweep VNA: `--start-ghz`/`--stop-ghz` (default 16–22), `--points` (201), `--power-dbm` (0), `--ifbw-hz` (1000).
   - Tracce misurate: `measure_list = [S11, S21, S12, S22]`.
@@ -487,6 +487,24 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 - Prerequisiti
   - Software: `pyserial`, `pyvisa` (con driver VISA del VNA), `numpy`, `matplotlib`; opzionali `scipy` (interpolazione) e `pyvista` (viewer 3D).
   - Operativi: connessione LAN al VNA, porta seriale della stampante libera, directory di output accessibile.
+
+
+### Riepilogo funzioni script (senza codice)
+
+- `VNA-Ender3/ender3_nf_scanner.py`
+  - VNA: `connect_vna` (sessione VISA), `scpi`/`scpi_query` (comandi/query SCPI), `configure_sweep` (start/stop, punti, IFBW, potenza).
+  - Utilità: `compute_params` (λ, z0, passo λ/..), `list_available_ports`, `_mm_to_tag` e `fmt_coord_tag` (tag coordinate nei filename), `make_grid` (griglia serpentina generica).
+  - Stampante: classe `GCodePrinter` con `connect/close`, `setup` (`G90/G21`), `home` (`G28`), `move` (`G1`+`M400`), `query/send`, `get_position`, `wait_ok`.
+  - Scansione: `run_scan` (griglia XZ, Y=0; sweep per punto; salvataggio `.s2p` sul VNA; download automatico in `outdir/<pol>` con separazione `co/cx`).
+  - CLI/avvio: `parse_args` (override parametri via flag), `main` (esecuzione, gestione errori e porte disponibili).
+
+- `VNA-Ender3/plot_sparams_field.py`
+  - Parsing/Lettura: `parse_coords_from_filename` (estrae X/Y/Z dai nomi), `read_s2p_values` (frequenze e S‑parametri `Re/Im`).
+  - Valori: `pick_value` (magnitudine, dB, fase da `Re/Im`).
+  - Griglia: `build_grid` (assi X/Z e matrice 2D con `NaN` dove mancano dati).
+  - Interpolazione: `interpolate_grid` (upsampling con SciPy `griddata`, riempimento `nearest`).
+  - Plot: `plot_field` (heatmap 2D con colormap e limiti `vmin/vmax`), `plot_field_3d` (superficie 3D con scala verticale `zscale`).
+  - Flusso: `main` (CLI: sorgente/destinazione, frequenza, parametro/valore, 3D/PyVista, interpolazione, colormap e limiti, normalizzazione).
 
 
 
