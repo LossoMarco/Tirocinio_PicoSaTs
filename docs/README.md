@@ -397,64 +397,42 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
 ## <span style="color: #e69a44ff;">Settimana 3</span>
 
-- Strumenti sviluppati: integrazione VNA ↔ Ender3 per scansione NF con acquisizione automatica dei parametri S e salvataggio CSV per punto griglia.
+- Sviluppo script python di test per comunicazione con stampante 3D Ender 3 e VNA Rohde & Schwarz ZVA 40
 
+- <span class="md-cite">ender3_nf_scanner.py</span>
 
-- <span class="md-cite">VNA-Ender3/vna_sparams.py</span>
-- Scopo
-  - Misurare i parametri S di un VNA R&S (ZVA/ZVB/ZVT) in due modalità: `single` (CW, una riga CSV) e `sweep` (start/stop, N punti; una riga per punto).
-  - Generare filename dinamici basati su frequenze e, se fornito, sul tag coordinate della stampante (`--coord`).
-- Modalità
-  - `single`: usa `CONFIG["freq_hz"]`; output `sparam_single_<freq>.csv`.
-  - `sweep`: usa `CONFIG["start_hz"]`, `CONFIG["stop_hz"]`, `CONFIG["points"]` oppure `CONFIG["step_hz"]` (calcolo automatico punti e adattamento dello stop); output `sparams_sweep_<start>_<stop>.csv`.
-- Configurazione principale
-  - `vna_address`: VISA (es. `TCPIP::10.30.59.150::INSTR`).
-  - `mode`: `single` o `sweep`.
-  - `freq_hz` (single) oppure `start_hz`, `stop_hz`, `points`/`step_hz` (sweep).
-  - `if_bandwidth_hz`, `power_dbm`, `timeout_s`, `measure_list` (default: `S11,S21,S12,S22`).
-  - Output folder: `VNA-Ender3/vna_output_file/` (creata automaticamente).
-- Dipendenze
-  - `pyvisa` e driver VISA R&S; consigliata connessione LAN.
-- Uso rapido
-  - Single: `python VNA-Ender3/vna_sparams.py --coord X120_000_Y35_500_Z30_000`
-  - Sweep:  `python VNA-Ender3/vna_sparams.py --coord X120_000_Y35_500_Z30_000`
-    - Frequenze e punti provengono dalla configurazione nel file.
-- Naming dei file
-  - Single: `sparam_single_<freqGHz>[_<coord>].csv` es. `sparam_single_20_X120_000_Y35_500_Z30_000.csv`.
-  - Sweep: `sparams_sweep_<startGHz>_<stopGHz>[_<coord>].csv` es. `sparams_sweep_18_22_X120_000_Y35_500_Z30_000.csv`.
-- Note operative
-  - Comandi SCPI channel-specific (`CH1`) e fallbacks per lista frequenze; `timeout_s` aumentato per sweep lunghi.
-  - `step_hz`: se impostato, calcola `points` e allinea `stop_hz` allo step.
+- Gestione stampante 3D (solo parte meccanica)
+  - Obiettivo: controllare l’Ender 3 via G‑code su porta seriale per eseguire una scansione planare sul piano `XZ` con traiettoria a zig‑zag e passo derivato da `λ` della frequenza di lavoro (`compute_params`). Parametri chiave: `port`, `baud`, `serial_timeout`, `bed_x_mm`, `bed_y_mm`, `feedrate`, `dwell_ms`, `aut_ingombro_mm`, `plane` (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:63–71).
+  - Classe di controllo `GCodePrinter`:
+    - Connessione seriale e handshake con il firmware Marlin: apertura porta e drenaggio buffer (`connect`) con lettura posizione `M114` per verifica (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:132–147, 189–198).
+    - Invio comandi e attesa di conferma: `send`/`wait_ok` gestiscono la risposta `ok`; `query` consente letture come `M114` (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:168–209, 173–188).
+    - Setup movimento: `G90` (coordinate assolute) e `G21` (unità in mm), con sincronizzazione `M400` per assicurare che i movimenti siano completati prima dell’azione successiva (`setup`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:210–215).
+    - Homing: `G28` per referenziare gli assi, seguito da `M400` (`home`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:216–220).
+    - Movimento puntuale: costruzione di `G1 X.. Y.. Z.. F..` con logging delle coordinate e velocità; `M400` per blocco fino a fine traiettoria (`move`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:221–240).
+  - Pianificazione della scansione `XZ` e traiettoria:
+    - Calcolo di `λ`, distanza operativa `y0` e passo `step = λ / (lambda_fraction)`; conversione in mm per pianificare gli incrementi su `Z` (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:84–91, 262–271, 319–323).
+    - Costruzione delle righe su `X` e delle quote su `Z` con percorso serpentiforme (righe alternate invertite) per minimizzare movimenti a vuoto (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:316–330).
+    - Limiti meccanici: verifica che `X` sia in `[0, bed_x_mm]` e `Z` in `[0, 180 mm]` prima di ogni comando; i punti fuori limite vengono saltati con messaggio di log (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:331–335).
+    - Esecuzione punto per punto: movimento `G1` alla coppia `(X, Z)` richiesta alla velocità `F = feedrate`; pausa di stabilizzazione `dwell_ms` per garantire fermo meccanico (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:338–340).
+    - Ritorno all’origine al termine della scansione per sicurezza (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:355–356).
+  - Robustezza e diagnosi:
+    - Enumerazione porte disponibili e gestione errori di apertura (chiusura di software che occupano la porta consigliata); messaggi di guida in caso di fallimento (`list_available_ports`, eccezioni di `serial`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:93–99, 140–147).
+    - Funzione `get_position` per verifica rapida della posizione attuale via `M114` (utile in fase di setup/debug) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:189–198).
 
+- <span class="md-cite">vna_comm_check.py</span>
 
-- <span class="md-cite">VNA-Ender3/ender3_nf_scanner.py</span>
-- Scopo
-  - Controllare la stampante Ender3 via G‑code (seriale) per eseguire una scansione su griglia nel piano `XY` (quota Z costante) o `XZ` (Y=0), e ad ogni punto lanciare la misura VNA in modo sincrono.
-- Funzionamento
-  - Calcolo parametri: `λ = c/f`, `z0 = 10λ` con clamp rispetto soglia di Fraunhofer; passo base ≈ `λ/3`.
-  - Pianificazione griglia sull’area utile del piano (`bed_x_mm`, `bed_y_mm`), serpentina per ridurre tempi.
-  - Sequenza: `G90/G21` → `G28` (homing) → movimenti `G1` con `F` impostato → `M400` (attesa fine movimento) → dwell (`dwell_ms`).
-  - Integrazione VNA: dopo ogni punto, esegue `vna_sparams.py --coord <tag>`; chiamata bloccante (`subprocess.run`) per garantire attesa fine misura.
-- Coordinate e tag
-  - Formato coerente: `X<mm>_Y<mm>_Z<mm>` con tre decimali e underscore (es. `X120_000_Y35_500_Z30_000`).
-  - `XY`: usa Z costante (`z0 + aut_ingombro_mm`). `XZ`: usa `Y=0.000` e Z variabile.
-- Dipendenze
-  - `pyserial` (comunicazione G‑code via porta seriale).
-- Avvio
-  - Selezione piano: `python VNA-Ender3/ender3_nf_scanner.py --plane xy` oppure `--plane xz`.
-  - Configurare `CONFIG["port"]` (es. `COM3`), `feedrate`, `dwell_ms`, dimensioni piano.
-- Gestione errori
-  - Errori VNA loggati e scansione prosegue; errori seriali gestiti con timeout.
-- Output
-  - CSV salvati in `VNA-Ender3/vna_output_file/` con naming frequenza + coordinate.
+- Verifica comunicazione VNA (senza RF)
+  - Obiettivo: testare la connessione VISA al VNA (R&S ZVA/ZVB/ZVT), impostare modalità `CW`, frequenza e livelli di potenza per ciascuna porta, mantenendo sempre le uscite RF disattivate per sicurezza (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:32–44).
+  - Spegnimento sicuro delle uscite: `safe_outputs_off` prova sequenze compatibili di comandi per disattivare la RF su tutte le porte e ignora errori per massima compatibilità tra modelli (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:47–64).
+  - Impostazione CW e frequenza: `set_cw_frequency` configura lo sweep in `CW` sul Channel 1 e scrive la frequenza richiesta (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:66–72).
+  - Livelli di potenza per porta: `set_source_power` imposta i livelli senza abilitare RF; mappa di potenze per porta con default e override (porta 1 a −10 dBm di default nel `CONFIG`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:74–82).
+  - Flusso principale: apre risorsa VISA, interroga `*IDN?`, esegue spegnimento, imposta CW/frequenza e potenze, legge i valori impostati (best‑effort), rispegne e chiude la sessione evitando trigger o misure (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:84–140).
 
-- Prossimi passi
-  - Aggiungere flag RF ON/OFF nel VNA, pre‑dwell dedicato prima di `INIT`, e opzionale timestamp nei filename.
 
 ## <span style="color: #e69a44ff;">Settimana 4</span>
 
 
-- <span class="md-cite">Misure e test in laboratorio</span>
+- <span class="md-cite"></span>
 
 - Setup
   - Stampante Ender 3 con antenna probe a guida d’onda fissata provvisoriamente con fascette, collegata alla porta 1 del VNA.
@@ -471,61 +449,3 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Ottenere il far‑field e confrontarlo con misure di due tagli della AUT eseguite in far‑field.
   - Modellare la probe in CST insieme alla geometria rilevante della stampante 3D per stimarne la RCS e predisporre la probe correction.
   - Ripetere le misure in camera anecoica per un confronto sistematico con le simulazioni.
-
-- Obiettivo
-  - Rendere autosufficiente la pipeline di misura NF planare: acquisizione automatica dei parametri S con VNA integrato nello scanner XZ e visualizzazione delle mappe dai file `.s2p` salvati.
-
-- Scanner NF — `VNA-Ender3/ender3_nf_scanner.py`
-  - Piano di scansione: XZ soltanto (Y=0); griglia su `X` e `Z` con passo basato su `λ / lambda_fraction`.
-  - Connessione VNA via VISA/SCPI integrata; sweep preconfigurato sul canale 1 (start/stop, punti, IFBW, potenza).
-  - Misura per punto: esegue `INIT1` e salva `.s2p` sul VNA; download automatico in cartella locale (`VNA-Ender3/vna_output_file`).
-  - Controllo stampante: homing, movimenti G‑code (`G1` con `F`), attesa (`M400`) e dwell per stabilizzazione.
-  - Distanza di lavoro: `z0 = 10λ` con clamp se oltre la soglia FF (`2·D²/λ`) e offset `aut_ingombro_mm`.
-
-- Parametri chiave (scanner)
-  - Geometria: `bed_x_mm` (es. 180 mm), `bed_y_mm` (es. 220 mm), limite verticale `Z_MAX_MM` (es. 150 mm).
-  - Campionamento: `--freq-ghz` (default progetto 20), `--lambda-fraction` (default 3 → passo ≈ `λ/3`).
-  - Sweep VNA: `--start-ghz`/`--stop-ghz` (default 16–22), `--points` (201), `--power-dbm` (0), `--ifbw-hz` (1000).
-  - Tracce misurate: `measure_list = [S11, S21, S12, S22]`.
-  - I/O: `--download-folder` attivo di default; `--outdir` per destinazione dei `.s2p` (cartella locale dedicata).
-  - Connessioni: `vna_address` (VISA/LAN), `port` seriale (es. `COM3`), `baud`, `serial_timeout`.
-  - Operativi: `feedrate`, `dwell_ms`, `aut_ingombro_mm`, cartella remota sul VNA per salvataggio (`C:\Users\Instrument\Desktop\nf_sparams`).
-
-- Plot dei campi S‑param — `VNA-Ender3/plot_sparams_field.py`
-  - Lettura dei `.s2p` e parsing dei parametri `S11/S21/S12/S22` (parte reale/immaginaria) alla frequenza target.
-  - Costruzione della mappa X–Z dalle coordinate codificate nel nome file; Y fissata a 0.
-  - Visualizzazione 2D (pseudocolor) e 3D opzionale; salvataggio PNG in `VNA-Ender3/nf_plot`.
-  - Interpolazione opzionale della griglia e normalizzazione al massimo per confronti visivi.
-
-- Parametri chiave (plot)
-  - Sorgente: `--dir` (default `VNA-Ender3/vna_output_file`); destinazione: `--outdir` (default `VNA-Ender3/nf_plot`).
-  - Selezione: `--freq-ghz` (obbligatoria); `--param` (`S11/S21/S12/S22`); `--value` (`mag/db/phase`).
-  - Grafica: `--plot3d`; `--interp-factor`/`--interp-method`; `--normalize`; `--pyvista`; `--zscale`.
-
-- Risultati
-  - Generate le prime mappe (es. `S12 @ 19 GHz`) e immagini salvate in `VNA-Ender3/Plot_first_scan_nf/`.
-
-- Prerequisiti
-  - Software: `pyserial`, `pyvisa` (con driver VISA del VNA), `numpy`, `matplotlib`; opzionali `scipy` (interpolazione) e `pyvista` (viewer 3D).
-  - Operativi: connessione LAN al VNA, porta seriale della stampante libera, directory di output accessibile.
-
-
-- <span class="md-cite">Riepilogo funzioni script</span>
-
-- `VNA-Ender3/ender3_nf_scanner.py`
-  - VNA: `connect_vna` (sessione VISA), `scpi`/`scpi_query` (comandi/query SCPI), `configure_sweep` (start/stop, punti, IFBW, potenza).
-  - Utilità: `compute_params` (λ, z0, passo λ/..), `list_available_ports`, `_mm_to_tag` e `fmt_coord_tag` (tag coordinate nei filename), `make_grid` (griglia serpentina generica).
-  - Stampante: classe `GCodePrinter` con `connect/close`, `setup` (`G90/G21`), `home` (`G28`), `move` (`G1`+`M400`), `query/send`, `get_position`, `wait_ok`.
-  - Scansione: `run_scan` (griglia XZ, Y=0; sweep per punto; salvataggio `.s2p` sul VNA; download automatico in `outdir/<pol>` con separazione `co/cx`).
-  - CLI/avvio: `parse_args` (override parametri via flag), `main` (esecuzione, gestione errori e porte disponibili).
-
-- `VNA-Ender3/plot_sparams_field.py`
-  - Parsing/Lettura: `parse_coords_from_filename` (estrae X/Y/Z dai nomi), `read_s2p_values` (frequenze e S‑parametri `Re/Im`).
-  - Valori: `pick_value` (magnitudine, dB, fase da `Re/Im`).
-  - Griglia: `build_grid` (assi X/Z e matrice 2D con `NaN` dove mancano dati).
-  - Interpolazione: `interpolate_grid` (upsampling con SciPy `griddata`, riempimento `nearest`).
-  - Plot: `plot_field` (heatmap 2D con colormap e limiti `vmin/vmax`), `plot_field_3d` (superficie 3D con scala verticale `zscale`).
-  - Flusso: `main` (CLI: sorgente/destinazione, frequenza, parametro/valore, 3D/PyVista, interpolazione, colormap e limiti, normalizzazione).
-
-
-
