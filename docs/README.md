@@ -31,7 +31,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - È necessaria la caratterizzazione della sonda (fattore di correzione) e l’allineamento di polarizzazione.
 - <span class="md-note">**Tutti =>** Che antenna usare => Tromba o guida d'onda non direttiva, lobo principale che prende tutto il FOV della AUT</span>
 - <span class="md-note">**Probes correction for planar near field antennas measurements =>** Nel metodo della deconvoluzione si ha che **E** è il campo elettrico da trovare. **V** è la tensione misurata e **H** è la risposta spaziale della sonda, quindi è cosa nota. Si ha che **V = E conv H**. quindi per trovare **E** devo dividere (nel dominio della frequenza)  **V/H** e fare la trasformata inversa.</span>
-- <span class="md-note">Per ottenere **H** si fanno delle simualzioni i CST come se fosse la misura, da stare attenti a mantenere la distanza della simualzione uguale a quella della misura reale</span>
+- <span class="md-note">Per ottenere **H** si fanno delle simualzioni in CST come se fosse la misura, da stare attenti a mantenere la distanza della simualzione uguale a quella della misura reale</span>
 
 - Principali fonti di errore
   - Troncamento del piano, aliasing (passo troppo grande), drift di fase/ampiezza.
@@ -402,50 +402,77 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 - <span class="md-cite">ender3_nf_scanner.py</span>
 
 - Gestione stampante 3D (solo parte meccanica)
-  - Obiettivo: controllare l’Ender 3 via G‑code su porta seriale per eseguire una scansione planare sul piano `XZ` con traiettoria a zig‑zag e passo derivato da `λ` della frequenza di lavoro (`compute_params`). Parametri chiave: `port`, `baud`, `serial_timeout`, `bed_x_mm`, `bed_y_mm`, `feedrate`, `dwell_ms`, `aut_ingombro_mm`, `plane` (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:63–71).
+  - Obiettivo: controllare l’Ender 3 via G‑code su porta seriale per eseguire una scansione planare sul piano `XZ` con traiettoria a zig‑zag e passo derivato da `λ` della frequenza di lavoro (`compute_params`). Parametri chiave: `port`, `baud`, `serial_timeout`, `bed_x_mm`, `bed_y_mm`, `feedrate`, `dwell_ms`, `aut_ingombro_mm`, `plane` (ender3_nf_scanner.py:63–71).
   - Classe di controllo `GCodePrinter`:
-    - Connessione seriale e handshake con il firmware Marlin: apertura porta e drenaggio buffer (`connect`) con lettura posizione `M114` per verifica (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:132–147, 189–198).
-    - Invio comandi e attesa di conferma: `send`/`wait_ok` gestiscono la risposta `ok`; `query` consente letture come `M114` (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:168–209, 173–188).
-    - Setup movimento: `G90` (coordinate assolute) e `G21` (unità in mm), con sincronizzazione `M400` per assicurare che i movimenti siano completati prima dell’azione successiva (`setup`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:210–215).
-    - Homing: `G28` per referenziare gli assi, seguito da `M400` (`home`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:216–220).
-    - Movimento puntuale: costruzione di `G1 X.. Y.. Z.. F..` con logging delle coordinate e velocità; `M400` per blocco fino a fine traiettoria (`move`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:221–240).
+    - Connessione seriale e handshake con il firmware Marlin: apertura porta e drenaggio buffer (`connect`) con lettura posizione `M114` per verifica (ender3_nf_scanner.py:132–147, 189–198).
+    - Invio comandi e attesa di conferma: `send`/`wait_ok` gestiscono la risposta `ok`; `query` consente letture come `M114` (ender3_nf_scanner.py:168–209, 173–188).
+    - Setup movimento: `G90` (coordinate assolute) e `G21` (unità in mm), con sincronizzazione `M400` per assicurare che i movimenti siano completati prima dell’azione successiva (`setup`) (ender3_nf_scanner.py:210–215).
+    - Homing: `G28` per referenziare gli assi, seguito da `M400` (`home`) (ender3_nf_scanner.py:216–220).
+    - Movimento puntuale: costruzione di `G1 X.. Y.. Z.. F..` con logging delle coordinate e velocità; `M400` per blocco fino a fine traiettoria (`move`) (ender3_nf_scanner.py:221–240).
   - Pianificazione della scansione `XZ` e traiettoria:
-    - Calcolo di `λ`, distanza operativa `y0` e passo `step = λ / (lambda_fraction)`; conversione in mm per pianificare gli incrementi su `Z` (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:84–91, 262–271, 319–323).
-    - Costruzione delle righe su `X` e delle quote su `Z` con percorso serpentiforme (righe alternate invertite) per minimizzare movimenti a vuoto (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:316–330).
-    - Limiti meccanici: verifica che `X` sia in `[0, bed_x_mm]` e `Z` in `[0, 180 mm]` prima di ogni comando; i punti fuori limite vengono saltati con messaggio di log (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:331–335).
-    - Esecuzione punto per punto: movimento `G1` alla coppia `(X, Z)` richiesta alla velocità `F = feedrate`; pausa di stabilizzazione `dwell_ms` per garantire fermo meccanico (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:338–340).
-    - Ritorno all’origine al termine della scansione per sicurezza (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:355–356).
+    - Calcolo di `λ`, distanza operativa `y0` e passo `step = λ / (lambda_fraction)`; conversione in mm per pianificare gli incrementi su `Z` (ender3_nf_scanner.py:84–91, 262–271, 319–323).
+    - Costruzione delle righe su `X` e delle quote su `Z` con percorso serpentiforme (righe alternate invertite) per minimizzare movimenti a vuoto (ender3_nf_scanner.py:316–330).
+    - Limiti meccanici: verifica che `X` sia in `[0, bed_x_mm]` e `Z` in `[0, 180 mm]` prima di ogni comando; i punti fuori limite vengono saltati con messaggio di log (ender3_nf_scanner.py:331–335).
+    - Esecuzione punto per punto: movimento `G1` alla coppia `(X, Z)` richiesta alla velocità `F = feedrate`; pausa di stabilizzazione `dwell_ms` per garantire fermo meccanico (ender3_nf_scanner.py:338–340).
+    - Ritorno all’origine al termine della scansione per sicurezza (ender3_nf_scanner.py:355–356).
   - Robustezza e diagnosi:
-    - Enumerazione porte disponibili e gestione errori di apertura (chiusura di software che occupano la porta consigliata); messaggi di guida in caso di fallimento (`list_available_ports`, eccezioni di `serial`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:93–99, 140–147).
-    - Funzione `get_position` per verifica rapida della posizione attuale via `M114` (utile in fase di setup/debug) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\ender3_nf_scanner.py:189–198).
+    - Enumerazione porte disponibili e gestione errori di apertura (chiusura di software che occupano la porta consigliata); messaggi di guida in caso di fallimento (`list_available_ports`, eccezioni di `serial`) (ender3_nf_scanner.py:93–99, 140–147).
+    - Funzione `get_position` per verifica rapida della posizione attuale via `M114` (utile in fase di setup/debug) (ender3_nf_scanner.py:189–198).
 
 - <span class="md-cite">vna_comm_check.py</span>
 
 - Verifica comunicazione VNA (senza RF)
-  - Obiettivo: testare la connessione VISA al VNA (R&S ZVA/ZVB/ZVT), impostare modalità `CW`, frequenza e livelli di potenza per ciascuna porta, mantenendo sempre le uscite RF disattivate per sicurezza (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:32–44).
-  - Spegnimento sicuro delle uscite: `safe_outputs_off` prova sequenze compatibili di comandi per disattivare la RF su tutte le porte e ignora errori per massima compatibilità tra modelli (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:47–64).
-  - Impostazione CW e frequenza: `set_cw_frequency` configura lo sweep in `CW` sul Channel 1 e scrive la frequenza richiesta (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:66–72).
-  - Livelli di potenza per porta: `set_source_power` imposta i livelli senza abilitare RF; mappa di potenze per porta con default e override (porta 1 a −10 dBm di default nel `CONFIG`) (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:74–82).
-  - Flusso principale: apre risorsa VISA, interroga `*IDN?`, esegue spegnimento, imposta CW/frequenza e potenze, legge i valori impostati (best‑effort), rispegne e chiude la sessione evitando trigger o misure (c:\Users\lloss\Documents\Trieste\UniTS\Tirocinio\VNA-Ender3\Not_used\vna_comm_check.py:84–140).
+  - Obiettivo: testare la connessione VISA al VNA (R&S ZVA/ZVB/ZVT), impostare modalità `CW`, frequenza e livelli di potenza per ciascuna porta, mantenendo sempre le uscite RF disattivate per sicurezza (vna_comm_check.py:32–44).
+  - Spegnimento sicuro delle uscite: `safe_outputs_off` prova sequenze compatibili di comandi per disattivare la RF su tutte le porte e ignora errori per massima compatibilità tra modelli (vna_comm_check.py:47–64).
+  - Impostazione CW e frequenza: `set_cw_frequency` configura lo sweep in `CW` sul Channel 1 e scrive la frequenza richiesta (vna_comm_check.py:66–72).
+  - Livelli di potenza per porta: `set_source_power` imposta i livelli senza abilitare RF; mappa di potenze per porta con default e override (porta 1 a −10 dBm di default nel `CONFIG`) (vna_comm_check.py:74–82).
+  - Flusso principale: apre risorsa VISA, interroga `*IDN?`, esegue spegnimento, imposta CW/frequenza e potenze, legge i valori impostati (best‑effort), rispegne e chiude la sessione evitando trigger o misure (vna_comm_check.py:84–140).
 
 
 ## <span style="color: #e69a44ff;">Settimana 4</span>
 
 
-- <span class="md-cite"></span>
+- <span class="md-cite">Setup misure</span>
 
-- Setup
-  - Stampante Ender 3 con antenna probe a guida d’onda fissata provvisoriamente con fascette, collegata alla porta 1 del VNA.
-  - Il carrello esegue un movimento a zig‑zag sul piano XZ con passo ≈ `λ/3` calcolato alla frequenza centrale di lavoro della AUT.
-  - AUT: patch a polarizzazione circolare 4×4 montata su un piedistallo da macchina fotografica, posta a ~13 cm dalla probe.
-  - Regime di misura: campo vicino radiativo (campo reattivo ≈ 8 cm; far‑field teorico ≈ 50 cm). La AUT è collegata alla porta 2 del VNA.
+  Il setup per queste prime campagne di misure è molto artigianale ma essenziale per convalidare il codice scritto e avere dei primi risultati qualitativi.
 
-- Condizioni di test
-  - Le misure attuali servono a convalidare il codice e ottenere una prima stima dei risultati.
-  - Non sono presenti assorbitori per limitare le riflessioni; non è stata applicata alcuna probe correction.
-  - Non sono state compensate le riflessioni introdotte dal telaio della stampante 3D.
+  Il setup consiste, come già sappiamo. da una stampante 3d Ender3 alla quale è stata montata l'antenna sonda (probe), una guida d'onda rettangolare in banda k come mostrato di seguito.
 
-- Prossimi passi
-  - Ottenere il far‑field e confrontarlo con misure di due tagli della AUT eseguite in far‑field.
-  - Modellare la probe in CST insieme alla geometria rilevante della stampante 3D per stimarne la RCS e predisporre la probe correction.
-  - Ripetere le misure in camera anecoica per un confronto sistematico con le simulazioni.
+  <img src="texture/20251114_145035.jpg" alt="Sonda su Ender‑3" width="680" />
+
+  Come prima AUT è stata scelta un'antenna patch 4x4 a polarizzazione circolare, anch'essa in banda k mostrata nella figura sottostante.
+
+  <img src="texture/20251114_145059.jpg" alt="AUT patch 4×4 CP" width="420" />
+
+  Strumentazione: VNA Rohde & Schwarz ZVA‑40 per l’acquisizione dei parametri S.
+
+  Il set‑up è mostrato nelle immagini seguenti: la AUT è posizionata di fronte al piano di scansione e centrata quanto più possibile.
+
+  <img src="texture/20251111_114402.jpg" alt="Set‑up complessivo (VNA + Ender‑3)" width="400" />
+  <img src="texture/20251111_114411.jpg" alt="Allineamento AUT rispetto al piano di scansione" width="400" />
+
+  Le prime misure sono effettuate su una griglia di 180mm x180mm nel piano XZ una distanza di 49mm su uno span che va da 16 a 22 GHz con potenza 0 dBm.
+
+  Per fare il tutto è stato fatto uso di codice python testato la settimana precedente e ottimizzato per automatizzare al meglio le misure ender3_nf_scanner.py.
+
+  Per poter ricostruire il FF dalle misure in NF è necessario ottenere due dataset della stessa AUT, ossia due polarizzazioni indipendenti. Per ottenere ciò è stata ruotata la sonda di 90° essendo a polarizzazione lineare.
+
+Del codice parleremo e approfondiremo nella sezione successiva dedicata
+  Automazione: script Python dedicato (`ender3_nf_scanner.py`), testato e ottimizzato per sequenze di misura ripetibili. Ulteriori dettagli e spiegazioni del codice nella sezione successiva.
+
+
+- <span class="md-cite">ender3_nf_scanner</span>
+  Script di automazione che orchestra la scansione NF planare con la Ender‑3 e il VNA ZVA‑40, pilotando gli assi X/Z e lo sweep di misura. Opera sul piano `xz` (con Y=0 fisso) e usa un passo spaziale impostato come `Δ = λ / lambda_fraction`, sovrascrivibile da riga di comando. L’area utile del piano è pari a 180 × 180 mm; la distanza di lavoro `y0` è un parametro che viene passato via CLI a script python successivi.
+
+  I movimenti sono regolati da `feedrate` e `dwell_ms`, con connessione seriale configurabile (`port`, `baud`, `serial_timeout`). Il VNA è gestito via LAN VISA (`vna_address`, `vna_timeout_s`) e lo sweep di misura viene definito in banda tramite `start/stop`, `points`, `IFBW` e `power_dBm`. La campagna abilita la lista dei parametri S `{S11, S21, S12, S22}`; al termine i file `.s2p` vengono scaricati automaticamente nella cartella `outdir`, organizzati per polarizzazione (`outdir/co` e `outdir/cx`) con naming posizionale `sparams_X…_Y…_Z…` (coordinate in mm).
+
+  Per ottenere le due polarizzazioni indipendenti si eseguono due campagne consecutive: prima la “co”, con la sonda lineare nella sua orientazione di riferimento; poi la “cx”, ruotando la sonda di 90°. In pratica si avvia lo script specificando l’opzione `--pol co`, quindi si ripete con `--pol cx` mantenendo gli stessi parametri di sweep e di scansione. Per come è costruito il sistema per ora eseguire l'operazione di ruotare la sonda induce una componente di errore particolarmente importante (a volte distruttiva) che si propaga per tutta la trasformazione fino al FF.
+
+  La durata della misura dipende dalla densità di griglia (`λ / lambda_fraction`), dal numero di punti dello sweep (`points`), dall’IF bandwidth (`IFBW`) e dal tempo di stabilizzazione (`dwell_ms`). Prima di avviare la campagna, assicurarsi che `pyserial` e `pyvisa` siano installati e che `port` e `vna_address` siano correttamente impostati in base al setup.
+
+  Questa prima campagna di misure ha una griglia spaziata di `λ/4` che corrispondono a poco più di 3 mm, quindi per una scansione si impiegano circa 10/15 minuti.
+
+  Di seguito viene lasciato un breve video per mostrare alcuni secondi di una misura in NF.
+
+  <video src="texture/20251111_114337.mp4" controls width="480"></video>
+  <p><a href="texture/20251111_114337.mp4">Scarica il video</a></p>
