@@ -394,6 +394,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Balanis, "Antenna Theory: Analysis and Design", 4th ed., Wiley, 2016. File: `Teoria/Antenna theory analysis and design, 4th Edition  Constantine A. Balanis. - New York John Wiley & Sons, 2016.pdf - collegamento.lnk`.
   - nf2ff_transformation — Algoritmi NF→FF (Matlab). Link: https://github.com/hbartle/nf2ff_transformation
 
+---
 
 ## <span style="color: #e69a44ff;">Settimana 3</span>
 
@@ -428,6 +429,7 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
   - Livelli di potenza per porta: `set_source_power` imposta i livelli senza abilitare RF; mappa di potenze per porta con default e override (porta 1 a −10 dBm di default nel `CONFIG`) (vna_comm_check.py:74–82).
   - Flusso principale: apre risorsa VISA, interroga `*IDN?`, esegue spegnimento, imposta CW/frequenza e potenze, legge i valori impostati (best‑effort), rispegne e chiude la sessione evitando trigger o misure (vna_comm_check.py:84–140).
 
+---
 
 ## <span style="color: #e69a44ff;">Settimana 4</span>
 
