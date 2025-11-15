@@ -482,8 +482,8 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
 
   Le immagini seguenti mostrano due misure a centro banda (18 GHz) per le due polarizzazioni indipendenti. Nella rappresentazione lineare si evidenzia bene come la sonda capti due polarizzazioni diverse, con massimi/spread spaziali differenti. Questi campi, considerati congiuntamente, danno un’indicazione di cosa aspettarsi in FF dopo la trasformazione, e permettono di verificare rapidamente che le misure siano coerenti (assenza di spike anomali, andamento regolare, allineamento della zona di massima).
 
-  <img src="texture/field_S12_db_norm_18_000GHz_pol1.png" alt="S12 dB (norm) 18 GHz – co" width="460" />
-  <img src="texture/field_S12_db_norm_18_000GHz_pol2.png" alt="S12 dB (norm) 18 GHz – cx" width="460" />
+  <img src="texture/field_S12_db_norm_18_000GHz_pol1.png" alt="S12 dB (norm) 18 GHz – co" width="400" />
+  <img src="texture/field_S12_db_norm_18_000GHz_pol2.png" alt="S12 dB (norm) 18 GHz – cx" width="400" />
 
-  <img src="texture/field_S12_mag_norm_18_000GHz_pol1.png" alt="S12 mag (norm) 18 GHz – co" width="460" />
-  <img src="texture/field_S12_mag_norm_18_000GHz_pol2.png" alt="S12 mag (norm) 18 GHz – cx" width="460" />
+  <img src="texture/field_S12_mag_norm_18_000GHz_pol1.png" alt="S12 mag (norm) 18 GHz – co" width="400" />
+  <img src="texture/field_S12_mag_norm_18_000GHz_pol2.png" alt="S12 mag (norm) 18 GHz – cx" width="400" />
