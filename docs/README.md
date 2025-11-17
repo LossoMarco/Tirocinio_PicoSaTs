@@ -490,3 +490,83 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
 ---
   <img src="texture/field_S12_mag_norm_18_000GHz_pol1.png" alt="S12 mag (norm) 18 GHz – co" width="400" />
   <img src="texture/field_S12_mag_norm_18_000GHz_pol2.png" alt="S12 mag (norm) 18 GHz – cx" width="400" />
+
+
+- <span class="md-cite">align_co_cx</span>
+  Questo script serve a mettere in relazione le due campagne NF di polarizzazione co e cx, stimando l’offset spaziale tra i lobi principali e producendo un confronto visivo. A partire dai file `.s2p` generati durante la scansione (organizzati in `vna_output_file/co` e `vna_output_file/cx`), ricostruisce due mappe sul piano `X–Z` alla frequenza di interesse e le normalizza separatamente: in dB riporta il massimo a 0 dB; in magnitudine porta il massimo a 1.0. In questo modo l’allineamento non è influenzato da eventuali differenze di scala tra le due polarizzazioni.
+
+  Per stimare il punto rappresentativo del lobo, utilizza un baricentro pesato sopra una soglia: in dB considera i punti entro alcuni dB dal massimo (soglia tipica 3–6 dB); in scala lineare considera una frazione del massimo (es. 0.6). Il baricentro così ottenuto per entrambe le polarizzazioni viene confrontato e dalla differenza si ricavano due offset, `Δx` e `Δz` in millimetri, che indicano la traslazione necessaria per sovrapporre la mappa cx alla mappa co.
+
+  L’output include tre elementi utili per la documentazione e l’analisi:
+  - Un’immagine “prima” con le due mappe affiancate, ciascuna normalizzata secondo la scelta dB/mag, per valutare forma e posizione dei lobi.
+
+  <img src="texture/align_S12_db_18_000GHz_before.png" alt="S12 align pol1/pol2 before" width="680" />
+  
+  - Un’immagine “dopo” con overlay: la mappa cx viene traslata di `Δx, Δz` e sovrapposta alla co con una trasparenza regolabile.
+
+  <img src="texture/align_S12_db_18_000GHz_overlay.png" alt="S12 align pol1/pol2 overlay" width="540" />
+
+  - Un file JSON con gli offset stimati e i metadati della sessione (parametro S, tipo di valore, frequenza, soglie, percorsi), per riuso in script successivi.
+
+  ``` json
+  {
+    "param": "S12",
+    "value": "db",
+    "freq_ghz": 18.0,
+    "dx_mm": 6.796572984598399,
+    "dz_mm": -3.31772632294296,
+    "threshold_db": 3.0,
+  }
+  ```
+  Lo scopo pratico è duplice: verificare rapidamente la coerenza spaziale tra le due polarizzazioni e disporre di una misura quantitativa dell’offset che può essere impiegata quando si combinano i campi per stime di FF o per controlli di qualità. In presenza di errori di rotazione/meccanici tra campagne, gli offset tendono ad aumentare e l’overlay aiuta a visualizzare la discrepanza.
+
+  Questo script è stato concepito per essere provvisorio, in quando una volta raffinato il sistema di misura non sarà necessario applicare alcun affset tra le misure, ma vista l'alta incertezza che vi è con questa configurazione risulta necesario avere questo confronto.
+  Si noti che i risultati `Δx` e `Δz` non vengono sempre utilizzati, poichè se applicati senza un corretto giudizio portano a una sovrapposizione dei campi errata, argomento che verrà affrontato nella prossima sezione.
+
+ - <span class="md-cite">total_field_co_cx</span>
+   Script di combinazione che ricostruisce il campo totale sul piano di misura a partire dalle due campagne co e cx alla frequenza di interesse. Per ogni punto sulla griglia, somma le componenti complesse oppure combina in potenza (modalità selezionabile) e produce sia il modulo totale normalizzato, sia la fase del campo risultante. Può applicare automaticamente la traslazione `Δx, Δz` stimata dal paragrafo precedente (allineamento co↔cx), così da ridurre gli errori introdotti dalla rotazione/meccanica tra campagne.
+   Come accennato in precedenza, l'applicazione degli offset proposti dallo script `align_cp_cx.py` va fatta congiudizio, in quanto potrebbero portare a risultati insensati in FF. In particolare se l'offset proposto è un sotttomultiplo di `λ` come nell'esempio del `json` riportato in precedenza.
+
+   La pipeline è pensata per la successiva trasformazione NF→FF: dopo avere centrato l’apertura e resampled la misura su una griglia rettangolare uniforme, esporta un CSV conforme alla convenzione del trasformatore in cui il piano misurato `X–Z` viene mappato sul piano `X–Y` (con `Y = Z_misura`) e la coordinata `Z` è fissata a `Y0` costante.
+
+   Modalità di combinazione:
+   - "somma complessa" (`complex_sum`): somma vettoriale `Ex + Ey` e fase derivata dalla risultante; modulo dal vettore complesso.
+   - "somma di potenze" (`power_sum`, predefinita): combina i moduli `|Ex|` e `|Ey|` come `sqrt(|Ex|^2 + |Ey|^2)` e usa la fase della somma complessa solo per il plot di fase.
+
+   Output generati in `total/nf_total`:
+   - CSV uniforme: `nf_total_uniform_<param>_<freq>GHz[_pc]_pol12.csv` con colonne `X,Y,Z,ExReal,ExImg,EyReal,EyImg,EzReal,EzImg` (coordinate in metri, piano `XY` con `Z=Y0`).
+
+   ``` csv
+    X,Y,Z,ExReal,ExImg,EyReal,EyImg,EzReal,EzImg
+    -0.0899377374,-0.0899377374,0.049,0.00497789821,0.00364549551,0.000212607396,0.00210900395,0,0
+    -0.0849411964,-0.0899377374,0.049,0.00334905786,0.00541681144,-0.000461695105,0.00255890936,0,0
+    -0.0799446555,-0.0899377374,0.049,0.0020931433,0.00614348147,-0.000535078696,0.00297143171,0,0
+    -0.0749481145,-0.0899377374,0.049,0.0031572734,0.00443550432,-0.00294306898,0.00293445284,0,0
+    ...
+    ...
+   ```
+   - Modulo totale lineare e in dB normalizzati.
+
+   <img src="texture/total_field_mag_norm_S12_18_000GHz_co_cx.png" alt="S12 total nf lin" width="400" />  
+   <img src="texture/total_field_mag_db_norm_S12_18_000GHz_co_cx.png" alt="S12 total nf db" width="400" />
+
+   In pratica, questo passaggio consente di ottenere un dataset coerente e direttamente impiegabile per la trasformazione, riducendo l’impatto delle differenze tra le due polarizzazioni e rendendo più trasparente la qualità del campo totale misurato.
+
+- <span class="md-cite">run_nf2ff_from_csv</span>
+   Questo script prende il CSV NF uniforme generato in precedenza (campo totale co+cx ricampionato su griglia regolare) e calcola il Far Field con la trasformazione planare basata su FFT. Per prima cosa individua automaticamente il file giusto in funzione della frequenza e del parametro S, poi stima la copertura angolare massima utilizzabile con un criterio geometrico, considerando l’estensione del piano di misura e la distanza `z0` impostata nel CSV.
+
+   La trasformazione costruisce una griglia angolare simmetrica attorno a `0°` con risoluzione circa `1°` e applica padding/finestra 2D come configurato. Gli assi sono coerenti con la convenzione adottata: `φ` è l’elevazione verso `x` con zero parallelo a `z+`, mentre `θ` è l'elevazione rispetto a `z`. Per ridurre artefatti ai bordi, è possibile indicare dei margini da sottrarre ai limiti geometrici prima del calcolo.
+
+   L’output include i prodotti necessari per analisi e report:
+   - Mappe FF 2D normalizzate: scala lineare con max=1, e in dB mormalizzato a 0.
+
+   <img src="texture/ff_2d_lin_norm_S12_18_000GHz.png" alt="S12 total ff lin" width="400" /> 
+   <img src="texture/ff_2d_db_norm_S12_18_000GHz.png" alt="S12 total ff db" width="400" />   
+   
+   - Tagli 1D in dB con i profili `φ` @ `θ=0°` e `θ` @ `φ=0°`.
+
+    <img src="texture/ff_cuts_db_S12_18_000GHz.png" alt="S12 total ff lin" width="680" />
+
+   - Visualizzazione 3D opzionale (PyVista): superfici 3D del FF in lin/dB.
+
+   Questo passaggio chiude la catena NF→FF: partendo dal CSV uniforme del campo totale, si ottiene la mappa angolare normalizzata del campo lontano insieme ai tagli principali e ai dati tabellari per ulteriori confronti o post‑elaborazioni.
