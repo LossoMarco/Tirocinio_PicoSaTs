@@ -552,6 +552,12 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
 
    In pratica, questo passaggio consente di ottenere un dataset coerente e direttamente impiegabile per la trasformazione, riducendo l’impatto delle differenze tra le due polarizzazioni e rendendo più trasparente la qualità del campo totale misurato.
 
+   In questo script è stata anche aggiunta la possibilità di applicare la probe correction. Ciò è stato implementato assumento che la guida d’onda rettangolare lavori in modo `TE₁₀`. Il campo di apertura viene rappresentato come una distribuzione sinusoidale lungo il lato largo `a = 10.55 mm` e uniforme lungo il lato stretto `b = 4.25 mm`. Questo si traduce in fattori di risposta `Hx`,`Hy` calcolati con integrali sinusoidali e funzioni sinc, che descrivono il pattern della sonda nei due assi spaziali.
+
+   Passando alla probe correction, il codice calcola la FFT dei campi misurati `(Ex, Ey)`, divide nel dominio spaziale‑frequenza per la risposta teorica della probe `(Hx,Hy)`, e poi fa l’iFFT per tornare ai campi corretti. In pratica rimuove l’effetto del pattern della sonda, riportando i dati a quelli che si avrebbero con una sonda ideale.
+
+
+
 - <span class="md-cite">run_nf2ff_from_csv</span>
    Questo script prende il CSV NF uniforme generato in precedenza (campo totale co+cx ricampionato su griglia regolare) e calcola il Far Field con la trasformazione planare basata su FFT. Per prima cosa individua automaticamente il file giusto in funzione della frequenza e del parametro S, poi stima la copertura angolare massima utilizzabile con un criterio geometrico, considerando l’estensione del piano di misura e la distanza `z0` impostata nel CSV.
 
@@ -570,3 +576,16 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
    - Visualizzazione 3D opzionale (PyVista): superfici 3D del FF in lin/dB.
 
    Questo passaggio chiude la catena NF→FF: partendo dal CSV uniforme del campo totale, si ottiene la mappa angolare normalizzata del campo lontano insieme ai tagli principali e ai dati tabellari per ulteriori confronti o post‑elaborazioni.
+
+- <span class="md-cite">ff_compare_cuts</span>
+   Il prende i dati di far‑field calcolati, sia nella versione grezza sia con probe correction, e li mette a confronto con le misure reali. Per farlo, individua i file CSV corrispondenti alla frequenza e al parametro scelto, e carica anche i file di misura in formato testo. Una volta raccolti i dati, seleziona i due tagli principali del diagramma di radiazione: quello lungo `θ` con `φ=0°` e quello lungo `φ` con `θ=0°`. Tutti i valori vengono normalizzati rispetto al massimo, così da avere un confronto coerente.  
+
+  Il programma poi cerca di allineare i lobi principali dei tre dataset, spostando leggermente gli assi angolari per far coincidere i massimi entro una soglia di `6 dB`. A questo punto genera due grafici: uno per il taglio in `φ` e uno per il taglio in `θ`, dove si vedono sovrapposti i pattern calcolati senza correzione, con correzione e quelli misurati.
+
+  <img src="texture/ff_compare_total_S12_18_500GHz.png" alt="S12 compare ff" width="680" />
+
+  Nell'immagine si nota come la probe correction abbia impatto solo ad angoli superiori di `40°`, ciò a senso poichè l'Half Power Beamwidth `(HPBW)` del nostro probe corrisponde a 
+
+  Infine, interpola i dati simulati sui punti di misura e calcola la differenza in dB tra simulazione e misura. Produce quindi un secondo set di grafici che mostra l’errore residuo lungo i due tagli principali. In sostanza, il codice serve a visualizzare e quantificare quanto la probe correction avvicini il far‑field calcolato al comportamento reale dell’antenna.
+
+  <img src="texture/ff_error_vs_measured_S12_18_500GHz.png" alt="S12 compare ff" width="680" />
