@@ -662,7 +662,7 @@ Le misure planari sono particolarmente sensibili all’effetto della distanza pr
 - **La compensazione della sonda è essenziale**: la risposta angolare e la polarizzazione della sonda devono essere note e compensate per ottenere una trasformazione NF-FF accurata.
 - **Le sonde OEWG sono preferite per la loro risposta quasi omnidirezionale e la facilità di modellizzazione**, ma richiedono comunque una calibrazione accurata e la correzione degli effetti di carico.
 
-## Sonde OEWG e Simili: Caratteristiche, Pattern e Effetto sul Carico dell’AUT
+#### Sonde OEWG e Simili: Caratteristiche, Pattern e Effetto sul Carico dell’AUT
 
 Le sonde OEWG (Open-Ended Waveguide) sono ampiamente utilizzate nelle misure near-field per la loro semplicità costruttiva, la risposta ben modellabile e la bassa cross-polarizzazione. Tuttavia:
 
