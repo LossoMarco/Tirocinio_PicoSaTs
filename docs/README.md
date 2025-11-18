@@ -589,3 +589,124 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
   Infine, interpola i dati simulati sui punti di misura e calcola la differenza in dB tra simulazione e misura. Produce quindi un secondo set di grafici che mostra l’errore residuo lungo i due tagli principali. In sostanza, il codice serve a visualizzare e quantificare quanto la probe correction avvicini il far‑field calcolato al comportamento reale dell’antenna.
 
   <img src="texture/ff_error_vs_measured_S12_18_500GHz.png" alt="S12 compare ff" width="680" />
+
+  ---
+
+## <span style="color: #e69a44ff;">Settimana 5</span>
+
+- <span class="md-cite">Effetto della Distanza Probe-AUT sui Parametri S11/S22</span>
+
+Nell'ambito delle misure in NF, la sonda di misura (probe) viene posizionata a distanza ravvicinata rispetto all’AUT, consentendo l’acquisizione del campo elettromagnetico su una superficie di scansione (planare, cilindrica o sferica). Tuttavia, la prossimità tra probe e AUT introduce fenomeni di accoppiamento mutuo e carico della sonda (probe loading), che possono influenzare sensibilmente i parametri di riflessione S11 e S22, ovvero i coefficienti di riflessione alle porte di ingresso e uscita del sistema di misura.
+
+1. Durante misure near-field con distanza ravvicinata tra AUT e sonda, i parametri S11 e S22 possono variare sensibilmente.
+2. Se l’obiettivo è la ricostruzione del far-field, le variazioni di S11/S22 non sono critiche purché la sonda sia coerente e calibrata.
+3. Se invece si vuole caratterizzare l’impedenza della AUT, la presenza ravvicinata della sonda falsifica la misura.
+
+Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configurazioni planari, il ruolo delle sonde OEWG (Open-Ended Waveguide), le tecniche di compensazione e calibrazione, la teoria dell’accoppiamento mutuo e le implicazioni pratiche per la progettazione e l’esecuzione delle misure.
+
+#### Effetto della Distanza Probe-AUT sui Parametri di Riflessione: Conferme Sperimentali e Teoriche
+
+Numerosi studi sperimentali e simulativi confermano che la distanza tra probe e AUT influisce in modo significativo sui parametri di riflessione S11 e S22. Ad esempio, in misure di permittività tramite probe coassiali open-ended, è stato dimostrato che la riflessione misurata (S11) varia drasticamente al variare della distanza tra la sonda e il materiale sotto test (MUT). In particolare:
+
+- **Studi su probe coassiali in mezzi stratificati** mostrano che la riflessione S11 è estremamente sensibile alla distanza tra la sonda e l’interfaccia di un secondo strato (AUT). Errori di stima della permittività superiori al 70% sono stati riscontrati ignorando la presenza del secondo strato a distanze inferiori a 0.1 mm, mentre l’errore si riduce a meno del 2% includendo un modello a due strati.
+- **Simulazioni e misure su sonde OEWG** mostrano che la presenza di materiali dielettrici, assorbitori o variazioni geometriche nella zona di accoppiamento modifica S11 anche di diversi dB, con impatti significativi sulle prestazioni della sonda e sulla misura.
+
+
+Dal punto di vista teorico, la variazione di S11/S22 con la distanza probe-AUT è spiegata dal fenomeno dell’accoppiamento mutuo, descritto tramite matrici di impedenza (Z-matrix) e S-matrix. Quando la sonda si avvicina all’AUT, si instaurano correnti indotte e campi reattivi che alterano l’impedenza vista dalla porta di misura, modificando i parametri di riflessione.
+
+- **La mutual coupling theory** mostra che la presenza di elementi radianti vicini (sonda e AUT) introduce termini di impedenza mutua che dipendono fortemente dalla distanza e dalla configurazione geometrica.
+- **Simulazioni numeriche (MoM, FEM, FDTD)** confermano che la variazione della distanza modifica la matrice di impedenza e, di conseguenza, i parametri S misurati.
+- **Studi su array di antenne** evidenziano che la riduzione della distanza tra elementi porta a una diminuzione del determinante della matrice di impedenza, con rischi di singolarità e instabilità nella misura.
+
+#### Ricostruzione del Far-Field: Robustezza alle Variazioni di S11/S22
+
+Una delle domande chiave riguarda la criticità delle variazioni di S11/S22 per la ricostruzione del far-field tramite trasformazione NF-FF. Numerose fonti autorevoli confermano che, **purché la sonda sia coerente e calibrata**, le variazioni locali di S11/S22 non compromettono la qualità della ricostruzione del campo lontano:
+
+- **Costanzo & Di Massa (InTechOpen, 2011)** dimostrano sperimentalmente che la trasformazione NF-FF (sia planare che cilindrica) restituisce pattern di radiazione accurati anche in presenza di variazioni di fase e ampiezza dovute alla prossimità della sonda, a condizione che la sonda sia correttamente calibrata e il sistema sia coerente.
+- **Migliore (MDPI Electronics, 2018)** afferma esplicitamente:  
+  > "Le variazioni di S11/S22 non sono critiche per la ricostruzione del far-field se la sonda è coerente e calibrata. Tali variazioni possono essere mitigate tramite tecniche di filtraggio e compensazione, e non compromettono la qualità della trasformazione NF-FF."
+- **Francis et al. (NIST, 1994)** mostrano che, anche in presenza di riflessioni multiple tra probe e AUT, la ricostruzione del far-field tramite algoritmi di compensazione della sonda (probe correction) rimane accurata fino a livelli di sidelobe inferiori a -55 dB rispetto al main beam.
+- **Leach & Paris (IEEE, 1973)** e **Wang (IEEE, 1988)**, citati come riferimenti fondamentali, confermano che la compensazione della sonda (tramite modelli teorici e misure di calibrazione) permette di eliminare l’effetto delle variazioni locali di S11/S22 sulla trasformazione NF-FF.
+- **Rohde & Schwarz (AppNote 1MA304)** e **MVG** nelle loro note tecniche ribadiscono che la calibrazione della sonda e la compensazione software sono sufficienti a garantire la correttezza della misura in campo lontano, anche in presenza di variazioni locali di riflessione.
+
+#### Analisi Numerica e Metodi di Compensazione
+
+Le tecniche numeriche di compensazione della sonda (probe correction) sono ormai standard in tutti i principali software di trasformazione NF-FF (AMS32, NSI-MI, MVG, ecc.). Queste tecniche includono:
+
+- **Compensazione di primo ordine**: adatta per sonde OEWG e horn simmetrici, corregge l’effetto della risposta angolare della sonda.
+- **Compensazione di ordine arbitrario**: necessaria per sonde non ideali o a banda larga, permette di correggere anche effetti di cross-polarizzazione e asimmetrie del pattern.
+- **Deconvoluzione e pesatura tramite pattern della sonda**: la risposta della sonda viene utilizzata come funzione di pesatura nell’integrale di trasformazione, eliminando l’effetto del probe loading.
+
+**Risultato chiave**:  
+*La robustezza della trasformazione NF-FF rispetto alle variazioni di S11/S22 è stata dimostrata sia teoricamente (teorema di reciprocità di Lorentz, pattern multiplication) sia sperimentalmente, purché la sonda sia coerente e calibrata*.
+
+#### Caratterizzazione d’Impedenza dell’AUT: Criticità della Prossimità della Sonda
+
+Quando l’obiettivo della misura è la caratterizzazione dell’impedenza dell’AUT (ad esempio, la misura precisa di S11 per determinare l’adattamento o la permittività di un materiale), la presenza ravvicinata della sonda introduce errori significativi:
+
+- **Studi su probe coassiali open-ended** mostrano che la presenza di strati multipli o la variazione della distanza tra probe e AUT altera drasticamente la misura della riflessione, rendendo la stima dell’impedenza o della permittività non affidabile se non si tiene conto dell’effetto di carico della sonda.
+- **Analisi teoriche** dimostrano che la riflessione misurata dalla sonda è funzione della distanza, della permittività e della geometria del sistema, e che la presenza di accoppiamento mutuo e campi reattivi falsifica la misura dell’impedenza reale dell’AUT.
+
+#### Linee Guida e Standard
+
+Le linee guida IEC, IEEE e CISPR raccomandano esplicitamente di minimizzare l’effetto di carico della sonda durante la caratterizzazione d’impedenza, suggerendo l’uso di modelli di correzione, la calibrazione su materiali di riferimento e la scelta di distanze di misura tali da ridurre l’accoppiamento mutuo.
+
+**Nota tecnica**:  
+*La IEC 61967-6 specifica procedure di calibrazione per sonde magnetiche e coassiali, sottolineando la necessità di tenere conto della distanza e della geometria della sonda per ottenere misure affidabili di impedenza e campo*.
+
+#### Misure Near-Field Planari: Impatto della Distanza e della Sonda
+
+Le misure planari sono particolarmente sensibili all’effetto della distanza probe-AUT, soprattutto per antenne direttive e sonde OEWG. Le principali fonti confermano che:
+
+- **La risoluzione spaziale e la precisione della misura dipendono dalla distanza di scansione**: distanze troppo ridotte aumentano il carico della sonda e l’accoppiamento mutuo, mentre distanze troppo elevate riducono la sensibilità e la risoluzione.
+- **La compensazione della sonda è essenziale**: la risposta angolare e la polarizzazione della sonda devono essere note e compensate per ottenere una trasformazione NF-FF accurata.
+- **Le sonde OEWG sono preferite per la loro risposta quasi omnidirezionale e la facilità di modellizzazione**, ma richiedono comunque una calibrazione accurata e la correzione degli effetti di carico.
+
+## Sonde OEWG e Simili: Caratteristiche, Pattern e Effetto sul Carico dell’AUT
+
+Le sonde OEWG (Open-Ended Waveguide) sono ampiamente utilizzate nelle misure near-field per la loro semplicità costruttiva, la risposta ben modellabile e la bassa cross-polarizzazione. Tuttavia:
+
+- **La geometria della sonda (apertura, taper, presenza di assorbitori o dielettrici)** influisce su S11 e sul pattern di radiazione, modificando il carico visto dall’AUT.
+- **L’aggiunta di assorbitori può migliorare la SCS (Scattering Cross Section) senza penalizzare S11, purché mantenuti a distanza >0.2λ dall’apertura**.
+- **La presenza di dielettrici o modifiche geometriche può peggiorare S11 e introdurre riflessioni indesiderate**, richiedendo ottimizzazione congiunta di taper e materiali.
+- **La risposta della sonda deve essere caratterizzata e compensata tramite modelli teorici o misure di calibrazione**, soprattutto per pattern complessi o misure a banda larga.
+
+
+#### Studi Numerici e Simulazioni: Valutazione dell’Effetto della Sonda sull’AUT
+
+Le simulazioni numeriche (MoM, FEM, FDTD) sono strumenti essenziali per valutare l’effetto della sonda sull’AUT e ottimizzare la configurazione di misura:
+
+- **Simulazioni FDTD** mostrano che la posizione della superficie di integrazione (equivalente alla distanza probe-AUT) influisce sulla ricostruzione del far-field solo se non si applicano tecniche di media geometrica o compensazione, confermando la robustezza della trasformazione NF-FF se la sonda è calibrata.
+- **Studi su probe per nanoscopia THz** evidenziano che la geometria e la distanza della sonda determinano il livello di accoppiamento e la risoluzione spaziale, con effetti diretti su S11/S22 e sulla qualità della misura.
+- **Analisi di array di antenne** confermano che la mutual coupling e la variazione della distanza tra elementi (inclusa la sonda) modificano il pattern di radiazione e l’impedenza attiva, richiedendo l’uso di embedded element patterns per una modellizzazione accurata.
+
+#### Quando S11/S22 Non Sono Critici (NF-FF)
+
+- **Obiettivo: Ricostruzione del far-field**  
+  Se la misura serve a ricostruire il pattern di radiazione in campo lontano, le variazioni locali di S11/S22 dovute alla prossimità della sonda non sono critiche, purché:
+  - La sonda sia coerente (stabile in ampiezza e fase) e calibrata.
+  - Si applichino tecniche di compensazione della sonda (probe correction).
+  - Si operi in ambiente controllato (camera anecoica, assorbitori adeguati).
+  - Si verifichi la coerenza tra le misure di ampiezza e fase su tutte le polarizzazioni.
+
+#### Conclusioni
+
+L’analisi approfondita della letteratura scientifica, delle note tecniche industriali e degli standard internazionali conferma inequivocabilmente che:
+
+- La distanza tra probe e AUT influisce sensibilmente sui parametri di riflessione S11/S22 nelle misure near-field, a causa di accoppiamento mutuo e carico della sonda.
+- Per la ricostruzione del far-field, le variazioni di S11/S22 non sono critiche se la sonda è coerente e calibrata, grazie alle tecniche di compensazione e calibrazione oggi disponibili.
+- Per la caratterizzazione d’impedenza dell’AUT, la presenza ravvicinata della sonda falsifica la misura, rendendo necessarie tecniche di de-embedding, modelli a più strati e calibrazione accurata.
+- Le sonde OEWG e simili, pur essendo preferite per la loro risposta modellabile, richiedono comunque una caratterizzazione accurata e una compensazione software per garantire l’affidabilità delle misure.
+- Le linee guida operative raccomandano di scegliere la distanza probe-AUT in funzione dell’obiettivo della misura, applicando sempre tecniche di calibrazione e compensazione appropriate.
+
+
+- Riferimenti
+
+  - [Costanzo & Di Massa, InTechOpen 2011](http://www.intechopen.com/books/numerical-simulations-of-physical-and-engineering-processes/advanced-numerical-techniques-for-near-field-antenna-measurements)
+  - [Migliore, MDPI Electronics 2018](https://doi.org/10.3390/electronics7100257)
+  - [Francis et al., NIST 1994](https://doi.org/10.6028/jres.099.012)
+  - [Aksoy et al., AMTA 2021](https://www.emcturkiye.org/papers/Session5_Talk2.pdf)
+  - [Rohde & Schwarz, AppNote 1MA304](http://www.rohde-schwarz.com/appnote/1MA304)
+  - [Asilian Bidgoli et al., ResearchGate 2024](https://www.researchgate.net/publication/380988387_A_Simplified_Formulation_of_the_Reflection_Coefficient_of_an_Open-Ended_Coaxial_Probe_in_Multilayered_Media)
+  - [IEC 61967-6:2002](https://webstore.iec.ch/en/publication/6193)
+  - [SpringerLink, Near-Field Antenna Measurement Techniques](https://link.springer.com/rwe/10.1007/978-981-4560-44-3_117)
