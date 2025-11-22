@@ -714,6 +714,46 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   È facile notare come gli errori di troncamento si manifestino inn entrambi i casi e rovinino la ricostruzione del campo FF.
   In particolare, a distanza di 120mm, l’ampiezza angolare risultante è circa la metà rispetto a misure con distanza di 31mm, questo quindi implica una ricostruzione del campo peggiore rispetto a misure a distanza ravvicinata.
 
+- <span class="md-cite">CST: familiarizzazaione e riproduzione probe utilizzata</span>
+
+  La seconda parte della settimana è stata impiegata per familiarizzare con il software di simulazioni elettromagnetiche CST (Computer Simulation Technology) e riprodurre la probe utilizzata per le misure. Per rendere il processo più veloce è stato fatto utilizzo di video su YouTube che illustrano le principali funzionalità del software linkati di seguito.
+
+  - [CST Studio How to Build A S1E1: Waveguide Horn](https://www.youtube.com/watch?v=zH8cJe9zppc&t=1523s)
+
+  Il risultato ottenuto è illustrato nella seguente immagine.
+
+  <img src="texture/OEWG_art.png" alt="OEWG art" width="680" />
+
+  Quindi il Far Field è stato misurato per ottenere una rappresentazione del pattern di radiazione utile ad avere ulteriore conferme nei risultati ottenuti nelle trasformazioni delle scorse settimane, soprattutto per quanto riguarda la probe correction. I plot 3D e dei tagli principali del campo sono illustrati nelle figure seguenti.
+
+  <img src="texture/OEWG_art_FF_3D.png" alt="OEWG art FF 3D" width="680" />
+
+  ---
+
+  <img src="texture/OEWG_art_phi0.png" alt="OEWG art phi0" width="400" />
+  <img src="texture/OEWG_art_phi90.png" alt="OEWG art phi90" width="400" />
+
+  Successivamente questi risultati verranno esportati e integrati nella tradformazione NF-FF per ottenere una probe correction più veritiera e rappresentativa del sistema reale utilizzato.
+
+  Per acquisire ulteriori capacità con CST si è deciso di modellare anche la transizione guida-cavo per ottenere una rappresentazione più accurata del sistema reale utilizzato. La trasnsizione utilizzata è la QWA-42S29F00, la quale purtroppo non risulta avere datasheet pubblici circa il suo return-loss (S11). Nonostante tutto si è deciso di proseguire e sono stati sfruttati video YouTube anche in questo caso.
+  
+  - [CST Studio How to Build A S1E3: Waveguide to Coax Adapter](https://www.youtube.com/watch?v=VQVC3bJbp98&t=1153s)
+  - [Design of a Ku Band Waveguide to coaxial line transition with Ansys HFSS 3D modeling](https://www.youtube.com/watch?v=UsYN-9vemWM&t=1737s)
+  
+  I risultati delle simulazioni del S11 risultano ottimi (probabilmente troppo, quindi poco realistici) e vengono riportati di seguito dopo il alcuni rendere 3D della transizione modellata.
+
+  <img src="texture/QWA-42S29F00.png" alt="QWA-42S29F00" width="680" />
+
+  ---
+
+  <img src="texture/QWA-42S29F00_X.png" alt="QWA-42S29F00 cut norm to X" width="400" />
+  <img src="texture/QWA-42S29F00_Y.png" alt="QWA-42S29F00 cut norm to Y" width="400" />
+
+  ---
+
+  <img src="texture/QWA-42S29F00_S11.png" alt="QWA-42S29F00 S11" width="680" />
+
+
 
 - Riferimenti
 
