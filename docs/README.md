@@ -714,6 +714,22 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   È facile notare come gli errori di troncamento si manifestino inn entrambi i casi e rovinino la ricostruzione del campo FF.
   In particolare, a distanza di 120mm, l’ampiezza angolare risultante è circa la metà rispetto a misure con distanza di 31mm, questo quindi implica una ricostruzione del campo peggiore rispetto a misure a distanza ravvicinata.
 
+- <span class="md-cite">Misure a distanza 15mm</span>
+
+  Nella speranza di ottenere risultati più accurati e una risoluzione angolare più ampia è stata eseguita una campagna di misure a distanza estremamente ravvicinata. Questo ha portato ad avere dati in NF che spaziano da -80° a +80° e risultati interessanti nel campo catturato.
+  Più precisamente, vista la natura della AUT (patch 4x4 a polarizzazione circolare con 4 sub-array) è stato possibile visualizzare come i diversi elementi radianti si comportano a frequenze differenti.
+
+  Di seguito vengono illustrati alcuni plot che evidenziano questo comportamento.
+
+  <img src="texture/nf_tot_17_5_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/nf_tot_18_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/nf_tot_18_5_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/nf_tot_19_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/nf_tot_20_GHz_15mm.png" alt="NF 15mm" width="400" />
+
+
+  Purtroppo per quanto riguarda la ricostruzione del FF non si ottengono risultati più accurati, al contrario si è costretti a tagliare più risoluzione angolare a causa del sistema artigianale di misura il quale porta con se errori per niente trascurabili.
+
 - <span class="md-cite">CST: familiarizzazaione e riproduzione probe utilizzata</span>
 
   La seconda parte della settimana è stata impiegata per familiarizzare con il software di simulazioni elettromagnetiche CST (Computer Simulation Technology) e riprodurre la probe utilizzata per le misure. Per rendere il processo più veloce è stato fatto utilizzo di video su YouTube che illustrano le principali funzionalità del software linkati di seguito.
