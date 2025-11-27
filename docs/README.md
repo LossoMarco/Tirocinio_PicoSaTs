@@ -781,3 +781,22 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   - [Asilian Bidgoli et al., ResearchGate 2024](https://www.researchgate.net/publication/380988387_A_Simplified_Formulation_of_the_Reflection_Coefficient_of_an_Open-Ended_Coaxial_Probe_in_Multilayered_Media)
   - [IEC 61967-6:2002](https://webstore.iec.ch/en/publication/6193)
   - [SpringerLink, Near-Field Antenna Measurement Techniques](https://link.springer.com/rwe/10.1007/978-981-4560-44-3_117)
+
+## <span style="color: #e69a44ff;">Settimana 6</span>
+
+- <span class="md-cite">CST: Simulazione completa probe + transizione</span>
+
+  Dopo aver disegnato e simulato la probe (OEWG) e la transizione guida-cavo (QWA-42S29F00) in maniera indipendente, si è deciso di simulare il sistema completo per ottenere una rappresentazione più accurata del sistema reale utilizzato.
+  Quindi sono stati uniti i componenti e ottenuti i risultati del FF e Return Loss (S11).
+
+  Di seguito vengono riportati i plot del parametro S11 misurati dal VNA e quelli simulati. È importante notare che i valori differiscono sia per la misura reale che non è stata effettuata in un ambiente privo di riflessioni e che il sistema simulato non è una esatta riproduzione dei compponenti reali in quanto per la transizione guida d'onda non erano disponibili datasheet o modelli.
+
+  <img src="texture/S11_OEWG+Transition_ZVA_40_Measured.png" alt="S11 OEWG+Transition ZVA 40 Measured" width="600" />
+  <img src="texture/OEWG+Transition_S11_16_21_GHz.png" alt="S11 OEWG+Transition 16-21 GHz" width="600" />
+
+  L'andamento dei due grafici risulta comunque simile e apprezzabile, seguiranno simulazioni e/o misure più accurate per ottenere una migliore rappresentazione del sistema reale utilizzato.
+
+  Come accennato è stato simulato ed eestrapolato il FF della probe simulata che verrà utilizzato nella probe correction durante la trasformazione NF-FF. Qui sotto sono riportati i due tagli `φ=0` e `φ=90`.
+
+  <img src="texture/OEWG+Transition_phi0.png" alt="OEWG+Transition phi0" width="450" />
+  <img src="texture/OEWG+Transition_phi90.png" alt="OEWG+Transition phi90" width="426" />
