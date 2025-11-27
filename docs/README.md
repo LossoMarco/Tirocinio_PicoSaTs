@@ -789,6 +789,8 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   Dopo aver disegnato e simulato la probe (OEWG) e la transizione guida-cavo (QWA-42S29F00) in maniera indipendente, si è deciso di simulare il sistema completo per ottenere una rappresentazione più accurata del sistema reale utilizzato.
   Quindi sono stati uniti i componenti e ottenuti i risultati del FF e Return Loss (S11).
 
+  <img src="texture/OEWG_Transition_3D.png" alt="OEWG+Transition 3D" width="680" />
+
   Di seguito vengono riportati i plot del parametro S11 misurati dal VNA e quelli simulati. È importante notare che i valori differiscono sia per la misura reale che non è stata effettuata in un ambiente privo di riflessioni e che il sistema simulato non è una esatta riproduzione dei compponenti reali in quanto per la transizione guida d'onda non erano disponibili datasheet o modelli.
 
   <img src="texture/S11_OEWG+Transition_ZVA_40_Measured.png" alt="S11 OEWG+Transition ZVA 40 Measured" width="600" />
