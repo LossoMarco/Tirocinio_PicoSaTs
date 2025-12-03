@@ -847,4 +847,5 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   Per semplicità di manipolazione dei dati si era deciso di utilizzare una convenzione differente per gli angoli `θ` e `φ`, il che portava ad ottenere `kx ∝ sin(φ)` e `ky ∝ sin(θ)` che rompeva la correlazione angolare `√(kx²+ky²) ≠ k0·sin(θ)`, distorcendo l'angolo polare effettivo e introducendo artefatti.
   Si è subito sistemato il problema reintroducendo la corretta mappatura sferica dei numeri d'onda, quindi eliminando le "diagonali" presenti nei plot del FF.
   DI seguito si possono apprezzare i nuovi risultati, che per quanto riguarda il lobo principare non subiscono variazioni, ma ai bordi non presentano più artefatti.
-  
+
+  <img src="texture/settimana_7/ff_2d_db_norm_S12_19_000GHz.png" alt="FF 2d db norm S12 19 000GHz" width="680" />
