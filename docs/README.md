@@ -817,6 +817,7 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 ## <span style="color: #e69a44ff;">Settimana 7</span>
 
 - <span class="md-cite">Risoluzione problemi sul bordo del FF trasformato</span>
+
   Durante questa settimana si è affrontato il problema di risolvere i problemi presenti sul bordo del FF trasformato. In particolare si è notato che per la campagna di misure svolta a distanza estremamente ravvicinata (14mm) si è verificato un comportamento anomalo del FF trasformato.
   In particolare si è notato come vicino al bordo del campo in FF trasformato si generasse uno spike che superava anche il lobo centrale.
   Oltre a questo problema, si è presentato anche un ulteriore artefatto, la creazione di "diagonali" ad alto guadagno nella trasformazione in FF, ovviamente non presenti nelle misure NF.
@@ -849,3 +850,67 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   DI seguito si possono apprezzare i nuovi risultati, che per quanto riguarda il lobo principare non subiscono variazioni, ma ai bordi non presentano più artefatti.
 
   <img src="texture/settimana_7/ff_2d_db_norm_S12_19_000GHz.png" alt="FF 2d db norm S12 19 000GHz" width="680" />
+
+
+- <span class="md-cite">Probe correction dai dati estratti in cst</span>
+
+  Dopo aver concluso la modellaziione del sistema probe OEWG e transizione guida d'onda, sono state eseguite le simulazioni del campo irradiato e quindi esportati i dati dello stesso in file `.txt` a diverse frequenze. 
+  L'idea iniziale era quella di manipolare questi dati estratti e darli in pasto al codice già presente che esegue la probe correction analitica, ciò ha generato non pochi problemi e soprattutto risultati completamente errati e insensati.
+  Viene riportato di seguito uno dei tanti kernel di trasformazione utilizzati per la probe correction che venivano computati.
+  
+  <img src="texture/settimana_7/kernel_cst_probe_corr_errato.png" alt="kernel errato" width="680" />
+  
+  Si è quindi deciso di adottare un approccio differente, realizzare uno script ad hoc che implementava la probe correction dai dati estratti dal software CST.
+  Come prima cosa si è proceduto a verificare che i dati estratti corrispondessero con le simulazioni presenti in CST e che venissero interpretati correttamente all'interno dello script, si sono quindi realizzati molteplici plot del varie componenti del campo.
+  Di seguito viene riporato il plot di modulo e fase delle componenti `Eθ` e `Eφ`, che corrisponde con quanto simulato in CST.
+
+  <img src="texture/settimana_7/Etheta_Ephi_mod_dB_phase.png" alt="Etheta Ephi mod e fase" width="680" />
+
+  Poi è stato verificato che il computo delle componenti `Ex` e `Ey` dal campo `Eθ` e `Eφ` corrisponde con quanto simulato in CST.
+  Vengono riportati di seguito i plot di modulo e fase delle componenti `Ex` e `Ey`, che corrisponde con quanto simulato in CST.
+
+  <img src="texture/settimana_7/Ex_Ey_mod_dB_phase.png" alt="Ex Ey mod e fase" width="680" />
+
+  Confermato anche il corretto calcolo delle componenti `Ex` e `Ey` dal campo `Eθ` e `Eφ`, si è passati finalmente alla computazione della risposta `H(kx, ky)` e della sua pseudo inversa, direttamente utile alla probe correction.
+  Come in precedenza è stato eseguito il plot dei vari passaggi, di seguito viene riportato direttamente il kernel invertito, l'obbiettivo è verificare che abbia una risposta continua e omogenea, visibilmente simile al pattern del campo irradiato dalla probe.
+
+  <img src="texture/settimana_7/Hx_Hy_inv_mod_dB.png" alt="Hx Hy inv mod dB" width="680" />
+
+  Infine, ottenuto il NF corretto è stato applicata la stessa routine per le precedenti trasformazioni e calcolato il compare dei tagli `φ=0` e `φ=90` con le altre trasformazioni e i dati reali.
+
+  <img src="texture/settimana_7/ff_compare_total_S12_18_000GHz_18000MHz.png" alt="FF compare total S12 18 000GHz 18000MHz" width="400" />
+  <img src="texture/settimana_7/ff_compare_total_S12_18_500GHz_18500MHz.png" alt="FF compare total S12 18 500GHz 18500MHz" width="400" />
+  <img src="texture/settimana_7/ff_compare_total_S12_19_000GHz_19000MHz.png" alt="FF compare total S12 19 000GHz 19000MHz" width="400" />
+
+- <span class="md-cite">cst_probe_correction.py</span>
+
+  Per completezzezza si va a spiegare in maniera concettuale quello che esegue lo script
+
+    Modello nel dominio tangenziale `k_t = (kx, ky)`:
+
+    - Misura: `V(kx, ky) = H(kx, ky) · E(kx, ky)`
+    - Correzione: `E(kx, ky) = G(kx, ky) · V(kx, ky)` con `G ≈ H⁺`
+    - Pseudoinversa regolarizzata: `G = (Hᴴ H + α I)⁻¹ Hᴴ`
+
+    Dove:
+    - `H(kx, ky)` è il kernel della probe (2×2) ottenuto dai pattern far‑field CST, mappati in `Ex,Ey` sul piano e campionati su `kx,ky`.
+    - `α` è la regolarizzazione (Tikhonov) per stabilizzare l’inversione.
+
+    Dominio valido e attenuazioni realistiche:
+    - Disco fisico: `k_t² ≤ k₀²` (`k₀ = 2π f / c`). Fuori dal disco, il kernel è non propagante.
+    - Taglio geometrico opzionale: `θ_max` dalla distanza `z0` limita a `k_t ≤ k₀ · sin(θ_max)`.
+    - Smorzamento ai bordi: limitazione del modulo di `G` (`gmin ≤ |G| ≤ gmax`) e blending con identità: `G_blend = (1−β) I + β · G_clamped`.
+
+    Procedura operativa:
+    1) Dal file CST FF (`Eθ,Eφ`) si calcolano `Ex,Ey` sul piano per ciascuna coppia di angoli; si costruisce `H(kx,ky)` su griglia regolare.
+    2) Si interpola/filla `H` solo dentro il disco `k_t ≤ k₀` e si applica il taglio geometrico se necessario.
+    3) Si calcola la pseudoinversa `G` con regolarizzazione `α`, quindi clamping del modulo (`gmin,gmax`) e blending `β`.
+    4) Si trasformano le misure NF co/cx in `V(kx,ky)` e si applica `E = G · V`.
+    5) Inversa FFT → `Ex(x,z), Ey(x,z)` corrette; si normalizza e si esporta il CSV (`X,Y,Z,ExReal,ExImg,EyReal,EyImg,…`) con coordinate in metri.
+
+    Parametri tipici (script):
+    - `--pinv-alpha` (regolarizzazione): più alto → correzione più morbida.
+    - `--pinv-gmin`, `--pinv-gmax` (clamping): limitano azione ai bordi.
+    - `--pinv-beta` (blending): 0 → identità, 1 → correzione piena.
+    - `--dist` (distanza `z0`): imposta `θ_max` e attenua naturalmente i bordi.
+
