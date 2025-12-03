@@ -377,9 +377,20 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
     - Script: `demo_planar_nf.py` — esegue carica dataset, stima copertura, esegue NF→FF e genera i grafici.
     - Comando: `demo_planar_nf.py` (opzionale `--show` per mostrare a schermo).
     - Output grafici salvati in: `Script/nf2ff_python/plots/` (es.: `nf_magnitude_3d_lin.png`, `nf_topdown_lin.png`, `ff_magnitude_3d_db.png`, `ff_topdown_db.png`).
-  - Prossimi passi
-    - Convalidare trasformazione con dataset con misure sferiche per confronto diretto FF calcolato e FF misurto (reale)
-    - Aggiungere probe correction
+  
+  Di seguito vengono lasciati i plot del NF e del FF in scala lineare e in dB
+
+  <img src="texture/settimana_2/nf_topdown_94GHz_lin.png" alt="NF topdown 94GHz lin" width="450" />
+  <img src="texture/settimana_2/nf_topdown_94GHz_db.png" alt="NF topdown 94GHz db" width="450" />
+  
+  ---
+
+  <img src="texture/settimana_2/ff_topdown_94GHz_lin.png" alt="FF topdown 94GHz lin" width="450" />
+  <img src="texture/settimana_2/ff_topdown_94GHz_db.png" alt="FF topdown 94GHz db" width="450" />
+  
+  ---
+
+
 
 - <span class="md-cite">Conferma ipotesi — Pattern a ~94 GHz</span>
   - Il confronto con il paper allegato conferma che il pattern di radiazione dell’antenna in esame coincide con quello estratto dagli script Python dal dataset a ~94 GHz.
@@ -440,18 +451,18 @@ Focus: sistemi di misura in camera anecoica e metodi NF→FF, con attenzione al 
 
   Il setup consiste, come già sappiamo. da una stampante 3d Ender3 alla quale è stata montata l'antenna sonda (probe), una guida d'onda rettangolare in banda k come mostrato di seguito.
 
-  <img src="texture/20251114_145035.jpg" alt="Sonda su Ender‑3" width="680" />
+  <img src="texture/settimana_4/20251114_145035.jpg" alt="Sonda su Ender‑3" width="680" />
 
   Come prima AUT è stata scelta un'antenna patch 4x4 a polarizzazione circolare, anch'essa in banda k mostrata nella figura sottostante.
 
-  <img src="texture/20251114_145059.jpg" alt="AUT patch 4×4 CP" width="420" />
+  <img src="texture/settimana_4/20251114_145059.jpg" alt="AUT patch 4×4 CP" width="420" />
 
   Strumentazione: VNA Rohde & Schwarz ZVA‑40 per l’acquisizione dei parametri S.
 
   Il set‑up è mostrato nelle immagini seguenti: la AUT è posizionata di fronte al piano di scansione e centrata quanto più possibile.
 
-  <img src="texture/20251111_114402.jpg" alt="Set‑up complessivo (VNA + Ender‑3)" width="400" />
-  <img src="texture/20251111_114411.jpg" alt="Allineamento AUT rispetto al piano di scansione" width="400" />
+  <img src="texture/settimana_4/20251111_114402.jpg" alt="Set‑up complessivo (VNA + Ender‑3)" width="400" />
+  <img src="texture/settimana_4/20251111_114411.jpg" alt="Allineamento AUT rispetto al piano di scansione" width="400" />
 
   Le prime misure sono effettuate su una griglia di 180mm x180mm nel piano XZ una distanza di 49mm su uno span che va da 16 a 22 GHz con potenza 0 dBm.
 
@@ -476,7 +487,7 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
 
   Di seguito viene lasciato un breve video per mostrare alcuni secondi di una misura in NF.
 
-  <video src="/Tirocinio_PicoSaTs/texture/20251111_114337.mp4" controls width="480"></video>
+  <video src="texture/settimana_4/20251111_114337.mp4" controls width="480"></video>
 
 
 - <span class="md-cite">plot_sparams_field</span>
@@ -484,12 +495,12 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
 
   Le immagini seguenti mostrano due misure a centro banda (18 GHz) per le due polarizzazioni indipendenti. Nella rappresentazione lineare si evidenzia bene come la sonda capti due polarizzazioni diverse, con massimi/spread spaziali differenti. Questi campi, considerati congiuntamente, danno un’indicazione di cosa aspettarsi in FF dopo la trasformazione, e permettono di verificare rapidamente che le misure siano coerenti (assenza di spike anomali, andamento regolare, allineamento della zona di massima).
 ---
-  <img src="texture/field_S12_db_norm_18_000GHz_pol1.png" alt="S12 dB (norm) 18 GHz – co" width="400" />
-  <img src="texture/field_S12_db_norm_18_000GHz_pol2.png" alt="S12 dB (norm) 18 GHz – cx" width="400" />
+  <img src="texture/settimana_4/field_S12_db_norm_18_000GHz_pol1.png" alt="S12 dB (norm) 18 GHz – co" width="400" />
+  <img src="texture/settimana_4/field_S12_db_norm_18_000GHz_pol2.png" alt="S12 dB (norm) 18 GHz – cx" width="400" />
 
 ---
-  <img src="texture/field_S12_mag_norm_18_000GHz_pol1.png" alt="S12 mag (norm) 18 GHz – co" width="400" />
-  <img src="texture/field_S12_mag_norm_18_000GHz_pol2.png" alt="S12 mag (norm) 18 GHz – cx" width="400" />
+  <img src="texture/settimana_4/field_S12_mag_norm_18_000GHz_pol1.png" alt="S12 mag (norm) 18 GHz – co" width="400" />
+  <img src="texture/settimana_4/field_S12_mag_norm_18_000GHz_pol2.png" alt="S12 mag (norm) 18 GHz – cx" width="400" />
 
 
 - <span class="md-cite">align_co_cx</span>
@@ -500,11 +511,11 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
   L’output include tre elementi utili per la documentazione e l’analisi:
   - Un’immagine “prima” con le due mappe affiancate, ciascuna normalizzata secondo la scelta dB/mag, per valutare forma e posizione dei lobi.
 
-  <img src="texture/align_S12_db_18_000GHz_before.png" alt="S12 align pol1/pol2 before" width="680" />
+  <img src="texture/settimana_4/align_S12_db_18_000GHz_before.png" alt="S12 align pol1/pol2 before" width="680" />
   
   - Un’immagine “dopo” con overlay: la mappa cx viene traslata di `Δx, Δz` e sovrapposta alla co con una trasparenza regolabile.
 
-  <img src="texture/align_S12_db_18_000GHz_overlay.png" alt="S12 align pol1/pol2 overlay" width="540" />
+  <img src="texture/settimana_4/align_S12_db_18_000GHz_overlay.png" alt="S12 align pol1/pol2 overlay" width="540" />
 
   - Un file JSON con gli offset stimati e i metadati della sessione (parametro S, tipo di valore, frequenza, soglie, percorsi), per riuso in script successivi.
 
@@ -547,8 +558,8 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
    ```
    - Modulo totale lineare e in dB normalizzati.
 
-   <img src="texture/total_field_mag_norm_S12_18_000GHz_co_cx.png" alt="S12 total nf lin" width="400" />  
-   <img src="texture/total_field_mag_db_norm_S12_18_000GHz_co_cx.png" alt="S12 total nf db" width="400" />
+   <img src="texture/settimana_4/total_field_mag_norm_S12_18_000GHz_co_cx.png" alt="S12 total nf lin" width="400" />  
+   <img src="texture/settimana_4/total_field_mag_db_norm_S12_18_000GHz_co_cx.png" alt="S12 total nf db" width="400" />
 
    In pratica, questo passaggio consente di ottenere un dataset coerente e direttamente impiegabile per la trasformazione, riducendo l’impatto delle differenze tra le due polarizzazioni e rendendo più trasparente la qualità del campo totale misurato.
 
@@ -566,12 +577,12 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
    L’output include i prodotti necessari per analisi e report:
    - Mappe FF 2D normalizzate: scala lineare con max=1, e in dB mormalizzato a 0.
 
-   <img src="texture/ff_2d_lin_norm_S12_18_000GHz.png" alt="S12 total ff lin" width="400" /> 
-   <img src="texture/ff_2d_db_norm_S12_18_000GHz.png" alt="S12 total ff db" width="400" />   
+   <img src="texture/settimana_4/ff_2d_lin_norm_S12_18_000GHz.png" alt="S12 total ff lin" width="400" /> 
+   <img src="texture/settimana_4/ff_2d_db_norm_S12_18_000GHz.png" alt="S12 total ff db" width="400" />   
    
    - Tagli 1D in dB con i profili `φ` @ `θ=0°` e `θ` @ `φ=0°`.
 
-    <img src="texture/ff_cuts_db_S12_18_000GHz.png" alt="S12 total ff lin" width="680" />
+    <img src="texture/settimana_4/ff_cuts_db_S12_18_000GHz.png" alt="S12 total ff lin" width="680" />
 
    - Visualizzazione 3D opzionale (PyVista): superfici 3D del FF in lin/dB.
 
@@ -582,13 +593,13 @@ Del codice parleremo e approfondiremo nella sezione successiva dedicata
 
   Il programma poi cerca di allineare i lobi principali dei tre dataset, spostando leggermente gli assi angolari per far coincidere i massimi entro una soglia di `6 dB`. A questo punto genera due grafici: uno per il taglio in `φ` e uno per il taglio in `θ`, dove si vedono sovrapposti i pattern calcolati senza correzione, con correzione e quelli misurati.
 
-  <img src="texture/ff_compare_total_S12_18_500GHz.png" alt="S12 compare ff" width="680" />
+  <img src="texture/settimana_4/ff_compare_total_S12_18_500GHz.png" alt="S12 compare ff" width="680" />
 
   Nell'immagine si nota come la probe correction abbia impatto solo ad angoli superiori di `40°`, ciò a senso poichè l'Half Power Beamwidth `(HPBW)` del nostro probe corrisponde a 
 
   Infine, interpola i dati simulati sui punti di misura e calcola la differenza in dB tra simulazione e misura. Produce quindi un secondo set di grafici che mostra l’errore residuo lungo i due tagli principali. In sostanza, il codice serve a visualizzare e quantificare quanto la probe correction avvicini il far‑field calcolato al comportamento reale dell’antenna.
 
-  <img src="texture/ff_error_vs_measured_S12_18_500GHz.png" alt="S12 compare ff" width="680" />
+  <img src="texture/settimana_4/ff_error_vs_measured_S12_18_500GHz.png" alt="S12 compare ff" width="680" />
 
   ---
 
@@ -708,8 +719,8 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   Ciò accade poichè a distanze superiori subentrano molto presto gli errori di troncamento ai bordi della griglia planare, che influiscono sulla ricostruzione del campo FF.
   Di seguito vengono lasciati due plot che evidenziano questo problema.
 
-  <img src="texture/ff_compare_total_S12_18_500GHz_31mm.png" alt="S12 compare ff" width="680" />
-  <img src="texture/ff_compare_total_S12_18_500GHz_120mm.png" alt="S12 compare ff" width="680" />
+  <img src="texture/settimana_5/ff_compare_total_S12_18_500GHz_31mm.png" alt="S12 compare ff" width="680" />
+  <img src="texture/settimana_5/ff_compare_total_S12_18_500GHz_120mm.png" alt="S12 compare ff" width="680" />
 
   È facile notare come gli errori di troncamento si manifestino inn entrambi i casi e rovinino la ricostruzione del campo FF.
   In particolare, a distanza di 120mm, l’ampiezza angolare risultante è circa la metà rispetto a misure con distanza di 31mm, questo quindi implica una ricostruzione del campo peggiore rispetto a misure a distanza ravvicinata.
@@ -721,11 +732,11 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
   Di seguito vengono illustrati alcuni plot che evidenziano questo comportamento.
 
-  <img src="texture/nf_tot_17_5_GHz_15mm.png" alt="NF 15mm" width="400" />
-  <img src="texture/nf_tot_18_GHz_15mm.png" alt="NF 15mm" width="400" />
-  <img src="texture/nf_tot_18_5_GHz_15mm.png" alt="NF 15mm" width="400" />
-  <img src="texture/nf_tot_19_GHz_15mm.png" alt="NF 15mm" width="400" />
-  <img src="texture/nf_tot_20_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/settimana_5/nf_tot_17_5_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/settimana_5/nf_tot_18_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/settimana_5/nf_tot_18_5_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/settimana_5/nf_tot_19_GHz_15mm.png" alt="NF 15mm" width="400" />
+  <img src="texture/settimana_5/nf_tot_20_GHz_15mm.png" alt="NF 15mm" width="400" />
 
 
   Purtroppo per quanto riguarda la ricostruzione del FF non si ottengono risultati più accurati, al contrario si è costretti a tagliare più risoluzione angolare a causa del sistema artigianale di misura il quale porta con se errori per niente trascurabili.
@@ -738,16 +749,16 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
   Il risultato ottenuto è illustrato nella seguente immagine.
 
-  <img src="texture/OEWG_art.png" alt="OEWG art" width="680" />
+  <img src="texture/settimana_5/OEWG_art.png" alt="OEWG art" width="680" />
 
   Quindi il Far Field è stato misurato per ottenere una rappresentazione del pattern di radiazione utile ad avere ulteriore conferme nei risultati ottenuti nelle trasformazioni delle scorse settimane, soprattutto per quanto riguarda la probe correction. I plot 3D e dei tagli principali del campo sono illustrati nelle figure seguenti.
 
-  <img src="texture/OEWG_art_FF_3D.png" alt="OEWG art FF 3D" width="680" />
+  <img src="texture/settimana_5/OEWG_art_FF_3D.png" alt="OEWG art FF 3D" width="680" />
 
   ---
 
-  <img src="texture/OEWG_art_phi0.png" alt="OEWG art phi0" width="400" />
-  <img src="texture/OEWG_art_phi90.png" alt="OEWG art phi90" width="400" />
+  <img src="texture/settimana_5/OEWG_art_phi0.png" alt="OEWG art phi0" width="400" />
+  <img src="texture/settimana_5/OEWG_art_phi90.png" alt="OEWG art phi90" width="400" />
 
   Successivamente questi risultati verranno esportati e integrati nella tradformazione NF-FF per ottenere una probe correction più veritiera e rappresentativa del sistema reale utilizzato.
 
@@ -758,16 +769,16 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   
   I risultati delle simulazioni del S11 risultano ottimi (probabilmente troppo, quindi poco realistici) e vengono riportati di seguito dopo il alcuni rendere 3D della transizione modellata.
 
-  <img src="texture/QWA-42S29F00.png" alt="QWA-42S29F00" width="680" />
+  <img src="texture/settimana_5/QWA-42S29F00.png" alt="QWA-42S29F00" width="680" />
 
   ---
 
-  <img src="texture/QWA-42S29F00_X.png" alt="QWA-42S29F00 cut norm to X" width="400" />
-  <img src="texture/QWA-42S29F00_Y.png" alt="QWA-42S29F00 cut norm to Y" width="400" />
+  <img src="texture/settimana_5/QWA-42S29F00_X.png" alt="QWA-42S29F00 cut norm to X" width="400" />
+  <img src="texture/settimana_5/QWA-42S29F00_Y.png" alt="QWA-42S29F00 cut norm to Y" width="400" />
 
   ---
 
-  <img src="texture/QWA-42S29F00_S11.png" alt="QWA-42S29F00 S11" width="680" />
+  <img src="texture/settimana_5/QWA-42S29F00_S11.png" alt="QWA-42S29F00 S11" width="680" />
 
 
 
@@ -789,16 +800,51 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   Dopo aver disegnato e simulato la probe (OEWG) e la transizione guida-cavo (QWA-42S29F00) in maniera indipendente, si è deciso di simulare il sistema completo per ottenere una rappresentazione più accurata del sistema reale utilizzato.
   Quindi sono stati uniti i componenti e ottenuti i risultati del FF e Return Loss (S11).
 
-  <img src="texture/OEWG_Transition_3D.png" alt="OEWG+Transition 3D" width="680" />
+  <img src="texture/settimana_6/OEWG_Transition_3D.png" alt="OEWG+Transition 3D" width="680" />
 
   Di seguito vengono riportati i plot del parametro S11 misurati dal VNA e quelli simulati. È importante notare che i valori differiscono sia per la misura reale che non è stata effettuata in un ambiente privo di riflessioni e che il sistema simulato non è una esatta riproduzione dei compponenti reali in quanto per la transizione guida d'onda non erano disponibili datasheet o modelli.
 
-  <img src="texture/S11_OEWG+Transition_ZVA_40_Measured.png" alt="S11 OEWG+Transition ZVA 40 Measured" width="600" />
-  <img src="texture/OEWG+Transition_S11_16_21_GHz.png" alt="S11 OEWG+Transition 16-21 GHz" width="600" />
+  <img src="texture/settimana_6/S11_OEWG+Transition_ZVA_40_Measured.png" alt="S11 OEWG+Transition ZVA 40 Measured" width="600" />
+  <img src="texture/settimana_6/OEWG+Transition_S11_16_21_GHz.png" alt="S11 OEWG+Transition 16-21 GHz" width="600" />
 
   L'andamento dei due grafici risulta comunque simile e apprezzabile, seguiranno simulazioni e/o misure più accurate per ottenere una migliore rappresentazione del sistema reale utilizzato.
 
   Come accennato è stato simulato ed eestrapolato il FF della probe simulata che verrà utilizzato nella probe correction durante la trasformazione NF-FF. Qui sotto sono riportati i due tagli `φ=0` e `φ=90`.
 
-  <img src="texture/OEWG+Transition_phi0.png" alt="OEWG+Transition phi0" width="450" />
-  <img src="texture/OEWG+Transition_phi90.png" alt="OEWG+Transition phi90" width="426" />
+  <img src="texture/settimana_6/OEWG+Transition_phi0.png" alt="OEWG+Transition phi0" width="450" />
+  <img src="texture/settimana_6//OEWG+Transition_phi90.png" alt="OEWG+Transition phi90" width="426" />
+
+## <span style="color: #e69a44ff;">Settimana 7</span>
+
+- <span class="md-cite">Risoluzione problemi sul bordo del FF trasformato</span>
+  Durante questa settimana si è affrontato il problema di risolvere i problemi presenti sul bordo del FF trasformato. In particolare si è notato che per la campagna di misure svolta a distanza estremamente ravvicinata (14mm) si è verificato un comportamento anomalo del FF trasformato.
+  In particolare si è notato come vicino al bordo del campo in FF trasformato si generasse uno spike che superava anche il lobo centrale.
+  Oltre a questo problema, si è presentato anche un ulteriore artefatto, la creazione di "diagonali" ad alto guadagno nella trasformazione in FF, ovviamente non presenti nelle misure NF.
+  Di seguito vengono riporti i plot con evidenziato questi comportamenti: cerchiato di rosso lo spike e di verde le "diagonali".
+
+  <img src="texture/settimana_7/ff_cuts_db_S12_18_000GHz_spike.png" alt="FF cuts db S12 18 000GHz spike" width="680" />
+
+  ---
+
+  <img src="texture/settimana_7/ff_2d_db_norm_S12_18_000GHz_spike_diag.png" alt="FF 2d db norm S12 18 000GHz spike diag" width="680" />
+
+  Si è deciso di cominciare col cercare di capire a cosa fosse dovuto lo spike. Conoscendo il sistema di misura implementato, si è subito pensato che potrebbe essere dovuto a riflessioni sul cavalletto utilizzato per sistenere la AUT, più precisamente di una vite che sporge proprio nella stessa posizione dello spike indicato. Se ciò fosse vero si dovrebbe trovare conferma anche nelle misure in NF.
+  Indagando i dati raccolti si nota che è presente una lieve riflessione (cerchiata in viola) al di fuori della regione del lobo centrale (cerchiata in grigio).
+  
+  <img src="texture/settimana_7/total_field_mag_db_norm_S12_18_000GHz_spike.png" alt="FF 2d db norm S12 18 000GHz spike diag" width="680" />
+
+  Per avere ulteriore conferma di questa ipotesi, si è andato a investigare altre campagne di misure a distanze più lontane (31mm e 49mm). In queste campagne si è notato che lo spike non è presente, confermando così l'ipotesi iniziale. Vengono riportati i tagli del FF come prova visiva.
+
+  <img src="texture/settimana_7/ff_cuts_db_S12_18_500GHz_31mm.png" alt="FF cuts 31mm" width="450" />
+  <img src="texture/settimana_7/ff_cuts_db_S12_18_500GHz_49mm.png" alt="FF cuts 49mm" width="450" />
+
+  ---
+
+  Successivamente si è passati a risolvere il problema delle "diagonani", problema che non si presenta nelle misure in NF, questo sta a indicare che è un problema che si genera nella trsformazione NF-FF.
+  Analizzando il problema più a fondo, queste "diagonali" non erano presenti nelle trasformazioni NF-FF quando era stato utilizzato il primo dataset a 94GHz, ancora ad inizio esperienza.
+  Si è prodotto a confrontare le differenze tra i due script di trasformazione, poichè erano stati adattati per lavorare con dataset diversi e si è scoperto che il problema delle "diagonali" è funzione di un errata definizione del vettore d'onda in coordinate sferiche.
+
+  Per semplicità di manipolazione dei dati si era deciso di utilizzare una convenzione differente per gli angoli `θ` e `φ`, il che portava ad ottenere `kx ∝ sin(φ)` e `ky ∝ sin(θ)` che rompeva la correlazione angolare `√(kx²+ky²) ≠ k0·sin(θ)`, distorcendo l'angolo polare effettivo e introducendo artefatti.
+  Si è subito sistemato il problema reintroducendo la corretta mappatura sferica dei numeri d'onda, quindi eliminando le "diagonali" presenti nei plot del FF.
+  DI seguito si possono apprezzare i nuovi risultati, che per quanto riguarda il lobo principare non subiscono variazioni, ma ai bordi non presentano più artefatti.
+  
