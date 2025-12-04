@@ -877,6 +877,7 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
   <img src="texture/settimana_7/Hx_Hy_inv_mod_dB.png" alt="Hx Hy inv mod dB" width="680" />
 
   Infine, ottenuto il NF corretto è stato applicata la stessa routine per le precedenti trasformazioni e calcolato il compare dei tagli `φ=0` e `φ=90` con le altre trasformazioni e i dati reali.
+  Seguono i confronti delle differenti trasformazioni rispettivamente a 18, 18.5 e 19 GHz.
 
   <img src="texture/settimana_7/ff_compare_total_S12_18_000GHz_18000MHz.png" alt="FF compare total S12 18 000GHz 18000MHz" width="400" />
   <img src="texture/settimana_7/ff_compare_total_S12_18_500GHz_18500MHz.png" alt="FF compare total S12 18 500GHz 18500MHz" width="400" />
