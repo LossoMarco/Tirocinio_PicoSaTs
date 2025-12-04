@@ -915,3 +915,55 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
     - `--pinv-beta` (blending): 0 → identità, 1 → correzione piena.
     - `--dist` (distanza `z0`): imposta `θ_max` e attenua naturalmente i bordi.
 
+- <span class="md-cite">An Effective Aperture Field Reconstruction Method Based on the SWE-to-PWE Technique</span>
+
+  - Obiettivo: ricostruire il campo sull’apertura (extreme near-field) partendo da misure NF sferiche, tramite trasformazione `SWE → PWE` e IFT sul piano.
+  - Metodologia: calcolo dei coefficienti SWE dai dati NF sferici, conversione in spettro di onde piane (PWE), recupero parziale della regione “invisibile” e trasformata di Fourier inversa per ottenere i campi sul piano dell’apertura.
+  - Punti chiave: risoluzione spaziale superiore al limite classico di λ/2 dell’IFT su far-field, uso di regolarizzazione/filtri per stabilizzare lo spettro, attenzione a rumore e troncamento.
+  - Validazione: dimostra accuratezza nella diagnostica (identificazione difetti, disallineamenti) tramite mappe di campo su aperture note.
+  - Implicazioni per NF planare: le regole di campionamento spettrale e la gestione del troncamento/finestre sono trasferibili; per scan planari servono correzione di sonda, passo ≤ λ/2 e apodizzazione per mitigare ringing.
+
+- <span class="md-cite">Application of the SWE-to-PWE Antenna Diagnostics Technique to an Offset Reflector Antenna</span>
+
+  - Obiettivo: validare sperimentalmente la diagnostica SWE→PWE su un riflettore offset reale introducendo volutamente tilt del feed e distorsioni superficiali.
+  - Metodologia: misura NF sferica, `SWE → PWE`, ricostruzione del campo in prossimità dell’apertura e confronto con far-field per evidenziare gli errori.
+  - Risultati: le anomalie introdotte sono rilevate nelle mappe di campo sull’apertura e correlate alle degradazioni nel pattern; la tecnica mostra sensibilità a errori di allineamento e di superficie.
+  - Considerazioni pratiche: accuratezza dipende da qualità della misura (rumore, posizionamento, correzione di sonda) e dall’estensione della sfera di misura.
+  - Implicazioni per NF planare: utili indicazioni su come leggere difetti reali nell’apertura; per setup planari valgono analoghe precauzioni di accuratezza e copertura spettrale.
+
+- <span class="md-cite">SWE-TO-PWE ANTENNA DIAGNOSTICS (influenza dell’accuratezza di misura)</span>
+  - Obiettivo: analizzare l’influenza di accuratezza finita della misura sulla trasformazione `SWE → PWE` e sulla ricostruzione del campo di apertura.
+  - Metodologia: studio simulato di rumore, troncamento, errori di sonda e non idealità; valutazione di quanto spettro PWE nella regione visibile (e parte dell’invisibile) sia recuperabile.
+  - Risultati: raccomandazioni su campionamento e filtraggio; mostra come certe non idealità degradino la ricostruzione e suggerisce strategie di mitigazione (finestratura, regolarizzazione, calibrazione).
+  - Implicazioni per NF planare: linee guida direttamente applicabili (passo, finestratura, correzione di sonda); con scan finiti si introduce convoluzione e leakage spettrale, da trattare con opportune finestre.
+
+- <span class="md-cite">An aperture back-projection technique and measurements made on a flat plate array with a spherical near-field arch</span>
+
+    - Obiettivo: ricostruire il campo sull’apertura di un array planare a partire da misure NF sferiche usando una tecnica di back‑projection.
+    - Metodologia: proiezione all’indietro del campo misurato sulla superficie d’apertura tramite funzione di Green/sorgenti equivalenti (Huygens), includendo correzione di sonda e normalizzazione di fase.
+    - Punti chiave: gestione del troncamento dell’arco sferico con finestre e zero‑padding; controllo del contributo evanescente; verifica sperimentale su flat‑plate array.
+    - Implicazioni per NF planare: la stessa idea di back‑propagation si traduce nel dominio planare come trasformazione inversa dello spettro di onde piane con filtri stabilizzanti e correzione di sonda accurata.
+
+- <span class="md-cite">Reduction of Truncation Errors in Planar Near-Field Aperture Antenna Measurements Using the Gerchberg-Papoulis Algorithm</span>
+
+    - Obiettivo: ridurre gli errori da troncamento delle misure NF planari (griglia finita) ricostruendo le parti mancanti del campo di apertura.
+    - Metodologia: algoritmo iterativo Gerchberg‑Papoulis che alterna vincoli di supporto nel dominio spaziale e banda limitata nel dominio spettrale (`k_t`), con aggiornamento coerente di ampiezza e fase.
+    - Parametri: numero di iterazioni, peso dei vincoli, scelta di finestre e soglie; attenzione alla sensibilità al rumore e alla stabilità.
+    - Risultati: riduzione di ripple nel FF, sidelobes più bassi e miglior fedeltà del campo di apertura rispetto a semplici finestre; utile quando l’area di scansione non copre sufficientemente l’apertura.
+    - Linee pratiche: partire da dati corretti di sonda, usare apodizzazione moderata, fermare l’iterazione quando l’errore RMS si stabilizza; validare su antenne standard.
+
+- <span class="md-cite">The backward transform of the near field for reconstruction of aperture fields</span>
+
+    - Obiettivo: ottenere il campo sull’apertura direttamente dalle misure NF planari via trasformazione all’indietro nel dominio dello spettro di onde piane.
+    - Metodologia: calcolo dello spettro `E(kx, ky, z0)` e retro‑propagazione al piano dell’apertura con il fattore `exp(+j kz · z0)`; ricostruzione delle componenti tangenziali `Ex, Ey` e mappa di ampiezza/fase.
+    - Stabilità: i termini evanescenti crescono nella retro‑propagazione → necessaria regolarizzazione/filtraggio su `k_t` (clamping, Tikhonov) e apodizzazione per contenere il rumore.
+    - Campionamento: passi ≤ `λ/2`, distanza `z0` non troppo grande per mantenere componenti utili; griglia estesa oltre il contorno dell’AUT per limitare troncamento.
+    - Operatività: integrare probe correction prima della backward transform; usare zero‑padding per migliorare la risoluzione angolare del FF e la qualità della mappa di apertura.
+
+- Riferimenti
+    - IEEE Explore — "An Effective Aperture Field Reconstruction Method Based on the SWE-to-PWE Technique"
+    - AMTA 2007, TICRA/DTU — “Application of the SWE-to-PWE Antenna Diagnostics Technique to an Offset Reflector Antenna”
+    - EUCAP 2006 — “The Influence of Finite Measurement Accuracy on the SWE-to-PWE Antenna Diagnostics Technique” (TICRA/DTU)
+    - AMTA — “An aperture back‑projection technique and measurements made on a flat plate array with a spherical near‑field arch”
+    - IEEE — “Reduction of Truncation Errors in Planar Near‑Field Aperture Antenna Measurements Using the Gerchberg‑Papoulis Algorithm”
+    - IEEE — “The backward transform of the near field for reconstruction of aperture fields”
