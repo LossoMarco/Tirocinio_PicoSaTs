@@ -967,3 +967,27 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
     - AMTA — “An aperture back‑projection technique and measurements made on a flat plate array with a spherical near‑field arch”
     - IEEE — “Reduction of Truncation Errors in Planar Near‑Field Aperture Antenna Measurements Using the Gerchberg‑Papoulis Algorithm”
     - IEEE — “The backward transform of the near field for reconstruction of aperture fields”
+
+## <span style="color: #e69a44ff;">Settimana 8</span>
+
+- <span class="md-cite">hbpr.py</span>
+
+    - **Obiettivo**: Ricostruire il campo elettrico complesso (ampiezza e fase) sull'apertura dell'antenna (z=0) partendo da misure Near-Field planari (parametri S), gestendo polarizzazione circolare e correzione degli errori di troncamento.
+    - **Flusso Logico**:
+        1.  **Caricamento e Parsing**: Lettura massiva di file `.s2p` (VNA) per componenti Co-pol e Cross-pol; estrazione automatica delle coordinate spaziali (X, Z) dai nomi dei file e creazione della griglia di misura.
+        2.  **Pre-processing & Constraints**: Verifica automatica dei vincoli di campionamento (Criterio di Nyquist $\Delta < \lambda/2$) e validazione distanza Probe-AUT rispetto al limite del Near-Field Reattivo ($0.62\sqrt{D^3/\lambda}$). Allineamento del centro griglia e applicazione di **Zero Padding** per migliorare la risoluzione nel dominio spettrale.
+        3.  **Gerchberg-Papoulis (Opzionale)**: Algoritmo iterativo per la riduzione dell'errore di troncamento (scan area limitata). Alterna trasformate FFT/IFFT applicando vincoli noti: i dati misurati all'interno dell'area di scansione e campo nullo all'esterno dell'apertura fisica dell'antenna.
+        4.  **Holographic Back Projection (HBPR)**:
+            -   Trasformata al dominio dei numeri d'onda (k-space) tramite FFT 2D.
+            -   Calcolo del **Propagatore Inverso** per traslare il campo dal piano di misura ($y=d$) al piano dell'apertura ($y=0$).
+            -   **Gestione Onde Evanescenti**: Implementazione di filtri per controllare l'amplificazione esponenziale del rumore nella regione evanescente ($k > k_0$). Supporta filtro esponenziale controllato (`beta`) e regolarizzazione di **Tikhonov** (`gamma`) per un'inversione stabile.
+        5.  **Filtraggio k-space**: Applicazione di maschera per la Regione Visibile ($k_x^2 + k_z^2 \le k_0^2$) con apodizzazione (taper coseno/Tukey) per ridurre il *Gibbs ringing*, oppure estensione controllata alle evanescenti per super-risoluzione.
+        6.  **Ricostruzione Spaziale**: IFFT 2D per ottenere il campo d'apertura complesso.
+        7.  **Sharpening & Post-processing**:
+            -   **Richardson-Lucy Deconvolution**: Algoritmo iterativo (opzionale) per de-sfocare l'immagine dell'apertura utilizzando la PSF del sistema (determinata dai filtri applicati). Include regolarizzazione **Total Variation (TV)** per sopprimere l'amplificazione del rumore nelle zone uniformi.
+            -   Trasformazione di polarizzazione: Calcolo componenti RHCP e LHCP da Co/Cx lineari.
+    - **Parametri CLI Principali**:
+        -   Input: `--freq-ghz`, `--y0-mm` (distanza), `--data-dir`, `--cx-dir`.
+        -   Geometria: `--aut-dim-x/z-mm`, `--probe-dim-x/z-mm`, `--center-x/z-mm`.
+        -   Algoritmo: `--padding-factor`, `--gp-iterations` (Gerchberg-Papoulis).
+        -   Regolarizzazione: `--evanescent-beta` (filtro exp), `--tikhonov-gamma` (inversione), `--rl-iterations` (Sharpening), `--rl-tv-reg` (TV noise control).
