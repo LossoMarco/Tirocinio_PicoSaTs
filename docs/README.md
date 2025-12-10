@@ -1000,9 +1000,14 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
     - `--rl-iterations` = 100
     - `--rl-tv-reg` = 1e-3
 
-    Di seguito vengono riportati dei plot che mostrano il campo sull'apertura della AUT a 17.8 GHz, con distanza Probe-AUT di 54.5 mm; prima senza l'utilizzo dell'algoritmo Gerchberg-Papoulis (GP), poi con una iterazione del GP. Il sistema risulta ancora molto rumoroso in quando non sono ancora presenti materiali e strutture assorbenti, ma i risultati risulatano apprezzabili e coerenti con quanto ci si aspettasse.
+    Di seguito vengono riportati dei plot che mostrano il campo sull'apertura della AUT a 17.8 GHz, con distanza Probe-AUT di 54.5 mm; prima senza l'utilizzo dell'algoritmo Gerchberg-Papoulis (GP), poi con una iterazione del GP. 
+    Si riescono a riconoscere distintamente alcuni degli elementi radianti presenti nella AUT, nella fattispecifca, si nota che non tutti e 16 gli elementi irradiano in egual misura. 
+    Il comportamento cambia a frequenze differenti.
+    Il sistema risulta ancora molto rumoroso in quando non sono ancora presenti materiali e strutture assorbenti, ma i risultati risulatano apprezzabili e coerenti con quanto ci si aspettasse.
 
     <img src="texture/settimana_8/HBPR_modulo.png" alt="HBPR modulo senza GP" width="680" />
     <img src="texture/settimana_8/HBPR_modulo_GP.png" alt="HBPR modulo con GP" width="680" />
 
     Si noti che l'area di interesse valida risulta essere solo quella delimitata dalla linea bianca tratetggiata, in quanto il campo elettrico è nullo all'esterno dell'apertura fisica dell'antenna e ciò che si vede nei plot risultano essere solo artefatti dovuti alle trasformate di Fourier e all'area di scansione non infinita.
+
+    - <span class="md-cite">Misure in camera anecoica</span>
