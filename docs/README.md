@@ -1010,4 +1010,19 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
     Si noti che l'area di interesse valida risulta essere solo quella delimitata dalla linea bianca tratetggiata, in quanto il campo elettrico è nullo all'esterno dell'apertura fisica dell'antenna e ciò che si vede nei plot risultano essere solo artefatti dovuti alle trasformate di Fourier e all'area di scansione non infinita.
 
-    - <span class="md-cite">Misure in camera anecoica</span>
+- <span class="md-cite">Misure in camera anecoica</span>
+
+    Durante questa settimana si è state eseguite misure in camera anecoica, in particolare sono state misurate le due antenne fin'ora utilizzate per tutte le campagne di misure: la probe OEWG e la AUT patch 4x4.
+
+    <img src="texture/settimana_8/20251210_093549.jpg" alt="AUT Camera Aneacoica" width="300" />
+    <img src="texture/settimana_8/20251210_102249.jpg" alt="Probe OEWG Camera Aneacoica" width="300" />
+
+    La probe è stata misurata per validare la probe correction che si esegue con i dati da CST, quindi misurando il campo reale della probe è stato possibile confrontare i tagli $\phi = 0°$ e $\phi = 90°$.
+
+    <img src="texture/settimana_8/Confronto_Probe_OEWG_CST_CameraAneacoica.png" alt="Confronto Probe OEWG CST Camera Aneacoica" width="680" />
+
+    Osservando l'immagine i radiation pattern risultano sovrapponibili, ciò basta a validare la correzione del campo delle misure NF applicata con i dati estratti da CST.
+
+    La AUT patch 4x4 è stata misurata per avere una seconda campagna di misure reali del campo elettrico, anche in questo caso sono stati misurati i due tagli $\phi = 0°$ e $\phi = 90°$. Sono quindi stati inseriti nei plot di compare del del FF per confrontare i risultati ottenuti dalle NFFFT.
+
+    <img src="texture/settimana_8/ff_compare_total_S12_19_000GHz_19000MHz.png" alt="FF compare con dati camera anecoica" width="680" />
