@@ -994,21 +994,16 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
     
     I parametri ottimali per quanto riguarda la HBR sono:
     - `--padding-factor` = 4
-    - `--gp-iterations` = 1
-    - `--evanescent-beta` = 1
-    - `--tikhonov-gamma` = 2.5e-5
-    - `--rl-iterations` = 100
+    - `--gp-iterations` = 20
+    - `--evanescent-beta` = 1e-3
+    - `--tikhonov-gamma` = 5e-4
+    - `--rl-iterations` = 20
     - `--rl-tv-reg` = 1e-3
 
-    Di seguito vengono riportati dei plot che mostrano il campo sull'apertura della AUT a 17.8 GHz, con distanza Probe-AUT di 54.5 mm; prima senza l'utilizzo dell'algoritmo Gerchberg-Papoulis (GP), poi con una iterazione del GP. 
-    Si riescono a riconoscere distintamente alcuni degli elementi radianti presenti nella AUT, nella fattispecifca, si nota che non tutti e 16 gli elementi irradiano in egual misura. 
-    Il comportamento cambia a frequenze differenti.
-    Il sistema risulta ancora molto rumoroso in quando non sono ancora presenti materiali e strutture assorbenti, ma i risultati risulatano apprezzabili e coerenti con quanto ci si aspettasse.
+    Di seguito vengono riportati dei plot che mostrano il campo sull'apertura della AUT a 18 GHz, con distanza Probe-AUT di 54 mm.
+    Si riescono a riconoscere distintamente i 4 sub-array presenti nella AUT, non si riescono a ricavare tutti e 16 gli elementi radianti in quanto il sistema è estremamente rumoroso, quindi il parametro `--tikhonov-gamma` è stato mantenuto "alto" per avere una proiezione sull'apertura stabile, limitando l'amplificazione esponenziale del rumore.
 
-    <img src="texture/settimana_8/HBPR_modulo.png" alt="HBPR modulo senza GP" width="680" />
     <img src="texture/settimana_8/HBPR_modulo_GP.png" alt="HBPR modulo con GP" width="680" />
-
-    Si noti che l'area di interesse valida risulta essere solo quella delimitata dalla linea bianca tratetggiata, in quanto il campo elettrico è nullo all'esterno dell'apertura fisica dell'antenna e ciò che si vede nei plot risultano essere solo artefatti dovuti alle trasformate di Fourier e all'area di scansione non infinita.
 
 - <span class="md-cite">Misure in camera anecoica</span>
 
@@ -1026,3 +1021,15 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
     La AUT patch 4x4 è stata misurata per avere una seconda campagna di misure reali del campo elettrico, anche in questo caso sono stati misurati i due tagli $\phi = 0°$ e $\phi = 90°$. Sono quindi stati inseriti nei plot di compare del del FF per confrontare i risultati ottenuti dalle NFFFT.
 
     <img src="texture/settimana_8/ff_compare_total_S12_19_000GHz_19000MHz.png" alt="FF compare con dati camera anecoica" width="680" />
+
+## <span style="color: #e69a44ff;">Settimana 9</span>
+
+- <span class="md-cite">Realizzazione supporto AUT</span>
+    Durante questa settimana è stato realizzato il supporto per la AUT patch 4x4. Per fare ciò è stato fatto uso del software AutoDesk Fusion 360.
+    Viene riportato in figura il render 3D dello stesso.
+
+    <img src="texture/settimana_9/Supporto_AUT_Fusion.png" alt="Supporto AUT patch 4x4" width="600" />
+
+    In breve, il supporto viene incastrato sul piatto della stampante 3D, la AUT viene avvitata in cima al supporto.
+
+    Di seguito le foto che mostrano il risultato finale. Ciò permette di avere una AUT stabile durante le misure, minimizzando la possibilità che si muova o che venga spostata durante le due campagne.
