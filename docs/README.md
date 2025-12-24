@@ -1039,3 +1039,5 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 - <span class="md-cite">Realizzazione supporto AUT</span>
    
     Oltre al supporto per la AUT è stato anche ralizzato il supporto per la probe utilizzata fin'ora. Come per la sezione precedente vengono lasciati il render 3D di Fusion 360 e le foto reali.
+
+    <img src="texture/settimana_9/Supporto_Probe_Fusion.png" alt="Supporto Probe OEWG" width="600" />
