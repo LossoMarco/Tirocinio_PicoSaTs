@@ -1035,3 +1035,7 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
     Di seguito le foto che mostrano il risultato finale. Ciò permette di avere una AUT stabile durante le misure, minimizzando la possibilità che si muova o che venga spostata durante le due campagne.
 
     <img src="texture/settimana_9/Supporto_AUT_real.jpeg" alt="Supporto AUT patch 4x4" width="600" />
+
+- <span class="md-cite">Realizzazione supporto AUT</span>
+   
+    Oltre al supporto per la AUT è stato anche ralizzato il supporto per la probe utilizzata fin'ora. Come per la sezione precedente vengono lasciati il render 3D di Fusion 360 e le foto reali.
