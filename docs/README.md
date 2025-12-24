@@ -1033,3 +1033,5 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
     In breve, il supporto viene incastrato sul piatto della stampante 3D, la AUT viene avvitata in cima al supporto.
 
     Di seguito le foto che mostrano il risultato finale. Ciò permette di avere una AUT stabile durante le misure, minimizzando la possibilità che si muova o che venga spostata durante le due campagne.
+
+    <img src="texture/settimana_9/Supporto_AUT_real.jpeg" alt="Supporto AUT patch 4x4" width="600" />
