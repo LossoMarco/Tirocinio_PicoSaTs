@@ -1036,8 +1036,26 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
     <img src="texture/settimana_9/Supporto_AUT_real.jpeg" alt="Supporto AUT patch 4x4" width="600" />
 
-- <span class="md-cite">Realizzazione supporto AUT</span>
+- <span class="md-cite">Realizzazione supporto probe</span>
    
     Oltre al supporto per la AUT è stato anche ralizzato il supporto per la probe utilizzata fin'ora. Come per la sezione precedente vengono lasciati il render 3D di Fusion 360 e le foto reali.
 
     <img src="texture/settimana_9/Supporto_Probe_Fusion.png" alt="Supporto Probe OEWG" width="600" />
+
+
+## <span style="color: #e69a44ff;">Settimana 10</span>
+
+- <span class="md-cite">Realizzazione GUI</span>
+
+    È stata effettuata un'importante riorganizzazione del software di controllo e post-processing. Le due interfacce grafiche separate (`ScannerLauncherApp` e `PostProcessingGUI`) sono state unite in un'unica applicazione a schede (`gui_main.py`), migliorando l'usabilità complessiva.
+
+    Le principali modifiche includono:
+    - **Persistenza delle Impostazioni**: Implementato il salvataggio automatico dei parametri del VNA (Start/Stop Freq, Sweep Points, Power, IF BW) su file JSON, permettendo di mantenere le configurazioni tra i riavvii.
+    - **Refactoring Strutturale**: Il codice è stato riorganizzato in moduli distinti:
+        - `gui/`: Contiene gli script dell'interfaccia grafica.
+        - `backend/`: Raggruppa gli script di elaborazione e controllo hardware.
+        - `config/`: Dedicata ai file di configurazione JSON.
+    - **Integrazione**: Risolti i conflitti di path relativi dovuti alla ristrutturazione, garantendo il corretto funzionamento degli script di backend (come `cst_probe_correction.py`) richiamati dalla GUI.
+
+    <img src="texture/settimana_10/gui_1.png" alt="GUI 1" width="400" />
+    <img src="texture/settimana_10/gui_2.png" alt="GUI 2" width="400" />
