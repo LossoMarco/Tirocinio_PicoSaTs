@@ -1057,5 +1057,13 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
         - `config/`: Dedicata ai file di configurazione JSON.
     - **Integrazione**: Risolti i conflitti di path relativi dovuti alla ristrutturazione, garantendo il corretto funzionamento degli script di backend (come `cst_probe_correction.py`) richiamati dalla GUI.
 
-    <img src="texture/settimana_10/gui_1.png" alt="GUI 1" width="400" />
-    <img src="texture/settimana_10/gui_2.png" alt="GUI 2" width="400" />
+    <img src="texture/settimana_10/gui_1.png" alt="GUI Scanner" width="400" />
+    <img src="texture/settimana_10/gui_2.png" alt="GUI Post Processing" width="400" />
+
+    Inoltre, sono state aggiunte due nuove schede funzionali:
+    - **3D Viewer**: Una nuova tab dedicata alla visualizzazione tridimensionale interattiva dei pattern di radiazione (Far-Field). Questa interfaccia permette di caricare i file CSV generati dal post-processing e visualizzare i diagrammi in scala lineare o logaritmica (dB), offrendo strumenti per l'ispezione visiva del campo radiato.
+    - **HBPR (Holographic Back Projection)**: Integrato lo strumento per l'analisi olografica in una tab dedicata. Questo permette di eseguire la retro-proiezione del campo misurato sull'apertura dell'antenna direttamente dalla GUI, facilitando l'identificazione delle sorgenti di radiazione e la diagnostica dell'array. Lo script sottostante (`hbpr.py`) è stato aggiornato per gestire dinamicamente i percorsi dei file e garantire il salvataggio corretto di tutti i plot generati.
+
+    <img src="texture/settimana_10/gui_3.png" alt="GUI 3D Viewer" width="400" />
+    <img src="texture/settimana_10/gui_4.png" alt="GUI HBPR" width="400" />
+
