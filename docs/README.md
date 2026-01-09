@@ -1066,3 +1066,14 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
     <img src="texture/settimana_10/gui_3.png" alt="GUI 3D Viewer" width="400" />
     <img src="texture/settimana_10/gui_4.png" alt="GUI HBPR" width="400" />
+
+- <span class="md-cite">Fix HBPR</span>
+    Durante questa settimana sono stati analizzati con più dettaglio i risultari prodotti dallo script `hbpr.py`. È stata posta particolare attenzione ai risultati individuali di campo EX,EY e RHCP,LHCP, quindi non più sul modulo finale. 
+    Analizzando i plot generati non è stato difficile notare che l'hbpr viene eseguita correttamente, visualizzando correttamente i 16 elementi radianti presenti nell'antenna.
+    I risultati anomali nel modulo sono dovuti all'errata sovrapposizione delle due griglie provenienti dalle due campagne di misura, ciò è dovuto a posizionamento non identico della probe tra le due campagne.
+
+    Di seguito vegono riportati i plot del campo EX/EY e RHCP/LHCP, rispettivamente. Si nota come, soprattutto nella fase, i 16 elementi siano perfettamente riconoscibili.
+    Inoltre nel plot di RHCP/LHCP è facile intuire che la AUT ha una dominanza maggiore rispetto a LHCP.
+
+    <img src="texture/settimana_10/Ex_Ey_Components_19.0GHz.png" alt="EX/EY Components" width="600" />
+    <img src="texture/settimana_10/RHCP_LHCP_19.0GHz.png" alt="RHCP/LHCP Components" width="600" />
