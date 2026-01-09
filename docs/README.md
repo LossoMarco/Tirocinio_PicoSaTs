@@ -1066,4 +1066,3 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
     <img src="texture/settimana_10/gui_3.png" alt="GUI 3D Viewer" width="400" />
     <img src="texture/settimana_10/gui_4.png" alt="GUI HBPR" width="400" />
-
