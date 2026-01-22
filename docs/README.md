@@ -1077,3 +1077,45 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
     <img src="texture/settimana_10/Ex_Ey_Components_19.0GHz.png" alt="EX/EY Components" width="600" />
     <img src="texture/settimana_10/RHCP_LHCP_19.0GHz.png" alt="RHCP/LHCP Components" width="600" />
+
+## <span style="color: #e69a44ff;">Settimana 11</span>
+
+- <span class="md-cite">Misure in camera anecoica - Patch 8x8</span>
+
+    Durante questa settimana si è andati in camera anecoica ad eseguire le misure di una patch 8x8.
+    Di seguito vengono riportati i risultati ottenuti: diagrammi 2D del Far Field, tagli principali e foto del setup.
+
+    **Diagramma 2D FF e Tagli (1):**
+
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2014.39.29_1.jpeg" alt="Diagramma 2D FF 1" width="600" />
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2014.39.29.jpeg" alt="Tagli FF 1" width="600" />
+
+    **Diagramma 2D FF e Tagli (2):**
+
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2014.41.06_1.jpeg" alt="Diagramma 2D FF 2" width="600" />
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2014.41.06.jpeg" alt="Tagli FF 2" width="600" />
+
+    **Foto in Camera Anecoica:**
+
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2016.33.38_1.jpeg" alt="Camera Anecoica 1" width="400" />
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2016.33.38.jpeg" alt="Camera Anecoica 2" width="400" />
+
+- <span class="md-cite">Misure in camera anecoica - Patch 4x4</span>
+
+    Nella stessa settimana è stata portata in camera anecoica anche la patch 4x4, utilizzata come benchmark per tutte le prime misure.
+    Di seguito vengono riportate le foto del setup in camera anecoica.
+
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2016.38.44.jpeg" alt="Setup Patch 4x4 Camera Anecoica 1" width="400" />
+    <img src="texture/settimana_11/WhatsApp%20Image%202026-01-22%20at%2016.38.45.jpeg" alt="Setup Patch 4x4 Camera Anecoica 2" width="400" />
+
+    Di seguito i risultati ottenuti (Diagramma 2D Far-Field e Tagli Principali) alle frequenze di 19.0 GHz e 19.5 GHz:
+
+    **Risultati @ 19.0 GHz:**
+
+    <img src="texture/settimana_11/ff_2d_db_norm_S12_19_000GHz.png" alt="FF 2D 19.0 GHz" width="600" />
+    <img src="texture/settimana_11/ff_cuts_db_S12_19_000GHz.png" alt="Tagli FF 19.0 GHz" width="600" />
+
+    **Risultati @ 19.5 GHz:**
+
+    <img src="texture/settimana_11/ff_2d_db_norm_S12_19_500GHz.png" alt="FF 2D 19.5 GHz" width="600" />
+    <img src="texture/settimana_11/ff_cuts_db_S12_19_500GHz.png" alt="Tagli FF 19.5 GHz" width="600" />
