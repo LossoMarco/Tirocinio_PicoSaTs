@@ -1119,3 +1119,55 @@ Verranno inoltre approfonditi: l’effetto della distanza probe-AUT in configura
 
     <img src="texture/settimana_11/ff_2d_db_norm_S12_19_500GHz.png" alt="FF 2D 19.5 GHz" width="600" />
     <img src="texture/settimana_11/ff_cuts_db_S12_19_500GHz.png" alt="Tagli FF 19.5 GHz" width="600" />
+
+## <span style="color: #e69a44ff;">Settimana 11</span>
+
+- <span class="md-cite">HBPR update</span>
+    
+    Durante questa settimana sono state apportate delle migliorie importanti all'algoritmo HBPR.
+    In particolare è stata introdotta quella che è la probe correction, che permette di ottenere la descrizione corretta della polarizzazione copolare e cross polare.
+
+    Oltre a ciò è stato introdotto anche il campionamento del campo sull'apertura della probe, in modo da ottenere una descrizione più precisa di modulo e fase di ogni singolo elemento radiante. Di seguito un plot esplicativo di come è stato campionato il campo sull'apertura della probe.
+
+    <img src="texture/settimana_12/RHCP_LHCP_17.5GHz.png" alt="Probe Sampling" width="600" />
+
+    Grazie a ciò è stato utile quindi creare ulteriori plot, più semplici da leggere, che mostrano le singole eccitazioni di ogni singolo elemento radiante (in modulo e fase). Di seguito vengono riportati due plot esplicativi, la differenza tra di essi è che nel primo non era presente la probe correction, mentre nel secondo sì. È facile notare che la polarizzazione dominante è cambiata da RHCP a LHCP, come era previsto.
+
+    <img src="texture/settimana_12/Discrete_Array_Excitation_Circular_19.0GHz_no_pc.png" alt="RHCP/LHCP Components No Corr" width="400" />
+    <img src="texture/settimana_12/Discrete_Array_Excitation_Circular_19.0GHz.png" alt="RHCP/LHCP Components Corr" width="400" />
+
+    
+
+- <span class="md-cite">Element Pattern De-embedding: Teoria e Workflow Operativo</span>
+
+  La tecnica di *Pattern De-embedding* permette di rimuovere l'effetto della forma del singolo elemento radiante dall'immagine olografica, trasformando l'apertura fisica ("blob") in una sorgente puntiforme (delta di Dirac) per una definizione superiore.
+
+  **Workflow operativo con dati CST:**
+
+  1.  **Preparazione Input (CST)**
+      - Esportare il Far Field ($\vec{E}_{far}$) del singolo elemento simulato.
+      - Richiede **Magnitudine e Fase** complesse, non solo guadagno.
+      - Polarizzazione: Co-polare allineata alla misura (Ludwig-3).
+      - Formato tipico: Griglia sferica $(\theta, \phi)$.
+
+  2.  **Trasformazione Coordinate**
+      - Mappare il pattern dallo spazio angolare $(\theta, \phi)$ allo spazio dei numeri d'onda $(k_x, k_z)$ usato dall'algoritmo olografico (`hbpr.py`).
+      - $k_x = k_0 \sin(\theta) \cos(\phi)$
+      - $k_z = k_0 \cos(\theta)$ (o $k_y$ a seconda dell'orientamento).
+
+  3.  **Ricampionamento (Gridding)**
+      - Interpolare il pattern complesso dell'elemento ($F_{element}$) per farlo coincidere esattamente con la griglia FFT del PWS misurato (stessa matrice $N \times M$).
+
+  4.  **De-embedding (Divisione Spettrale)**
+      - Applicare la divisione nel dominio $k$:
+      $$ PWS_{new}(k_x, k_z) = \frac{PWS_{measured}(k_x, k_z)}{F_{element}(k_x, k_z)} $$
+
+  5.  **Regolarizzazione (Singolarità)**
+      - Gestire i nulli di $F_{element}$ per evitare divisioni per zero o amplificazione di rumore.
+      - Metodi: Soglia minima o filtro di Wiener ($ \frac{1}{F} \approx \frac{F^*}{|F|^2 + \epsilon} $).
+
+  6.  **Trasformata Inversa (IFFT)**
+      - Calcolare la IFFT del $PWS_{new}$.
+      - **Risultato:** L'immagine finale mostrerà picchi netti (simili a delta) nel centro di fase degli elementi, rimuovendo la diffrazione e l'estensione fisica dell'apertura.
+
+    
